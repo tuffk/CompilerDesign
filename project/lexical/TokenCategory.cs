@@ -51,6 +51,11 @@ namespace Buttercup {
         WHILE,
         DO,
         IN,
-        VAR
+        VAR,
+        // ints
+        INT,
+        BIN,
+        OCT,
+        HEX
     }
 }
