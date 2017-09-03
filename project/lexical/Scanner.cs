@@ -116,12 +116,12 @@ public IEnumerable<Token> Start() {
                         row++;
                         columnStart = m.Index + m.Length;
 
-                } else if (m.Groups["WhiteSpace"].Success
-                           || m.Groups["Comment"].Success) {
-
+                } else if (m.Groups["WhiteSpace"].Success) {
                         // Skip white space and comments.
 
-                } else if (m.Groups["Identifier"].Success) {
+                } else if (m.Groups["Comment"].Success){
+                        yield return newTok(m, TokenCategory.COMMENT);
+                }else if (m.Groups["Identifier"].Success) {
 
                         if (keywords.ContainsKey(m.Value)) {
 
