@@ -53,7 +53,7 @@ namespace Buttercup {
         IN,
         VAR,
         // ints
-        INT,
+        // INT,
         BIN,
         OCT,
         HEX
