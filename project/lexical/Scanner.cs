@@ -35,7 +35,7 @@ static readonly Regex regex = new Regex(
               | (?<Comment>    [/][/].*  )
               | (?<Comment>  [/*] [\w|\W]* [*/] )
               | (?<False>      false      )
-              | (?<Identifier> [a-zA-Z]+ )
+              | (?<Identifier> [a-zA-Z]+ [a-zA-Z0-9_]* )
               | (?<IntLiteral> \d+       )
               | (?<Less>       [<]       )
               | (?<Mul>        [*]       )
