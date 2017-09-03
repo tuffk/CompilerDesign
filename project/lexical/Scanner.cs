@@ -33,9 +33,12 @@ static readonly Regex regex = new Regex(
                 (?<And>        [&]       )
               | (?<Assign>     [=]       )
               | (?<Comment>    [/][/].*  )
-              | (?<Comment>  [/*] [\w|\W]* [*/] )
+              | (?<Comment>    [/*] [\w|\W]* [*/] )
               | (?<False>      false      )
               | (?<Identifier> [a-zA-Z]+ [a-zA-Z0-9_]* )
+              | (?<Char>       ' [\w|\d|\ ]? '  )
+              | (?<Char>       ' \\u[a-fA-F0-9]{6} '  )
+              | (?<String>     "".*""      )
               | (?<Less>       [<]       )
               | (?<Mul>        [*]       )
               | (?<Neg>        [-]       )
@@ -44,10 +47,10 @@ static readonly Regex regex = new Regex(
               | (?<ParRight>   [)]       )
               | (?<Plus>       [+]       )
               | (?<True>       true      )
-              |(?<Bin>        [0|1]+ [b|B])
-              |(?<Oct>        [0-7]+ [o|O])
-              |(?<Hex>        [0-9a-fA-F]+ [x|X])
-              |(?<Int>        \d+        )
+              | (?<Bin>        [0|1]+ [b|B])
+              | (?<Oct>        [0-7]+ [o|O])
+              | (?<Hex>        [0-9a-fA-F]+ [x|X])
+              | (?<Int>        \d+        )
               | (?<WhiteSpace> \s        )     # Must go anywhere after Newline.
               | (?<Other>      .         )     # Must be last: match any other character.
             ",

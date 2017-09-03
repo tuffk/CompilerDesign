@@ -27,7 +27,6 @@ namespace Buttercup {
         FALSE,
         IDENTIFIER,
         IF,
-        INT,
         INT_LITERAL,
         LESS,
         MUL,
