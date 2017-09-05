@@ -55,6 +55,7 @@ namespace Buttercup {
         INT,
         BIN,
         OCT,
-        HEX
+        HEX,
+        COMMENT
     }
 }
