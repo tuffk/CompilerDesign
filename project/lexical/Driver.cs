@@ -1,6 +1,6 @@
 /*
-  Jaime Margolin
-  Juan carlos Leon
+  Jaime Margolin A01019332
+  Juan carlos Leon A01020200
   Rodrigo Solana
 */
 
