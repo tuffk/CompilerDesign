@@ -1,19 +1,7 @@
 /*
-  Buttercup compiler - Program driver.
-  Copyright (C) 2013 Ariel Ortiz, ITESM CEM
-  
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-  
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-  
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  Jaime Margolin
+  Juan carlos Leon
+  Rodrigo Solana
 */
 
 using System;
@@ -34,7 +22,7 @@ namespace Buttercup {
         //-----------------------------------------------------------
         void PrintAppHeader() {
             Console.WriteLine("Buttercup compiler, version " + VERSION);
-            Console.WriteLine("Copyright \u00A9 2013 by A. Ortiz, ITESM CEM."                
+            Console.WriteLine("Copyright \u00A9 2013 by A. Ortiz, ITESM CEM."
             );
             Console.WriteLine("This program is free software; you may "
                 + "redistribute it under the terms of");
@@ -45,7 +33,7 @@ namespace Buttercup {
 
         //-----------------------------------------------------------
         void PrintReleaseIncludes() {
-            Console.WriteLine("Included in this release:");            
+            Console.WriteLine("Included in this release:");
             foreach (var phase in ReleaseIncludes) {
                 Console.WriteLine("   * " + phase);
             }
@@ -65,24 +53,24 @@ namespace Buttercup {
                 Environment.Exit(1);
             }
 
-            try {            
-                var inputPath = args[0];                
+            try {
+                var inputPath = args[0];
                 var input = File.ReadAllText(inputPath);
-                
+
                 Console.WriteLine(String.Format(
                     "===== Tokens from: \"{0}\" =====", inputPath)
                 );
                 var count = 1;
                 foreach (var tok in new Scanner(input).Start()) {
-                    Console.WriteLine(String.Format("[{0}] {1}", 
+                    Console.WriteLine(String.Format("[{0}] {1}",
                                                     count++, tok)
                     );
                 }
-                
+
             } catch (FileNotFoundException e) {
                 Console.Error.WriteLine(e.Message);
                 Environment.Exit(1);
-            }                
+            }
         }
 
         //-----------------------------------------------------------
