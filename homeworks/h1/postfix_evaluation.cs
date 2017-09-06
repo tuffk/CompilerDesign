@@ -86,8 +86,8 @@ namespace ExpressionTokenizer {
 
             foreach (Token t in scanner.Start()) {
               if (stack.Count >= 3){
-              Console.WriteLine("Hay demasiados números en la cola = {0} ", stack.Count );
-                break;
+              Console.WriteLine("Hay demasiados números");
+              System.Environment.Exit(666);
             }
                  if((t.Category).ToString() == "NUMBER")
                      stack.Push(Int32.Parse(t.Lexeme));
