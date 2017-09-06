@@ -8,42 +8,7 @@ namespace Exam1 {
 class Question1 {
 
 public static void solve(string file){
-        Regex wc = new Regex(
-                @"
-                  (?<word> [a-zA-Z]+ [a-zA-Z0-9_]*)
-                  |(?<nl> \n)
-                ",
-                RegexOptions.IgnorePatternWhitespace
-                | RegexOptions.Compiled
-                | RegexOptions.Multiline
-                );
-        Regex cc = new Regex(
-                @"
-                  (?<ch> .)
-                ",
-                RegexOptions.IgnorePatternWhitespace
-                | RegexOptions.Compiled
-                | RegexOptions.Singleline
-                );
-        var words = 0;
-        var chars = 0;
-        var news = 0;
-        foreach (Match m in wc.Matches(file)) {
-          if(m.Groups["word"].Success)
-          {
-            words++;
-          }else if(m.Groups["nl"].Success){
-            news++;
-          }
-        }
-        foreach (Match m in cc.Matches(file)) {
-          if(m.Groups["ch"].Success)
-          {
-            chars++;
-          }
-        }
-
-      Console.WriteLine($"lines: {news}\nwords: {words}\nchars: {chars}");
+        
 }
 
 public static void Main(String[] args) {

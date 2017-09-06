@@ -29,21 +29,21 @@ public static void solve(string file){
         var chars = 0;
         var news = 0;
         foreach (Match m in wc.Matches(file)) {
-          if(m.Groups["word"].Success)
-          {
-            words++;
-          }else if(m.Groups["nl"].Success){
-            news++;
-          }
+                if(m.Groups["word"].Success)
+                {
+                        words++;
+                }else if(m.Groups["nl"].Success) {
+                        news++;
+                }
         }
         foreach (Match m in cc.Matches(file)) {
-          if(m.Groups["ch"].Success)
-          {
-            chars++;
-          }
+                if(m.Groups["ch"].Success)
+                {
+                        chars++;
+                }
         }
 
-      Console.WriteLine($"lines: {news}\nwords: {words}\nchars: {chars}");
+        Console.WriteLine($"lines: {news}\nwords: {words}\nchars: {chars}");
 }
 
 public static void Main(String[] args) {
