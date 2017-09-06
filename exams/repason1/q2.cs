@@ -8,7 +8,20 @@ namespace Exam1 {
 class Question1 {
 
 public static void solve(string file){
-        
+  Regex cc = new Regex(
+          @"
+              (?<b> 0[b|B] [0|1] [0|1|_]* [0|1]+ [l|L]? \b)
+             |(?<b> 0[b|B] [0|1]+ [l|L]? \b)
+          ",
+          RegexOptions.IgnorePatternWhitespace
+          | RegexOptions.Compiled
+          | RegexOptions.Multiline
+          );
+          foreach (Match m in cc.Matches(file)) {
+
+                          Console.WriteLine($"{m.Captures[0]}\n");
+
+          }
 }
 
 public static void Main(String[] args) {
