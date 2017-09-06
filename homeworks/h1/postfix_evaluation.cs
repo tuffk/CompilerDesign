@@ -96,13 +96,7 @@ namespace ExpressionTokenizer {
                   sharmuta(ref stack, (t.Category).ToString());
                   continue;
                 }
-                else
-                {
-                  Console.WriteLine("Se ingresaron caracteres no válidos");
-                    System.Environment.Exit(666);
-                }
-
-            }
+                          }
 
             foreach (int i in stack)
             Console.WriteLine("El resultado es = {0} ", i);
