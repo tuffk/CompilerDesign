@@ -16,15 +16,9 @@ public static void solve(string input){
                 RegexOptions.IgnorePatternWhitespace
                 | RegexOptions.Multiline
                 );
-                System.IO.StreamWriter file = new System.IO.StreamWriter("prog1.f");
         foreach (Match m in wc.Matches(input)) {
-
-                Console.WriteLine($"{m.Captures[0]}\n");
-                file.WriteLine($"{m.Captures[0]}");
-
-
+                Console.WriteLine($"{m.Captures[0]}");
         }
-        file.Close();
 }
 public static void Main(String[] args) {
         if (args.Length != 1) {
