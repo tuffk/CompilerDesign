@@ -17,16 +17,20 @@ readonly string input;
 
 static readonly Regex regex = new Regex(
         @"
-                (?<And>        [&]       )
-              | (?<Assign>     [=]       )
-              | (?<Comment>    [/][/].*  )
+               (?<Comment>    [/][/].*  )
               | (?<Comment>    [/*] [\w|\W]* [*/] )
               | (?<False>      false      )
               | (?<Identifier> [a-zA-Z]+ [a-zA-Z0-9_]* )
               | (?<Char>       ' [\w|\d|\ ]? '  )
               | (?<Char>       ' \\u[a-fA-F0-9]{6} '  )
               | (?<String>     "".*""    )
-              | (?<Less>       [<]       )
+              | (?<EqLess>     \<=       )
+              | (?<Less>       \<        )
+              | (?<EqMore>     \>=       )
+              | (?<More>       \>        )
+              | (?<EqCompare>  ==        )
+              | (?<Assign>     =         )
+              | (?<NotEq>      !=        )
               | (?<Mul>        [*]       )
               | (?<Neg>        [-]       )
               | (?<Newline>    \n        )
@@ -38,14 +42,15 @@ static readonly Regex regex = new Regex(
               | (?<CurlyClose> [}]       )
               | (?<Semicolon>  [;]       )
               | (?<InlineIf>   [?]       )
-              | (?<DosPuntos>  [:]       )
+              | (?<Colon>      [:]       )
               | (?<NomOr>      [\|\|]    )
-              | (?<BitOr>      [\|]        )
+              | (?<BitOr>      [\|]      )
               | (?<NomAnd>     [&&]      )
+              | (?<BitAnd>     [&]       )
               | (?<Bin>        [0|1]+ [b|B])
               | (?<Oct>        [0-7]+ [o|O])
               | (?<Hex>        [0-9a-fA-F]+ [x|X])
-              | (?<Int>        \d+        )
+              | (?<Int>        \d+       )
               | (?<WhiteSpace> \s        )     # Must go anywhere after Newline.
               | (?<Other>      .         )     # Must be last: match any other character.
             ",
@@ -88,7 +93,20 @@ static readonly IDictionary<string, TokenCategory> nonKeywords =
         {"ParLeft", TokenCategory.PARENTHESIS_OPEN},
         {"ParRight", TokenCategory.PARENTHESIS_CLOSE},
         {"Plus", TokenCategory.PLUS},
-        {"True", TokenCategory.TRUE}
+        {"True", TokenCategory.TRUE},
+        {"CurlyOpen", TokenCategory.CURLY_OPEN},
+        {"CurlyClose", TokenCategory.CURLY_CLOSE},
+        {"Semicolon", TokenCategory.SEMICOLON},
+        {"InlineIf", TokenCategory.INLINEIF},
+        {"Colon", TokenCategory.COLON},
+        {"NomOr", TokenCategory.NOMOR},
+        {"BitOr", TokenCategory.BITOR},
+        {"NomAnd", TokenCategory.NOMAND},
+        {"BitAnd", TokenCategory.BITAND},
+        {"EqCompare", TokenCategory.EQCOMPARE},
+        {"NotEq", TokenCategory.NOTEQ},
+        {"More", TokenCategory.MORE},
+        {"EqMore", TokenCategory.EQMORE}
 };
 
 public Scanner(string input) {
