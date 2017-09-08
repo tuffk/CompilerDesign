@@ -18,7 +18,7 @@ readonly string input;
 static readonly Regex regex = new Regex(
         @"
                (?<Comment>    [/][/].*  )
-              | (?<Comment>    [/*] [\w|\W]* [*/] )
+              | (?<Comment>    \/\* [\w|\W]*? \*\/ )
               | (?<False>      false      )
               | (?<Identifier> [a-zA-Z]+ [a-zA-Z0-9_]* )
               | (?<Char>       ' [\w|\d|\ ]? '  )
@@ -47,6 +47,7 @@ static readonly Regex regex = new Regex(
               | (?<BitOr>      [\|]      )
               | (?<NomAnd>     [&&]      )
               | (?<BitAnd>     [&]       )
+              | (?<Comma>      ,         )
               | (?<Bin>        [0|1]+ [b|B])
               | (?<Oct>        [0-7]+ [o|O])
               | (?<Hex>        [0-9a-fA-F]+ [x|X])
@@ -106,7 +107,8 @@ static readonly IDictionary<string, TokenCategory> nonKeywords =
         {"EqCompare", TokenCategory.EQCOMPARE},
         {"NotEq", TokenCategory.NOTEQ},
         {"More", TokenCategory.MORE},
-        {"EqMore", TokenCategory.EQMORE}
+        {"EqMore", TokenCategory.EQMORE},
+        {"Comma", TokenCategory.COMMA}
 };
 
 public Scanner(string input) {
