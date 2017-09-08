@@ -18,11 +18,12 @@ readonly string input;
 static readonly Regex regex = new Regex(
         @"
                (?<Comment>    [/][/].*  )
-              | (?<Comment>    \/\* [\w|\W]*? \*\/ )
+              | (?<Comment>    \/\* (?<Newline> \n)? [\w|\W]*? \*\/ )
               | (?<False>      false      )
               | (?<Identifier> [a-zA-Z]+ [a-zA-Z0-9_]* )
               | (?<Char>       ' [\w|\d|\ ]? '  )
               | (?<Char>       ' \\u[a-fA-F0-9]{6} '  )
+              | (?<Char>       ' \\[n|t|\\|r|""|'] '   )
               | (?<String>     "".*""    )
               | (?<EqLess>     \<=       )
               | (?<Less>       \<        )
