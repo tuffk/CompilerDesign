@@ -34,7 +34,6 @@ static readonly Regex regex = new Regex(
               | (?<NotEq>      !=        )
               | (?<Mul>        [*]       )
               | (?<Neg>        [-]       )
-              | (?<Newline>    \n        )
               | (?<ParLeft>    [(]       )
               | (?<ParRight>   [)]       )
               | (?<Plus>       [+]       )
@@ -53,6 +52,7 @@ static readonly Regex regex = new Regex(
               | (?<Oct>        [0-7]+ [o|O])
               | (?<Hex>        [0-9a-fA-F]+ [x|X])
               | (?<Int>        \d+       )
+              | (?<Newline>    \n        )
               | (?<WhiteSpace> \s        )     # Must go anywhere after Newline.
               | (?<Other>      .         )     # Must be last: match any other character.
             ",
@@ -60,6 +60,13 @@ static readonly Regex regex = new Regex(
         | RegexOptions.Compiled
         | RegexOptions.Multiline
         );
+        static readonly Regex nl = new Regex(
+        @"
+          (?<Newline>    \n        )
+        ",
+        RegexOptions.IgnorePatternWhitespace
+        | RegexOptions.Compiled
+        | RegexOptions.Multiline);
 
 static readonly IDictionary<string, TokenCategory> keywords =
         new Dictionary<string, TokenCategory>() {
@@ -136,6 +143,9 @@ public IEnumerable<Token> Start() {
                         // Skip white space and comments.
 
                 } else if (m.Groups["Comment"].Success){
+                        foreach(Match mm in nl.Matches(m.Captures[0].ToString())){
+                          row++;
+                        }
                         yield return newTok(m, TokenCategory.COMMENT);
                 }else if (m.Groups["Identifier"].Success) {
 
