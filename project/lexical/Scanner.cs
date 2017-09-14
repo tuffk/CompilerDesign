@@ -18,7 +18,7 @@ readonly string input;
 static readonly Regex regex = new Regex(
         @"
                (?<Comment>    [/][/].*  )
-              | (?<Comment>    \/\* (?<Newline> \n)? [\w \W]*? \*\/ )
+              | (?<Comment>    \/\* [\w \W]*? \*\/ )
               | (?<False>      false      )
               | (?<Identifier> [a-zA-Z]+ [a-zA-Z0-9_]* )
               | (?<Char>       ' [\w \d \ ]? '  )
