@@ -1,3 +1,8 @@
-var hola ;
-var adios, kuz;
-var sharmuta, tutzke, zain;
+kuz(){}
+zain(hola){}
+sharmuta(hola, adios){}
+zain(){
+  var hola ;
+}
+hola();
+hola(adio ) {}

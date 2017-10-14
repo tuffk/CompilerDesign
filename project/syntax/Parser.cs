@@ -80,36 +80,82 @@ namespace Buttercup {
         }
 
         public void Declaration() {
-            // Type();
-            Expect(TokenCategory.VAR);
-            Expect(TokenCategory.IDENTIFIER);
-            if(CurrentToken == TokenCategory.COMMA)
-            {
-              DeclarationContinuer();
-            }else if(CurrentToken == TokenCategory.IDENTIFIER){
-              throw new SyntaxError(TokenCategory.COMMA,
-                                    tokenStream.Current);
+
+            switch (CurrentToken) {
+              case TokenCategory.VAR:
+                Vareamela();
+                break;
+
+
+              default:
+                break;
             }
-            Finisher();
+        }
+
+        public void Vareamela(){
+          Expect(TokenCategory.VAR);
+          Expect(TokenCategory.IDENTIFIER);
+          if(CurrentToken == TokenCategory.COMMA)
+          {
+            Expect(TokenCategory.COMMA);
+            DeclarationContinuer();
+          }else if(CurrentToken == TokenCategory.IDENTIFIER){
+            throw new SyntaxError(TokenCategory.COMMA, tokenStream.Current);
+          }
+          Finisher();
         }
 
         public void DeclarationContinuer()
         {
-          Expect(TokenCategory.COMMA);
+
           Expect(TokenCategory.IDENTIFIER);
           if(CurrentToken == TokenCategory.COMMA)
           {
+            Expect(TokenCategory.COMMA);
             DeclarationContinuer();
           }
         }
 
-        public void Statement() {
+        public void Identificamela()
+        {
+          Expect(TokenCategory.IDENTIFIER);
+          switch(CurrentToken)
+          {
+              case TokenCategory.PARENTHESIS_OPEN:
+                Funcionamela();
+                break;
+              case TokenCategory.ASSIGN:
+                Assignment();
+                break;
+              default:
+                break;
+          }
+        }
+        public void Funcionamela()
+        {
+          Expect(TokenCategory.PARENTHESIS_OPEN);
+          if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
+          {
+            DeclarationContinuer();
+          }
+          Expect(TokenCategory.PARENTHESIS_CLOSE);
+          if (CurrentToken == TokenCategory.SEMICOLON)
+          {
+            Expect(TokenCategory.SEMICOLON);
+            return;
+          }
+          Expect(TokenCategory.CURLY_OPEN);
+          Declaration();
+          Statement();
+          Expect(TokenCategory.CURLY_CLOSE);
+        }
 
+        public void Statement() {
             switch (CurrentToken) {
 
             case TokenCategory.IDENTIFIER:
-                Assignment();
-                break;
+              Identificamela();
+              break;
 
             case TokenCategory.PRINT:
                 Print();
@@ -120,8 +166,8 @@ namespace Buttercup {
                 break;
 
             default:
-                throw new SyntaxError(firstOfStatement,
-                                      tokenStream.Current);
+                // throw new SyntaxError(firstOfStatement, tokenStream.Current);
+                break;
             }
         }
 
