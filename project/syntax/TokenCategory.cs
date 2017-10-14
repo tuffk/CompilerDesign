@@ -28,15 +28,12 @@ namespace Buttercup {
         ASSIGN,
         END,
         EOF,
-        FALSE,
-        BOOL,
         IDENTIFIER,
         INT_LITERAL,
         PARENTHESIS_OPEN,
         PARENTHESIS_CLOSE,
         PRINT,
         THEN,
-        TRUE,
         ILLEGAL_CHAR,
         //
         BREAK,
@@ -55,11 +52,19 @@ namespace Buttercup {
         CURLY_CLOSE,
         SEMICOLON,
         COLON,
+        // bools
+        TRUE,
+        FALSE,
+        //types
         // ints
         INT,
         BIN,
         OCT,
         HEX,
+        // others
+        BOOL,
+        CHAR,
+        STRING,
         //
         COMMA,
         COMMENT

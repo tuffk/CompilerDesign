@@ -19,7 +19,8 @@ static readonly Regex regex = new Regex(
         @"
                (?<Comment>    [/][/].*  )
               | (?<Comment>    \/\* [\w \W]*? \*\/ )
-              | (?<False>      false      )
+              | (?<False>      false     )
+              | (?<True>       true      )
               | (?<Identifier> [a-zA-Z]+ [a-zA-Z0-9_]* )
               | (?<Char>       ' [\w \d \ ]? '  )
               | (?<Char>       ' \\u[a-fA-F0-9]{6} '  )
@@ -37,7 +38,6 @@ static readonly Regex regex = new Regex(
               | (?<ParLeft>    [(]       )
               | (?<ParRight>   [)]       )
               | (?<Plus>       [+]       )
-              | (?<True>       true      )
               | (?<CurlyOpen>  [{]       )
               | (?<CurlyClose> [}]       )
               | (?<Semicolon>  [;]       )

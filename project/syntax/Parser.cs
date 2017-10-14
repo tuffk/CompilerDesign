@@ -13,8 +13,7 @@ namespace Buttercup {
 
         static readonly ISet<TokenCategory> firstOfDeclaration =
             new HashSet<TokenCategory>() {
-                TokenCategory.INT,
-                TokenCategory.BOOL
+                TokenCategory.VAR
             };
 
         static readonly ISet<TokenCategory> firstOfStatement =
