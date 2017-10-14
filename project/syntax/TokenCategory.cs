@@ -50,7 +50,6 @@ namespace Buttercup {
         VAR,
         CURLY_OPEN,
         CURLY_CLOSE,
-        SEMICOLON,
         COLON,
         // bools
         TRUE,
@@ -66,6 +65,7 @@ namespace Buttercup {
         CHAR,
         STRING,
         //
+        SEMICOLON,
         COMMA,
         COMMENT
     }

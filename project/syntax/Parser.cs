@@ -75,9 +75,32 @@ namespace Buttercup {
             Expect(TokenCategory.EOF);
         }
 
+        public void Finisher(){
+            Expect(TokenCategory.SEMICOLON);
+        }
+
         public void Declaration() {
-            Type();
+            // Type();
+            Expect(TokenCategory.VAR);
             Expect(TokenCategory.IDENTIFIER);
+            if(CurrentToken == TokenCategory.COMMA)
+            {
+              DeclarationContinuer();
+            }else if(CurrentToken == TokenCategory.IDENTIFIER){
+              throw new SyntaxError(TokenCategory.COMMA,
+                                    tokenStream.Current);
+            }
+            Finisher();
+        }
+
+        public void DeclarationContinuer()
+        {
+          Expect(TokenCategory.COMMA);
+          Expect(TokenCategory.IDENTIFIER);
+          if(CurrentToken == TokenCategory.COMMA)
+          {
+            DeclarationContinuer();
+          }
         }
 
         public void Statement() {
