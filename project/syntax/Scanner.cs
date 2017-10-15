@@ -21,11 +21,11 @@ static readonly Regex regex = new Regex(
               | (?<Comment>    \/\* [\w\W]*? \*\/ )
               | (?<False>      false     )
               | (?<True>       true      )
-              | (?<Identifier> [a-zA-Z]+ [a-zA-Z0-9_]* )
-              | (?<Char>       ' [\w\d\ ]? '  )
-              | (?<Char>       ' \\u[a-fA-F0-9]{6} '  )
-              | (?<Char>       ' \\[nt\\r""'] '   )
+              | (?<Char>       '\\u[a-fA-F0-9]{6}'  )
+              | (?<Char>       '\\[nt\\r""']'   )
+              | (?<Char>       '[\w\d\ ]?'  )
               | (?<String>     "".*""    )
+              | (?<Identifier> [a-zA-Z]+ [a-zA-Z0-9_]* )
               | (?<EqLess>     \<=       )
               | (?<Less>       \<        )
               | (?<EqMore>     \>=       )
@@ -95,6 +95,8 @@ static readonly IDictionary<string, TokenCategory> nonKeywords =
         {"Int", TokenCategory.INT},
         {"Bin", TokenCategory.BIN},
         {"Oct", TokenCategory.OCT},
+        {"Char", TokenCategory.CHAR},
+        {"String", TokenCategory.STRING},
         {"Hex", TokenCategory.HEX},
         {"Less", TokenCategory.LESS},
         {"Mul", TokenCategory.MUL},

@@ -51,6 +51,9 @@ namespace Buttercup {
         public TokenCategory CurrentToken {
             get { return tokenStream.Current.Category; }
         }
+        public Token CurrentToken2 {
+            get { return tokenStream.Current; }
+        }
 
         public Token Expect(TokenCategory category) {
             if (CurrentToken == category) {
@@ -154,6 +157,8 @@ namespace Buttercup {
             switch (CurrentToken) {
 
             case TokenCategory.IDENTIFIER:
+
+
               Identificamela();
               break;
 
@@ -189,7 +194,11 @@ namespace Buttercup {
         }
 
         public void Assignment() {
+
+
             Expect(TokenCategory.ASSIGN);
+
+
             Expression();
             Finisher();
         }
@@ -218,7 +227,6 @@ namespace Buttercup {
         }
 
         public void SimpleExpression() {
-
             switch (CurrentToken) {
 
             case TokenCategory.IDENTIFIER:
@@ -227,6 +235,26 @@ namespace Buttercup {
 
             case TokenCategory.INT:
                 Expect(TokenCategory.INT);
+                break;
+
+            case TokenCategory.BIN:
+                Expect(TokenCategory.BIN);
+                break;
+
+            case TokenCategory.CHAR:
+                Expect(TokenCategory.CHAR);
+                break;
+
+            case TokenCategory.STRING:
+                Expect(TokenCategory.STRING);
+                break;
+
+            case TokenCategory.OCT:
+                Expect(TokenCategory.OCT);
+                break;
+
+            case TokenCategory.HEX:
+                Expect(TokenCategory.HEX);
                 break;
 
             case TokenCategory.TRUE:
