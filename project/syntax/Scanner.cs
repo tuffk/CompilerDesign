@@ -70,8 +70,8 @@ static readonly Regex regex = new Regex(
 
 static readonly IDictionary<string, TokenCategory> keywords =
         new Dictionary<string, TokenCategory>() {
+        {"else_if", TokenCategory.ELSEIF},
         {"if", TokenCategory.IF},
-        {"else if", TokenCategory.ELSEIF},
         {"else", TokenCategory.ELSE},
         {"switch", TokenCategory.SWITCH},
         {"case", TokenCategory.CASE},

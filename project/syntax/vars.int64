@@ -10,6 +10,13 @@ hola = 5 + 7;
 adios = "asd";
 if(adios){
  pene = 5;
-}else {
+}else_if(piru)
+{
+jew= 8;
+}else_if(piru)
+{
+chino_gordo_y_borracho= 8;
+}
+else {
 pene = 8;
 }

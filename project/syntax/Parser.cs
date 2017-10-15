@@ -216,9 +216,30 @@ namespace Buttercup {
                 Statement();
             }
             Expect(TokenCategory.CURLY_CLOSE);
+            if(CurrentToken == TokenCategory.ELSEIF){
+              RecursiveameEnElIf();
+            }
             if (CurrentToken == TokenCategory.ELSE) {
+              Expect(TokenCategory.ELSE);
+              Expect(TokenCategory.CURLY_OPEN);
+              Statement();
+              Expect(TokenCategory.CURLY_CLOSE);
+            }
+        }
 
-            }else if(CurrentToken == TokenCategory.ELSEIF)
+        public void RecursiveameEnElIf()
+        {
+          Expect(TokenCategory.ELSEIF);
+          Expect(TokenCategory.PARENTHESIS_OPEN);
+          DeclarationContinuer();
+          Expect(TokenCategory.PARENTHESIS_CLOSE);
+          Expect(TokenCategory.CURLY_OPEN);
+          Statement();
+          Expect(TokenCategory.CURLY_CLOSE);
+          if(CurrentToken == TokenCategory.ELSEIF)
+          {
+            RecursiveameEnElIf();
+          }
         }
 
         public void Expression() {
