@@ -67,15 +67,27 @@ namespace Buttercup {
 
         public void Program() {
 
+            Comentamela();
             while (firstOfDeclaration.Contains(CurrentToken)) {
                 Declaration();
+                Comentamela();
             }
 
             while (firstOfStatement.Contains(CurrentToken)) {
                 Statement();
+                Comentamela();
             }
 
             Expect(TokenCategory.EOF);
+        }
+        public void Comentamela()
+        {
+          if (CurrentToken == TokenCategory.COMMENT) {
+            Expect(TokenCategory.COMMENT);
+          }
+          if (CurrentToken == TokenCategory.COMMENT) {
+            Comentamela();
+          }
         }
 
         public void Finisher(){
@@ -83,12 +95,14 @@ namespace Buttercup {
         }
 
         public void Declaration() {
-
+          Comentamela();
             switch (CurrentToken) {
               case TokenCategory.VAR:
                 Vareamela();
                 break;
-
+            case TokenCategory.COMMENT:
+              Expect(TokenCategory.COMMENT);
+              break;
 
               default:
                 break;
@@ -137,6 +151,7 @@ namespace Buttercup {
         public void Funcionamela()
         {
           Expect(TokenCategory.PARENTHESIS_OPEN);
+          Comentamela();
           if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
           {
             DeclarationContinuer();
@@ -154,11 +169,10 @@ namespace Buttercup {
         }
 
         public void Statement() {
+          Comentamela();
             switch (CurrentToken) {
 
             case TokenCategory.IDENTIFIER:
-
-
               Identificamela();
               break;
 
@@ -170,10 +184,16 @@ namespace Buttercup {
                 If();
                 break;
 
+            case TokenCategory.COMMENT:
+            Console.WriteLine("aki si");
+              Expect(TokenCategory.COMMENT);
+              break;
+
             default:
                 // throw new SyntaxError(firstOfStatement, tokenStream.Current);
                 break;
             }
+            Comentamela();
         }
 
         public void Type() {
@@ -212,16 +232,19 @@ namespace Buttercup {
             Expect(TokenCategory.IF);
             Expression();
             Expect(TokenCategory.CURLY_OPEN);
+            Comentamela();
             while (firstOfStatement.Contains(CurrentToken)) {
                 Statement();
             }
             Expect(TokenCategory.CURLY_CLOSE);
             if(CurrentToken == TokenCategory.ELSEIF){
+              Comentamela();
               RecursiveameEnElIf();
             }
             if (CurrentToken == TokenCategory.ELSE) {
               Expect(TokenCategory.ELSE);
               Expect(TokenCategory.CURLY_OPEN);
+              Comentamela();
               Statement();
               Expect(TokenCategory.CURLY_CLOSE);
             }
@@ -243,6 +266,7 @@ namespace Buttercup {
         }
 
         public void Expression() {
+          Comentamela();
             SimpleExpression();
             while (firstOfOperator.Contains(CurrentToken)) {
                 Operator();
