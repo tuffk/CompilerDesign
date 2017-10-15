@@ -148,6 +148,7 @@ namespace Buttercup {
                 break;
           }
         }
+
         public void Funcionamela()
         {
           Expect(TokenCategory.PARENTHESIS_OPEN);
@@ -163,35 +164,39 @@ namespace Buttercup {
             return;
           }
           Expect(TokenCategory.CURLY_OPEN);
-          Declaration();
-          Statement();
+          while(CurrentToken != TokenCategory.CURLY_CLOSE)
+          {
+            Declaration();
+            Statement();
+          }
           Expect(TokenCategory.CURLY_CLOSE);
         }
 
         public void Statement() {
           Comentamela();
+
+
             switch (CurrentToken) {
 
-            case TokenCategory.IDENTIFIER:
-              Identificamela();
-              break;
-
-            case TokenCategory.PRINT:
-                Print();
+              case TokenCategory.IDENTIFIER:
+                Identificamela();
                 break;
 
-            case TokenCategory.IF:
-                If();
+              case TokenCategory.PRINT:
+                  Print();
+                  break;
+
+              case TokenCategory.IF:
+                  If();
+                  break;
+
+              case TokenCategory.COMMENT:
+                Expect(TokenCategory.COMMENT);
                 break;
 
-            case TokenCategory.COMMENT:
-            Console.WriteLine("aki si");
-              Expect(TokenCategory.COMMENT);
-              break;
-
-            default:
-                // throw new SyntaxError(firstOfStatement, tokenStream.Current);
-                break;
+              default:
+                  // throw new SyntaxError(firstOfStatement, tokenStream.Current);
+                  break;
             }
             Comentamela();
         }
@@ -214,11 +219,7 @@ namespace Buttercup {
         }
 
         public void Assignment() {
-
-
             Expect(TokenCategory.ASSIGN);
-
-
             Expression();
             Finisher();
         }
