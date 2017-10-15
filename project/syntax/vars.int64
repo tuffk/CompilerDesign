@@ -6,3 +6,4 @@ zain(){
 }
 hola();
 hola(adio ) {}
+hola = 5 + 7;

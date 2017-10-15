@@ -189,9 +189,9 @@ namespace Buttercup {
         }
 
         public void Assignment() {
-            Expect(TokenCategory.IDENTIFIER);
             Expect(TokenCategory.ASSIGN);
             Expression();
+            Finisher();
         }
 
         public void Print() {
@@ -225,8 +225,8 @@ namespace Buttercup {
                 Expect(TokenCategory.IDENTIFIER);
                 break;
 
-            case TokenCategory.INT_LITERAL:
-                Expect(TokenCategory.INT_LITERAL);
+            case TokenCategory.INT:
+                Expect(TokenCategory.INT);
                 break;
 
             case TokenCategory.TRUE:
