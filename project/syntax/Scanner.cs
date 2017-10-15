@@ -70,20 +70,21 @@ static readonly Regex regex = new Regex(
 
 static readonly IDictionary<string, TokenCategory> keywords =
         new Dictionary<string, TokenCategory>() {
-        {"break", TokenCategory.BREAK},
+        {"if", TokenCategory.IF},
+        {"else if", TokenCategory.ELSEIF},
         {"else", TokenCategory.ELSE},
-        {"return", TokenCategory.RETURN},
-        {"case", TokenCategory.CASE},
-        {"false", TokenCategory.FALSE},
         {"switch", TokenCategory.SWITCH},
+        {"case", TokenCategory.CASE},
+        {"default", TokenCategory.DEFAULT},
+        {"break", TokenCategory.BREAK},
         {"continue", TokenCategory.CONTINUE},
         {"for", TokenCategory.FOR},
         {"true", TokenCategory.TRUE},
-        {"default", TokenCategory.DEFAULT},
-        {"if", TokenCategory.IF},
+        {"false", TokenCategory.FALSE},
         {"while", TokenCategory.WHILE},
         {"do", TokenCategory.DO},
         {"in", TokenCategory.IN},
+        {"return", TokenCategory.RETURN},
         {"var", TokenCategory.VAR}
 };
 

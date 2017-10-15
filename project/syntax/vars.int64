@@ -8,3 +8,8 @@ hola();
 hola(adio ) {}
 hola = 5 + 7;
 adios = "asd";
+if(adios){
+ pene = 5;
+}else {
+pene = 8;
+}

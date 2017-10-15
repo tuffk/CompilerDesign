@@ -211,11 +211,14 @@ namespace Buttercup {
         public void If() {
             Expect(TokenCategory.IF);
             Expression();
-            Expect(TokenCategory.THEN);
+            Expect(TokenCategory.CURLY_OPEN);
             while (firstOfStatement.Contains(CurrentToken)) {
                 Statement();
             }
-            Expect(TokenCategory.END);
+            Expect(TokenCategory.CURLY_CLOSE);
+            if (CurrentToken == TokenCategory.ELSE) {
+
+            }else if(CurrentToken == TokenCategory.ELSEIF)
         }
 
         public void Expression() {

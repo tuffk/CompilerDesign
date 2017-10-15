@@ -22,8 +22,11 @@ namespace Buttercup {
         EQLESS,
         MORE,
         EQMORE,
-        //
+        // if stuff
         IF,
+        ELSE,
+        ELSEIF,
+        //
         INLINEIF,
         ASSIGN,
         END,
@@ -37,7 +40,6 @@ namespace Buttercup {
         ILLEGAL_CHAR,
         //
         BREAK,
-        ELSE,
         RETURN,
         CASE,
         SWITCH,
