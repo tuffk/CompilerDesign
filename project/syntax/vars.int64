@@ -36,3 +36,6 @@ else {
 
 /* multi line coment*/
 // el gordo se durmio
+//
+
+algo != pito && algo == 5;

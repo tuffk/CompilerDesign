@@ -28,7 +28,17 @@ namespace Buttercup {
                 TokenCategory.AND,
                 TokenCategory.LESS,
                 TokenCategory.PLUS,
-                TokenCategory.MUL
+                TokenCategory.MUL,
+                TokenCategory.NEG,
+                TokenCategory.NOMOR,
+                TokenCategory.BITOR,
+                TokenCategory.NOMAND,
+                TokenCategory.BITAND,
+                TokenCategory.EQCOMPARE,
+                TokenCategory.NOTEQ,
+                TokenCategory.EQLESS,
+                TokenCategory.MORE,
+                TokenCategory.EQMORE
             };
 
         static readonly ISet<TokenCategory> firstOfSimpleExpression =
@@ -56,6 +66,7 @@ namespace Buttercup {
         }
 
         public Token Expect(TokenCategory category) {
+          Console.WriteLine(CurrentToken2);
             if (CurrentToken == category) {
                 Token current = tokenStream.Current;
                 tokenStream.MoveNext();
@@ -133,6 +144,17 @@ namespace Buttercup {
           }
         }
 
+        public void ArgumentContinuer()
+        {
+
+          SimpleExpression();
+          if(CurrentToken == TokenCategory.COMMA)
+          {
+            Expect(TokenCategory.COMMA);
+            ArgumentContinuer();
+          }
+        }
+
         public void Identificamela()
         {
           Expect(TokenCategory.IDENTIFIER);
@@ -144,6 +166,24 @@ namespace Buttercup {
               case TokenCategory.ASSIGN:
                 Assignment();
                 break;
+                case TokenCategory.AND:
+                case TokenCategory.LESS:
+                case TokenCategory.PLUS:
+                case TokenCategory.MUL:
+                case TokenCategory.NEG:
+                case TokenCategory.NOMOR:
+                case TokenCategory.BITOR:
+                case TokenCategory.NOMAND:
+                case TokenCategory.BITAND:
+                case TokenCategory.EQCOMPARE:
+                case TokenCategory.NOTEQ:
+                case TokenCategory.EQLESS:
+                case TokenCategory.MORE:
+                case TokenCategory.EQMORE:
+                  Operator();
+                  Expression();
+                  Finisher();
+                  break;
               default:
                 break;
           }
@@ -155,7 +195,7 @@ namespace Buttercup {
           Comentamela();
           if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
           {
-            DeclarationContinuer();
+            ArgumentContinuer();
           }
           Expect(TokenCategory.PARENTHESIS_CLOSE);
           if (CurrentToken == TokenCategory.SEMICOLON)
@@ -221,6 +261,7 @@ namespace Buttercup {
         public void Assignment() {
             Expect(TokenCategory.ASSIGN);
             Expression();
+
             Finisher();
         }
 
@@ -267,8 +308,9 @@ namespace Buttercup {
         }
 
         public void Expression() {
-          Comentamela();
+            Comentamela();
             SimpleExpression();
+            Console.WriteLine("exploto");
             while (firstOfOperator.Contains(CurrentToken)) {
                 Operator();
                 SimpleExpression();
@@ -332,7 +374,6 @@ namespace Buttercup {
         }
 
         public void Operator() {
-
             switch (CurrentToken) {
 
             case TokenCategory.AND:
