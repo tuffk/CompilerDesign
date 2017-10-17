@@ -21,7 +21,9 @@ namespace Buttercup {
                 TokenCategory.IDENTIFIER,
                 TokenCategory.PRINT,
                 TokenCategory.IF,
-                TokenCategory.SWITCH
+                TokenCategory.SWITCH,
+                TokenCategory.WHILE,
+                TokenCategory.DO
             };
 
         static readonly ISet<TokenCategory> firstOfOperator =
@@ -254,6 +256,16 @@ namespace Buttercup {
                   Switcheamela();
                   break;
 
+
+              case TokenCategory.WHILE:
+                  Whileamela();
+                  break;
+
+
+              case TokenCategory.DO:
+                  DoWhileamela();
+                  break;
+
               case TokenCategory.COMMENT:
                 Expect(TokenCategory.COMMENT);
                 break;
@@ -314,7 +326,9 @@ namespace Buttercup {
 
         public void If() {
             Expect(TokenCategory.IF);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
             Expression();
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
             Expect(TokenCategory.CURLY_OPEN);
             Comentamela();
             while (firstOfStatement.Contains(CurrentToken)) {
@@ -352,7 +366,9 @@ namespace Buttercup {
         public void Switcheamela() {
             Console.WriteLine("Estoy en funcion switch");
             Expect(TokenCategory.SWITCH);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
             Expression();
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
             Expect(TokenCategory.CURLY_OPEN);
             Comentamela();
 
@@ -373,7 +389,7 @@ namespace Buttercup {
 
                     Expect(TokenCategory.DEFAULT);
                     Expect(TokenCategory.COLON);
-                    
+
                     while (firstOfStatement.Contains(CurrentToken)) {
                         Statement();
                     }
@@ -382,6 +398,40 @@ namespace Buttercup {
                     Expect(TokenCategory.CURLY_CLOSE);
 
         }
+
+
+
+        public void Whileamela() {
+            Expect(TokenCategory.WHILE);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+            Expression();
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
+            Expect(TokenCategory.CURLY_OPEN);
+            Comentamela();
+            while (firstOfStatement.Contains(CurrentToken)) {
+                Statement();
+            }
+            Expect(TokenCategory.CURLY_CLOSE);
+        }
+
+
+        public void DoWhileamela() {
+            Expect(TokenCategory.DO);
+            Expect(TokenCategory.CURLY_OPEN);
+            while (firstOfStatement.Contains(CurrentToken)) {
+                Statement();
+            }
+
+            Expect(TokenCategory.CURLY_CLOSE);
+            Expect(TokenCategory.WHILE);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+            Expression();
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
+            Expect(TokenCategory.SEMICOLON);
+
+
+        }
+
 
         public void Expression() {
             Comentamela();

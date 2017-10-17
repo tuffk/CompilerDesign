@@ -9,10 +9,17 @@ switch (Jaime)
 /* Switch de la homosexualidad de JAIME*/
 
 case true, 1 : algo
-default
+default :
 
  }
 
+while(true)
+{
 
 
-//Se le agregó el pinche
+}
+
+if (true) {}
+
+
+do{  } while(algo == 1);
