@@ -20,7 +20,8 @@ namespace Buttercup {
             new HashSet<TokenCategory>() {
                 TokenCategory.IDENTIFIER,
                 TokenCategory.PRINT,
-                TokenCategory.IF
+                TokenCategory.IF,
+                TokenCategory.SWITCH
             };
 
         static readonly ISet<TokenCategory> firstOfOperator =
@@ -49,6 +50,25 @@ namespace Buttercup {
                 TokenCategory.FALSE,
                 TokenCategory.PARENTHESIS_OPEN,
                 TokenCategory.NEG
+            };
+
+/*Lo necesario para SWITCH statement*/
+
+
+
+        static readonly ISet<TokenCategory> switchSimpleExpression=
+            new HashSet<TokenCategory>() {
+                TokenCategory.CASE
+            };
+
+
+        static readonly ISet<TokenCategory> litSimple =
+            new HashSet<TokenCategory>() {
+                TokenCategory.INT_LITERAL,
+                TokenCategory.CHAR,
+                TokenCategory.TRUE,
+                TokenCategory.FALSE
+
             };
 
         IEnumerator<Token> tokenStream;
@@ -230,9 +250,31 @@ namespace Buttercup {
                   If();
                   break;
 
+              case TokenCategory.SWITCH:
+                  Switcheamela();
+                  break;
+
               case TokenCategory.COMMENT:
                 Expect(TokenCategory.COMMENT);
                 break;
+
+              default:
+                  // throw new SyntaxError(firstOfStatement, tokenStream.Current);
+                  break;
+            }
+            Comentamela();
+        }
+
+
+        public void caseList() {
+          Comentamela();
+
+            switch (CurrentToken) {
+
+              case TokenCategory.IDENTIFIER:
+                Identificamela();
+                break;
+
 
               default:
                   // throw new SyntaxError(firstOfStatement, tokenStream.Current);
@@ -307,6 +349,36 @@ namespace Buttercup {
           }
         }
 
+        public void Switcheamela() {
+            Console.WriteLine("Estoy en funcion switch");
+            Expect(TokenCategory.SWITCH);
+            Expression();
+            Expect(TokenCategory.CURLY_OPEN);
+            Comentamela();
+
+            while (switchSimpleExpression.Contains(CurrentToken)) {
+
+              BEGIN:
+                    Expect(TokenCategory.CASE);
+                     switchExpresion();
+                    Expect(TokenCategory.COLON);
+                    while (firstOfStatement.Contains(CurrentToken)) {
+                        Statement();
+
+                    }
+
+                    if(CurrentToken == TokenCategory.COMMA)
+                    {
+                      Expect(TokenCategory.COMMA);
+                    goto BEGIN;
+                  }
+            }
+
+
+              Expect(TokenCategory.CURLY_CLOSE);
+
+        }
+
         public void Expression() {
             Comentamela();
             SimpleExpression();
@@ -314,6 +386,32 @@ namespace Buttercup {
             while (firstOfOperator.Contains(CurrentToken)) {
                 Operator();
                 SimpleExpression();
+            }
+        }
+
+        public void switchExpresion() {
+            switch (CurrentToken) {
+
+            case TokenCategory.INT:
+                Expect(TokenCategory.INT);
+                break;
+
+            case TokenCategory.CHAR:
+                Expect(TokenCategory.CHAR);
+                break;
+
+
+            case TokenCategory.TRUE:
+                Expect(TokenCategory.TRUE);
+                break;
+
+            case TokenCategory.FALSE:
+                Expect(TokenCategory.FALSE);
+                break;
+
+            default:
+                throw new SyntaxError(litSimple,
+                                      tokenStream.Current);
             }
         }
 

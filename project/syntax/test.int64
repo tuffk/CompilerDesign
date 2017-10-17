@@ -1,0 +1,14 @@
+
+//probando el puto switch
+
+switch (Jaime)
+ {
+/* Switch de la homosexualidad de JAIME*/
+
+  case  true:
+        marica();
+
+  case  false:
+        jaime="GAY";
+
+ }
