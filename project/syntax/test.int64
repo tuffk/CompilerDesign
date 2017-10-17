@@ -1,14 +1,18 @@
 
 //probando el puto switch
 
+
+  var result, remainder;
+
 switch (Jaime)
  {
 /* Switch de la homosexualidad de JAIME*/
 
-  case  true:
-        marica();
-
-  case  false:
-        jaime="GAY";
+case true, 1 : algo
+default
 
  }
+
+
+
+//Se le agregó el pinche

@@ -358,24 +358,28 @@ namespace Buttercup {
 
             while (switchSimpleExpression.Contains(CurrentToken)) {
 
-              BEGIN:
                     Expect(TokenCategory.CASE);
+                      BEGIN:
                      switchExpresion();
+                     if(CurrentToken == TokenCategory.COMMA)
+                      {
+                        Expect(TokenCategory.COMMA);
+                      goto BEGIN;
+                      }
                     Expect(TokenCategory.COLON);
                     while (firstOfStatement.Contains(CurrentToken)) {
                         Statement();
-
                     }
 
-                    if(CurrentToken == TokenCategory.COMMA)
-                    {
-                      Expect(TokenCategory.COMMA);
-                    goto BEGIN;
-                  }
-            }
+                    Expect(TokenCategory.DEFAULT);
+                    Expect(TokenCategory.COLON);
+                    
+                    while (firstOfStatement.Contains(CurrentToken)) {
+                        Statement();
+                    }
+              }
 
-
-              Expect(TokenCategory.CURLY_CLOSE);
+                    Expect(TokenCategory.CURLY_CLOSE);
 
         }
 
