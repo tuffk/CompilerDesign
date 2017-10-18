@@ -646,6 +646,12 @@ public void SimpleExpression() {
                 Expect(TokenCategory.PARENTHESIS_CLOSE);
                 break;
 
+        case TokenCategory.CURLY_OPEN:
+                //Expect(TokenCategory.CURLY_OPEN);
+                Arreglamela();
+                //Expect(TokenCategory.CURLY_CLOSE);
+                break;
+
         case TokenCategory.NEG:
                 Expect(TokenCategory.NEG);
                 SimpleExpression();
@@ -655,6 +661,28 @@ public void SimpleExpression() {
                 Expect(TokenCategory.PLUS);
                 SimpleExpression();
                 break;
+
+        case TokenCategory.NOTT:
+              Expect(TokenCategory.NOTT);
+              switch(CurrentToken){
+                case TokenCategory.TRUE:
+                    Expect(TokenCategory.TRUE);
+                    break;
+
+                case TokenCategory.FALSE:
+                    Expect(TokenCategory.FALSE);
+                    break;
+
+                case TokenCategory.IDENTIFIER:
+                    Expect(TokenCategory.IDENTIFIER);
+                    break;
+
+                default:
+                    throw new SyntaxError(TokenCategory.IDENTIFIER,
+                                       tokenStream.Current);
+              }
+            break;
+
         default:
                 // throw new SyntaxError(firstOfSimpleExpression,
                 //                       tokenStream.Current);
@@ -732,6 +760,23 @@ public void Operator() {
 
         case TokenCategory.NOTT:
               Expect(TokenCategory.NOTT);
+              switch(CurrentToken){
+                case TokenCategory.TRUE:
+                    Expect(TokenCategory.TRUE);
+                    break;
+
+                case TokenCategory.FALSE:
+                    Expect(TokenCategory.FALSE);
+                    break;
+
+                case TokenCategory.IDENTIFIER:
+                    Expect(TokenCategory.IDENTIFIER);
+                    break;
+
+                default:
+                    throw new SyntaxError(TokenCategory.IDENTIFIER,
+                                       tokenStream.Current);
+              }
               break;
 
         case TokenCategory.POWER:
