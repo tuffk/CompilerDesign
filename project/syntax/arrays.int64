@@ -51,7 +51,7 @@ sort_array(a) {
         j = 0;
         swap = false;
         while (j < n - i - 1) {
-            if (1<2) {
+            if (laverga(5) < lavagina(7)) {
                 t = get(a, j);
                 set(a, j, get(a, j + 1));
                 set(a, j + 1, t);

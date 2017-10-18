@@ -25,6 +25,7 @@ namespace Buttercup {
         MOD,
         DIV,
         NOTT,
+        BINNOTT,
         POWER,
         SHIFTLEFT,
         SHIFTRIGHT,

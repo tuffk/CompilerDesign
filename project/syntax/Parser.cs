@@ -42,7 +42,16 @@ static readonly ISet<TokenCategory> firstOfOperator =
         TokenCategory.NOTEQ,
         TokenCategory.EQLESS,
         TokenCategory.MORE,
-        TokenCategory.EQMORE
+        TokenCategory.EQMORE,
+        TokenCategory.POWER,
+        TokenCategory.SHIFTLEFT,
+        TokenCategory.SHIFTRIGHT,
+        TokenCategory.TRIPLESHIFT,
+        TokenCategory.DIV,
+        TokenCategory.MOD,
+        TokenCategory.NOTT,
+        TokenCategory.BINNOTT,
+        TokenCategory.INLINEIF
 };
 
 static readonly ISet<TokenCategory> firstOfSimpleExpression =
@@ -233,6 +242,7 @@ public void Identificamela()
         case TokenCategory.MOD:
         case TokenCategory.DIV:
         case TokenCategory.NOTT:
+        case TokenCategory.BINNOTT:
         case TokenCategory.POWER:
         case TokenCategory.SHIFTLEFT:
         case TokenCategory.SHIFTRIGHT:
@@ -412,6 +422,15 @@ public void If() {
         Expect(TokenCategory.IF);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expression();
+        KUZ:
+        if(CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+        {
+          Funcionamela();
+        }
+        if(CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+        {
+          goto KUZ;
+        }
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         Expect(TokenCategory.CURLY_OPEN);
         Comentamela();
@@ -455,6 +474,14 @@ public void RecursiveameEnElIf()
         {
                 RecursiveameEnElIf();
         }
+}
+
+public void Inlinemeamela()
+{
+  Expect(TokenCategory.INLINEIF);
+  Expression();
+  Expect(TokenCategory.COLON);
+  Expression();
 }
 
 public void Switcheamela() {
@@ -662,6 +689,20 @@ public void SimpleExpression() {
                 SimpleExpression();
                 break;
 
+        case TokenCategory.POWER:
+                Expect(TokenCategory.POWER);
+                SimpleExpression();
+                break;
+
+        case TokenCategory.BINNOTT:
+                Expect(TokenCategory.BINNOTT);
+                SimpleExpression();
+                break;
+
+        case TokenCategory.INLINEIF:
+                Inlinemeamela();
+                break;
+
         case TokenCategory.NOTT:
               Expect(TokenCategory.NOTT);
               switch(CurrentToken){
@@ -677,6 +718,10 @@ public void SimpleExpression() {
                     Expect(TokenCategory.IDENTIFIER);
                     break;
 
+                case TokenCategory.NOTT:
+                      Expect(TokenCategory.NOTT);
+                      break;
+
                 default:
                     throw new SyntaxError(TokenCategory.IDENTIFIER,
                                        tokenStream.Current);
@@ -688,6 +733,7 @@ public void SimpleExpression() {
                 //                       tokenStream.Current);
                 break;
         }
+        Console.WriteLine("la naca -------------------------------------------------");
 }
 
 public void Operator() {
@@ -697,7 +743,10 @@ public void Operator() {
         case TokenCategory.AND:
                 Expect(TokenCategory.AND);
                 break;
-
+                
+        case TokenCategory.INLINEIF:
+                Inlinemeamela();
+                break;
         case TokenCategory.LESS:
                 Expect(TokenCategory.LESS);
                 break;
@@ -758,6 +807,10 @@ public void Operator() {
               Expect(TokenCategory.DIV);
               break;
 
+        case TokenCategory.BINNOTT:
+              Expect(TokenCategory.BINNOTT);
+              break;
+
         case TokenCategory.NOTT:
               Expect(TokenCategory.NOTT);
               switch(CurrentToken){
@@ -772,6 +825,10 @@ public void Operator() {
                 case TokenCategory.IDENTIFIER:
                     Expect(TokenCategory.IDENTIFIER);
                     break;
+
+                case TokenCategory.NOTT:
+                      Expect(TokenCategory.NOTT);
+                      break;
 
                 default:
                     throw new SyntaxError(TokenCategory.IDENTIFIER,
