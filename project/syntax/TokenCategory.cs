@@ -1,7 +1,7 @@
 /*
   Jaime Margolin A01019332
   Juan carlos Leon A01020200
-  Rodrigo Solana A01129839
+  Rodrido Solana A01129839
 */
 
 namespace Buttercup {
@@ -22,6 +22,13 @@ namespace Buttercup {
         EQLESS,
         MORE,
         EQMORE,
+        MOD,
+        DIV,
+        NOTT,
+        POWER,
+        SHIFTLEFT,
+        SHIFTRIGHT,
+        TRIPLESHIFT,
         // if stuff
         IF,
         ELSE,
