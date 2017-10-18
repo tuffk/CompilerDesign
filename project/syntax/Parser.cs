@@ -42,7 +42,15 @@ static readonly ISet<TokenCategory> firstOfOperator =
         TokenCategory.NOTEQ,
         TokenCategory.EQLESS,
         TokenCategory.MORE,
-        TokenCategory.EQMORE
+        TokenCategory.EQMORE,
+        TokenCategory.POWER,
+        TokenCategory.SHIFTLEFT,
+        TokenCategory.SHIFTRIGHT,
+        TokenCategory.TRIPLESHIFT,
+        TokenCategory.DIV,
+        TokenCategory.MOD,
+        TokenCategory.NOTT,
+        TokenCategory.BINNOTT
 };
 
 static readonly ISet<TokenCategory> firstOfSimpleExpression =
@@ -233,6 +241,7 @@ public void Identificamela()
         case TokenCategory.MOD:
         case TokenCategory.DIV:
         case TokenCategory.NOTT:
+        case TokenCategory.BINNOTT:
         case TokenCategory.POWER:
         case TokenCategory.SHIFTLEFT:
         case TokenCategory.SHIFTRIGHT:
@@ -671,6 +680,16 @@ public void SimpleExpression() {
                 SimpleExpression();
                 break;
 
+        case TokenCategory.POWER:
+                Expect(TokenCategory.POWER);
+                SimpleExpression();
+                break;
+
+        case TokenCategory.BINNOTT:
+                Expect(TokenCategory.BINNOTT);
+                SimpleExpression();
+                break;
+
         case TokenCategory.NOTT:
               Expect(TokenCategory.NOTT);
               switch(CurrentToken){
@@ -686,6 +705,10 @@ public void SimpleExpression() {
                     Expect(TokenCategory.IDENTIFIER);
                     break;
 
+                case TokenCategory.NOTT:
+                      Expect(TokenCategory.NOTT);
+                      break;
+
                 default:
                     throw new SyntaxError(TokenCategory.IDENTIFIER,
                                        tokenStream.Current);
@@ -697,6 +720,7 @@ public void SimpleExpression() {
                 //                       tokenStream.Current);
                 break;
         }
+        Console.WriteLine("la naca -------------------------------------------------");
 }
 
 public void Operator() {
@@ -767,6 +791,10 @@ public void Operator() {
               Expect(TokenCategory.DIV);
               break;
 
+        case TokenCategory.BINNOTT:
+              Expect(TokenCategory.BINNOTT);
+              break;
+
         case TokenCategory.NOTT:
               Expect(TokenCategory.NOTT);
               switch(CurrentToken){
@@ -781,6 +809,10 @@ public void Operator() {
                 case TokenCategory.IDENTIFIER:
                     Expect(TokenCategory.IDENTIFIER);
                     break;
+
+                case TokenCategory.NOTT:
+                      Expect(TokenCategory.NOTT);
+                      break;
 
                 default:
                     throw new SyntaxError(TokenCategory.IDENTIFIER,

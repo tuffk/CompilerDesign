@@ -35,10 +35,11 @@ static readonly Regex regex = new Regex(
               | (?<More>       \>        )
               | (?<EqCompare>  ==        )
               | (?<Assign>     =         )
-              | (?<NotEq>      =         )
-              | (?<Nott>       !|~       )
+              | (?<NotEq>      !=        )
+              | (?<Nott>       !         )
               | (?<Power>      \*{2}     )
-              | (?<Mul>        [*]       )
+              | (?<Mul>        \*        )
+              | (?<BinNott>    ~         )
               | (?<Neg>        [-]       )
               | (?<ParLeft>    [(]       )
               | (?<ParRight>   [)]       )
@@ -126,6 +127,7 @@ static readonly IDictionary<string, TokenCategory> nonKeywords =
         {"EqCompare", TokenCategory.EQCOMPARE},
         {"NotEq", TokenCategory.NOTEQ},
         {"Nott", TokenCategory.NOTT},
+        {"BinNott", TokenCategory.BINNOTT},
         {"More", TokenCategory.MORE},
         {"EqMore", TokenCategory.EQMORE},
         {"Comma", TokenCategory.COMMA},
