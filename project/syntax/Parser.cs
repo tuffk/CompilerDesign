@@ -144,6 +144,26 @@ public void Declaration() {
         }
 }
 
+public void Arreglamela(){
+  Expect(TokenCategory.CURLY_OPEN);
+  if(CurrentToken != TokenCategory.CURLY_CLOSE)
+  {
+    ArreglamelaContinuer();
+  }
+  Expect(TokenCategory.CURLY_CLOSE);
+  Finisher();
+}
+
+public void ArreglamelaContinuer()
+{
+  SimpleExpression();
+  if(CurrentToken == TokenCategory.COMMA)
+  {
+    Expect(TokenCategory.COMMA);
+    ArreglamelaContinuer();
+  }
+}
+
 public void Vareamela(){
         Console.WriteLine("Vareamela");
         Expect(TokenCategory.VAR);
@@ -212,6 +232,11 @@ public void Identificamela()
         case TokenCategory.EQMORE:
         case TokenCategory.MOD:
         case TokenCategory.DIV:
+        case TokenCategory.NOTT:
+        case TokenCategory.POWER:
+        case TokenCategory.SHIFTLEFT:
+        case TokenCategory.SHIFTRIGHT:
+        case TokenCategory.TRIPLESHIFT:
                 Operator();
                 Expression();
                 Finisher();
@@ -220,6 +245,20 @@ public void Identificamela()
                 break;
         }
 
+}
+
+public void Breakeamela(){
+  if(CurrentToken == TokenCategory.BREAK){
+        Expect(TokenCategory.BREAK);
+        Expect(TokenCategory.SEMICOLON);
+  }
+}
+
+public void Continuamela(){
+  if(CurrentToken == TokenCategory.CONTINUE){
+        Expect(TokenCategory.CONTINUE);
+        Expect(TokenCategory.SEMICOLON);
+  }
 }
 
 public void Returneamela(){
@@ -254,8 +293,12 @@ public void Funcionamela()
                   Declaration();
                   Statement();
                   Returneamela();
+                  Breakeamela();
+                  Continuamela();
           }
           Returneamela();
+          Breakeamela();
+          Continuamela();
           Expect(TokenCategory.CURLY_CLOSE);
         }else{
           Expression();
@@ -376,6 +419,8 @@ public void If() {
                 Statement();
         }
         Returneamela();
+        Breakeamela();
+        Continuamela();
         Expect(TokenCategory.CURLY_CLOSE);
         if(CurrentToken == TokenCategory.ELSEIF) {
                 Comentamela();
@@ -387,6 +432,8 @@ public void If() {
                 Comentamela();
                 Statement();
                 Returneamela();
+                Breakeamela();
+                Continuamela();
                 Expect(TokenCategory.CURLY_CLOSE);
         }
 }
@@ -401,6 +448,8 @@ public void RecursiveameEnElIf()
         Expect(TokenCategory.CURLY_OPEN);
         Statement();
         Returneamela();
+        Breakeamela();
+        Continuamela();
         Expect(TokenCategory.CURLY_CLOSE);
         if(CurrentToken == TokenCategory.ELSEIF)
         {
@@ -437,6 +486,8 @@ public void Switcheamela() {
                         Statement();
                 }
                 Returneamela();
+                Breakeamela();
+                Continuamela();
         }
 
         Expect(TokenCategory.DEFAULT);
@@ -447,6 +498,8 @@ public void Switcheamela() {
         }
 
         Returneamela();
+        Breakeamela();
+        Continuamela();
         Expect(TokenCategory.CURLY_CLOSE);
 
 }
@@ -465,6 +518,8 @@ public void Whileamela() {
                 Statement();
         }
         Returneamela();
+        Breakeamela();
+        Continuamela();
         Expect(TokenCategory.CURLY_CLOSE);
 }
 
@@ -477,6 +532,8 @@ public void DoWhileamela() {
                 Statement();
         }
         Returneamela();
+        Breakeamela();
+        Continuamela();
         Expect(TokenCategory.CURLY_CLOSE);
         Expect(TokenCategory.WHILE);
         Expect(TokenCategory.PARENTHESIS_OPEN);
@@ -499,6 +556,8 @@ public void Foreamesto() {
                 Statement();
         }
         Returneamela();
+        Breakeamela();
+        Continuamela();
         Expect(TokenCategory.CURLY_CLOSE);
 
 }
@@ -669,6 +728,26 @@ public void Operator() {
 
         case TokenCategory.DIV:
               Expect(TokenCategory.DIV);
+              break;
+
+        case TokenCategory.NOTT:
+              Expect(TokenCategory.NOTT);
+              break;
+
+        case TokenCategory.POWER:
+              Expect(TokenCategory.POWER);
+              break;
+
+        case TokenCategory.SHIFTLEFT:
+              Expect(TokenCategory.SHIFTLEFT);
+              break;
+
+        case TokenCategory.SHIFTRIGHT:
+              Expect(TokenCategory.SHIFTRIGHT);
+              break;
+
+        case TokenCategory.TRIPLESHIFT:
+              Expect(TokenCategory.TRIPLESHIFT);
               break;
 
         default:

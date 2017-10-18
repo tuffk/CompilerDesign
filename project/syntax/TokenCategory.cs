@@ -24,6 +24,11 @@ namespace Buttercup {
         EQMORE,
         MOD,
         DIV,
+        NOTT,
+        POWER,
+        SHIFTLEFT,
+        SHIFTRIGHT,
+        TRIPLESHIFT,
         // if stuff
         IF,
         ELSE,

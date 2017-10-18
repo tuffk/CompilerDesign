@@ -23,9 +23,12 @@ static readonly Regex regex = new Regex(
               | (?<True>       true      )
               | (?<Char>       '\\u[a-fA-F0-9]{6}'  )
               | (?<Char>       '\\[nt\\r""']'   )
-              | (?<Char>       '[\w\d\ ]?'  )
+              | (?<Char>       '[\S ]?'  )
               | (?<String>     "".*""    )
               | (?<Identifier> [a-zA-Z]+ [a-zA-Z0-9_]* )
+              | (?<Shiftleft>  \<{2}     )
+              | (?<Shiftright> \>{2}     )
+              | (?<Tripleshift> \>{3}    )
               | (?<EqLess>     \<=       )
               | (?<Less>       \<        )
               | (?<EqMore>     \>=       )
@@ -33,6 +36,8 @@ static readonly Regex regex = new Regex(
               | (?<EqCompare>  ==        )
               | (?<Assign>     =         )
               | (?<NotEq>      =         )
+              | (?<Nott>       !|~       )
+              | (?<Power>      \*{2}     )
               | (?<Mul>        [*]       )
               | (?<Neg>        [-]       )
               | (?<ParLeft>    [(]       )
@@ -45,14 +50,14 @@ static readonly Regex regex = new Regex(
               | (?<InlineIf>   [?]       )
               | (?<Colon>      [:]       )
               | (?<NomOr>      \|\|      )
-              | (?<BitOr>      \|        )
+              | (?<BitOr>      \||\^     )
               | (?<NomAnd>     &&        )
               | (?<BitAnd>     &         )
               | (?<Mod>        %         )
               | (?<Comma>      ,         )
               | (?<Bin>        [01]+ [bB])
               | (?<Oct>        [0-7]+ [oO])
-              | (?<Hex>        [0-9a-fA-F]+ [xX])
+              | (?<Hex>        0[xX][0-9a-fA-F]+)
               | (?<Int>        \d+       )
               | (?<Newline>    \n        )
               | (?<WhiteSpace> \s        )     # Must go anywhere after Newline.
@@ -120,11 +125,16 @@ static readonly IDictionary<string, TokenCategory> nonKeywords =
         {"BitAnd", TokenCategory.BITAND},
         {"EqCompare", TokenCategory.EQCOMPARE},
         {"NotEq", TokenCategory.NOTEQ},
+        {"Nott", TokenCategory.NOTT},
         {"More", TokenCategory.MORE},
         {"EqMore", TokenCategory.EQMORE},
         {"Comma", TokenCategory.COMMA},
         {"Mod", TokenCategory.MOD},
-        {"Div", TokenCategory.DIV}
+        {"Div", TokenCategory.DIV},
+        {"Power", TokenCategory.POWER},
+        {"Shiftleft", TokenCategory.SHIFTLEFT},
+        {"Shiftright", TokenCategory.SHIFTRIGHT},
+        {"Tripleshift", TokenCategory.TRIPLESHIFT}
 };
 
 public Scanner(string input) {
