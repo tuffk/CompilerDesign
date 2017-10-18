@@ -190,7 +190,9 @@ public void Vareamela(){
 public void DeclarationContinuer()
 {
         Console.WriteLine("DeclarationContinuer");
+        Comentamela();
         Expect(TokenCategory.IDENTIFIER);
+        Comentamela();
         if(CurrentToken == TokenCategory.COMMA)
         {
                 Expect(TokenCategory.COMMA);
@@ -429,6 +431,7 @@ public void If() {
         }
         if(CurrentToken == TokenCategory.PARENTHESIS_OPEN)
         {
+          Comentamela();
           goto KUZ;
         }
         Expect(TokenCategory.PARENTHESIS_CLOSE);
@@ -450,6 +453,7 @@ public void If() {
                 Expect(TokenCategory.CURLY_OPEN);
                 Comentamela();
                 while (firstOfStatement.Contains(CurrentToken)) {
+                  Comentamela();
                         Statement();
                 }
                 Returneamela();
@@ -467,7 +471,9 @@ public void RecursiveameEnElIf()
         DeclarationContinuer();
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         Expect(TokenCategory.CURLY_OPEN);
+        Comentamela();
         while (firstOfStatement.Contains(CurrentToken)) {
+          Comentamela();
                 Statement();
         }
         Returneamela();
@@ -584,6 +590,7 @@ public void Foreamesto() {
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         Expect(TokenCategory.CURLY_OPEN);
         while (firstOfStatement.Contains(CurrentToken)) {
+          Comentamela();
                 Statement();
         }
         Returneamela();
