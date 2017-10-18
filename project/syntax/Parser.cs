@@ -50,7 +50,8 @@ static readonly ISet<TokenCategory> firstOfOperator =
         TokenCategory.DIV,
         TokenCategory.MOD,
         TokenCategory.NOTT,
-        TokenCategory.BINNOTT
+        TokenCategory.BINNOTT,
+        TokenCategory.INLINEIF
 };
 
 static readonly ISet<TokenCategory> firstOfSimpleExpression =
@@ -475,6 +476,14 @@ public void RecursiveameEnElIf()
         }
 }
 
+public void Inlinemeamela()
+{
+  Expect(TokenCategory.INLINEIF);
+  Expression();
+  Expect(TokenCategory.COLON);
+  Expression();
+}
+
 public void Switcheamela() {
         Console.WriteLine("Switcheamela");
         Expect(TokenCategory.SWITCH);
@@ -690,6 +699,10 @@ public void SimpleExpression() {
                 SimpleExpression();
                 break;
 
+        case TokenCategory.INLINEIF:
+                Inlinemeamela();
+                break;
+
         case TokenCategory.NOTT:
               Expect(TokenCategory.NOTT);
               switch(CurrentToken){
@@ -730,7 +743,10 @@ public void Operator() {
         case TokenCategory.AND:
                 Expect(TokenCategory.AND);
                 break;
-
+                
+        case TokenCategory.INLINEIF:
+                Inlinemeamela();
+                break;
         case TokenCategory.LESS:
                 Expect(TokenCategory.LESS);
                 break;
