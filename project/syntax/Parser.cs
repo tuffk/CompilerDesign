@@ -412,6 +412,15 @@ public void If() {
         Expect(TokenCategory.IF);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expression();
+        KUZ:
+        if(CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+        {
+          Funcionamela();
+        }
+        if(CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+        {
+          goto KUZ;
+        }
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         Expect(TokenCategory.CURLY_OPEN);
         Comentamela();
