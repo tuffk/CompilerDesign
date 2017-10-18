@@ -1,7 +1,7 @@
 /*
    Jaime Margolin A01019332
    Juan carlos Leon A01020200
-   Rodrigo Solana A01129839
+   Rodrido Solana A01129839
  */
 
 using System;
@@ -169,17 +169,21 @@ public void DeclarationContinuer()
 
 public void ArgumentContinuer()
 {
-
         SimpleExpression();
+        if(CurrentToken == TokenCategory.PARENTHESIS_OPEN){
+          Funcionamela();
+        }
         if(CurrentToken == TokenCategory.COMMA)
         {
                 Expect(TokenCategory.COMMA);
+
                 ArgumentContinuer();
         }
 }
 
 public void Identificamela()
 {
+
         Expect(TokenCategory.IDENTIFIER);
         switch(CurrentToken)
         {
@@ -210,6 +214,7 @@ public void Identificamela()
         default:
                 break;
         }
+
 }
 
 public void Funcionamela()
@@ -226,23 +231,26 @@ public void Funcionamela()
                 Expect(TokenCategory.SEMICOLON);
                 return;
         }
-        Expect(TokenCategory.CURLY_OPEN);
-        while(CurrentToken != TokenCategory.CURLY_CLOSE)
-        {
-                Declaration();
-                Statement();
+        if(CurrentToken == TokenCategory.CURLY_OPEN){
+          Expect(TokenCategory.CURLY_OPEN);
+          while(CurrentToken != TokenCategory.CURLY_CLOSE)
+          {
+                  Declaration();
+                  Statement();
+          }
+          Expect(TokenCategory.CURLY_CLOSE);
+        }else{
+          Expression();
         }
-        Expect(TokenCategory.CURLY_CLOSE);
 }
 
 public void Statement() {
         Comentamela();
-
-
         switch (CurrentToken) {
-
         case TokenCategory.IDENTIFIER:
+
                 Identificamela();
+
                 break;
 
         case TokenCategory.PRINT:
@@ -319,10 +327,22 @@ public void Type() {
 }
 
 public void Assignment() {
-        Expect(TokenCategory.ASSIGN);
-        Expression();
 
-        Finisher();
+        Expect(TokenCategory.ASSIGN);
+        if(CurrentToken == TokenCategory.IDENTIFIER){
+          Identificamela();
+        }else if (CurrentToken == TokenCategory.SEMICOLON) {
+          Finisher();
+        }else {
+
+          Expression();
+
+        }
+
+        if (CurrentToken == TokenCategory.SEMICOLON) {
+          Finisher();
+        }
+
 }
 
 public void Print() {
@@ -370,7 +390,7 @@ public void RecursiveameEnElIf()
 }
 
 public void Switcheamela() {
-        Console.WriteLine("Estoy en funcion switch");
+
         Expect(TokenCategory.SWITCH);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expression();
@@ -414,8 +434,10 @@ public void Whileamela() {
         Expression();
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         Expect(TokenCategory.CURLY_OPEN);
-        Comentamela();
-        while (firstOfStatement.Contains(CurrentToken)) {
+
+        while (CurrentToken != TokenCategory.CURLY_CLOSE) {
+                Comentamela();
+                Declaration();
                 Statement();
         }
         Expect(TokenCategory.CURLY_CLOSE);
@@ -458,7 +480,7 @@ public void Foreamesto() {
 public void Expression() {
         Comentamela();
         SimpleExpression();
-        Console.WriteLine("exploto");
+
         while (firstOfOperator.Contains(CurrentToken)) {
                 Operator();
                 SimpleExpression();
@@ -542,8 +564,9 @@ public void SimpleExpression() {
                 break;
 
         default:
-                throw new SyntaxError(firstOfSimpleExpression,
-                                      tokenStream.Current);
+                // throw new SyntaxError(firstOfSimpleExpression,
+                //                       tokenStream.Current);
+                break;
         }
 }
 

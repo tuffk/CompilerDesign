@@ -1,7 +1,7 @@
 /*
   Jaime Margolin A01019332
   Juan carlos Leon A01020200
-  Rodrigo Solana A01129839
+  Rodrido Solana A01129839
 */
 
 using System;
