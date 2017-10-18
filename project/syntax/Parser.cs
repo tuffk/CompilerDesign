@@ -111,11 +111,11 @@ public void Program() {
                 Statement();
                 Comentamela();
         }
-
         Expect(TokenCategory.EOF);
 }
 public void Comentamela()
 {
+        Console.WriteLine("Comentamela");
         if (CurrentToken == TokenCategory.COMMENT) {
                 Expect(TokenCategory.COMMENT);
         }
@@ -129,6 +129,7 @@ public void Finisher(){
 }
 
 public void Declaration() {
+        Console.WriteLine("Declaration");
         Comentamela();
         switch (CurrentToken) {
         case TokenCategory.VAR:
@@ -144,6 +145,7 @@ public void Declaration() {
 }
 
 public void Vareamela(){
+        Console.WriteLine("Vareamela");
         Expect(TokenCategory.VAR);
         Expect(TokenCategory.IDENTIFIER);
         if(CurrentToken == TokenCategory.COMMA)
@@ -158,7 +160,7 @@ public void Vareamela(){
 
 public void DeclarationContinuer()
 {
-
+        Console.WriteLine("DeclarationContinuer");
         Expect(TokenCategory.IDENTIFIER);
         if(CurrentToken == TokenCategory.COMMA)
         {
@@ -169,21 +171,22 @@ public void DeclarationContinuer()
 
 public void ArgumentContinuer()
 {
-        SimpleExpression();
+        Console.WriteLine("ArgumentContinuer");
+        // SimpleExpression();
+        Expression();
         if(CurrentToken == TokenCategory.PARENTHESIS_OPEN){
           Funcionamela();
         }
         if(CurrentToken == TokenCategory.COMMA)
         {
                 Expect(TokenCategory.COMMA);
-
                 ArgumentContinuer();
         }
 }
 
 public void Identificamela()
 {
-
+        Console.WriteLine("Identificamela");
         Expect(TokenCategory.IDENTIFIER);
         switch(CurrentToken)
         {
@@ -207,6 +210,8 @@ public void Identificamela()
         case TokenCategory.EQLESS:
         case TokenCategory.MORE:
         case TokenCategory.EQMORE:
+        case TokenCategory.MOD:
+        case TokenCategory.DIV:
                 Operator();
                 Expression();
                 Finisher();
@@ -217,8 +222,19 @@ public void Identificamela()
 
 }
 
+public void Returneamela(){
+  if(CurrentToken == TokenCategory.RETURN){
+        Expect(TokenCategory.RETURN);
+        if(CurrentToken != TokenCategory.SEMICOLON){
+          Expression();
+        }
+        Expect(TokenCategory.SEMICOLON);
+  }
+}
+
 public void Funcionamela()
 {
+        Console.WriteLine("Funcionamela");
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Comentamela();
         if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
@@ -237,7 +253,9 @@ public void Funcionamela()
           {
                   Declaration();
                   Statement();
+                  Returneamela();
           }
+          Returneamela();
           Expect(TokenCategory.CURLY_CLOSE);
         }else{
           Expression();
@@ -245,12 +263,11 @@ public void Funcionamela()
 }
 
 public void Statement() {
+        Console.WriteLine("Statement");
         Comentamela();
         switch (CurrentToken) {
         case TokenCategory.IDENTIFIER:
-
                 Identificamela();
-
                 break;
 
         case TokenCategory.PRINT:
@@ -294,7 +311,6 @@ public void Statement() {
 
 public void caseList() {
         Comentamela();
-
         switch (CurrentToken) {
 
         case TokenCategory.IDENTIFIER:
@@ -327,16 +343,14 @@ public void Type() {
 }
 
 public void Assignment() {
-
+        Console.WriteLine("Assignment");
         Expect(TokenCategory.ASSIGN);
         if(CurrentToken == TokenCategory.IDENTIFIER){
           Identificamela();
         }else if (CurrentToken == TokenCategory.SEMICOLON) {
           Finisher();
         }else {
-
           Expression();
-
         }
 
         if (CurrentToken == TokenCategory.SEMICOLON) {
@@ -351,6 +365,7 @@ public void Print() {
 }
 
 public void If() {
+        Console.WriteLine("IF Function");
         Expect(TokenCategory.IF);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expression();
@@ -360,6 +375,7 @@ public void If() {
         while (firstOfStatement.Contains(CurrentToken)) {
                 Statement();
         }
+        Returneamela();
         Expect(TokenCategory.CURLY_CLOSE);
         if(CurrentToken == TokenCategory.ELSEIF) {
                 Comentamela();
@@ -370,18 +386,21 @@ public void If() {
                 Expect(TokenCategory.CURLY_OPEN);
                 Comentamela();
                 Statement();
+                Returneamela();
                 Expect(TokenCategory.CURLY_CLOSE);
         }
 }
 
 public void RecursiveameEnElIf()
 {
+        Console.WriteLine("RecursiveameEnElIf");
         Expect(TokenCategory.ELSEIF);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         DeclarationContinuer();
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         Expect(TokenCategory.CURLY_OPEN);
         Statement();
+        Returneamela();
         Expect(TokenCategory.CURLY_CLOSE);
         if(CurrentToken == TokenCategory.ELSEIF)
         {
@@ -390,10 +409,15 @@ public void RecursiveameEnElIf()
 }
 
 public void Switcheamela() {
-
+        Console.WriteLine("Switcheamela");
         Expect(TokenCategory.SWITCH);
         Expect(TokenCategory.PARENTHESIS_OPEN);
-        Expression();
+        Expect(TokenCategory.IDENTIFIER);
+        if(CurrentToken != TokenCategory.PARENTHESIS_OPEN){
+          Expression();
+        }else{
+          Funcionamela();
+        }
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         Expect(TokenCategory.CURLY_OPEN);
         Comentamela();
@@ -412,7 +436,7 @@ public void Switcheamela() {
                 while (firstOfStatement.Contains(CurrentToken)) {
                         Statement();
                 }
-
+                Returneamela();
         }
 
         Expect(TokenCategory.DEFAULT);
@@ -422,13 +446,13 @@ public void Switcheamela() {
                 Statement();
         }
 
+        Returneamela();
         Expect(TokenCategory.CURLY_CLOSE);
 
 }
 
-
-
 public void Whileamela() {
+        Console.WriteLine("Whileamela");
         Expect(TokenCategory.WHILE);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expression();
@@ -440,17 +464,19 @@ public void Whileamela() {
                 Declaration();
                 Statement();
         }
+        Returneamela();
         Expect(TokenCategory.CURLY_CLOSE);
 }
 
 
 public void DoWhileamela() {
+        Console.WriteLine("DoWhileamela");
         Expect(TokenCategory.DO);
         Expect(TokenCategory.CURLY_OPEN);
         while (firstOfStatement.Contains(CurrentToken)) {
                 Statement();
         }
-
+        Returneamela();
         Expect(TokenCategory.CURLY_CLOSE);
         Expect(TokenCategory.WHILE);
         Expect(TokenCategory.PARENTHESIS_OPEN);
@@ -461,7 +487,7 @@ public void DoWhileamela() {
 
 
 public void Foreamesto() {
-
+        Console.WriteLine("Foreamesto");
         Expect(TokenCategory.FOR);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expect(TokenCategory.IDENTIFIER);
@@ -472,12 +498,14 @@ public void Foreamesto() {
         while (firstOfStatement.Contains(CurrentToken)) {
                 Statement();
         }
+        Returneamela();
         Expect(TokenCategory.CURLY_CLOSE);
 
 }
 
 
 public void Expression() {
+        Console.WriteLine("Expression");
         Comentamela();
         SimpleExpression();
 
@@ -514,6 +542,7 @@ public void switchExpresion() {
 }
 
 public void SimpleExpression() {
+        Console.WriteLine("SimpleExpression");
         switch (CurrentToken) {
 
         case TokenCategory.IDENTIFIER:
@@ -563,6 +592,10 @@ public void SimpleExpression() {
                 SimpleExpression();
                 break;
 
+        case TokenCategory.PLUS:
+                Expect(TokenCategory.PLUS);
+                SimpleExpression();
+                break;
         default:
                 // throw new SyntaxError(firstOfSimpleExpression,
                 //                       tokenStream.Current);
@@ -571,6 +604,7 @@ public void SimpleExpression() {
 }
 
 public void Operator() {
+        Console.WriteLine("Operator");
         switch (CurrentToken) {
 
         case TokenCategory.AND:
@@ -628,6 +662,14 @@ public void Operator() {
         case TokenCategory.EQLESS:
                 Expect(TokenCategory.EQLESS);
                 break;
+
+        case TokenCategory.MOD:
+                Expect(TokenCategory.MOD);
+                break;
+
+        case TokenCategory.DIV:
+              Expect(TokenCategory.DIV);
+              break;
 
         default:
                 throw new SyntaxError(firstOfOperator,

@@ -32,21 +32,23 @@ static readonly Regex regex = new Regex(
               | (?<More>       \>        )
               | (?<EqCompare>  ==        )
               | (?<Assign>     =         )
-              | (?<NotEq>      !=        )
+              | (?<NotEq>      =         )
               | (?<Mul>        [*]       )
               | (?<Neg>        [-]       )
               | (?<ParLeft>    [(]       )
               | (?<ParRight>   [)]       )
               | (?<Plus>       [+]       )
+              | (?<Div>        \/        )
               | (?<CurlyOpen>  [{]       )
               | (?<CurlyClose> [}]       )
               | (?<Semicolon>  [;]       )
               | (?<InlineIf>   [?]       )
               | (?<Colon>      [:]       )
-              | (?<NomOr>      \|\|        )
-              | (?<BitOr>      \|         )
+              | (?<NomOr>      \|\|      )
+              | (?<BitOr>      \|        )
               | (?<NomAnd>     &&        )
               | (?<BitAnd>     &         )
+              | (?<Mod>        %         )
               | (?<Comma>      ,         )
               | (?<Bin>        [01]+ [bB])
               | (?<Oct>        [0-7]+ [oO])
@@ -100,6 +102,7 @@ static readonly IDictionary<string, TokenCategory> nonKeywords =
         {"String", TokenCategory.STRING},
         {"Hex", TokenCategory.HEX},
         {"Less", TokenCategory.LESS},
+        {"EqLess", TokenCategory.EQLESS},
         {"Mul", TokenCategory.MUL},
         {"Neg", TokenCategory.NEG},
         {"ParLeft", TokenCategory.PARENTHESIS_OPEN},
@@ -119,7 +122,9 @@ static readonly IDictionary<string, TokenCategory> nonKeywords =
         {"NotEq", TokenCategory.NOTEQ},
         {"More", TokenCategory.MORE},
         {"EqMore", TokenCategory.EQMORE},
-        {"Comma", TokenCategory.COMMA}
+        {"Comma", TokenCategory.COMMA},
+        {"Mod", TokenCategory.MOD},
+        {"Div", TokenCategory.DIV}
 };
 
 public Scanner(string input) {

@@ -22,6 +22,8 @@ namespace Buttercup {
         EQLESS,
         MORE,
         EQMORE,
+        MOD,
+        DIV,
         // if stuff
         IF,
         ELSE,
