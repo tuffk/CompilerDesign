@@ -449,7 +449,9 @@ public void If() {
                 Expect(TokenCategory.ELSE);
                 Expect(TokenCategory.CURLY_OPEN);
                 Comentamela();
-                Statement();
+                while (firstOfStatement.Contains(CurrentToken)) {
+                        Statement();
+                }
                 Returneamela();
                 Breakeamela();
                 Continuamela();
@@ -465,7 +467,9 @@ public void RecursiveameEnElIf()
         DeclarationContinuer();
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         Expect(TokenCategory.CURLY_OPEN);
-        Statement();
+        while (firstOfStatement.Contains(CurrentToken)) {
+                Statement();
+        }
         Returneamela();
         Breakeamela();
         Continuamela();
@@ -743,7 +747,7 @@ public void Operator() {
         case TokenCategory.AND:
                 Expect(TokenCategory.AND);
                 break;
-                
+
         case TokenCategory.INLINEIF:
                 Inlinemeamela();
                 break;
