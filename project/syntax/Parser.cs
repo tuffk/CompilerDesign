@@ -580,7 +580,7 @@ public void Foreamesto() {
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expect(TokenCategory.IDENTIFIER);
         Expect(TokenCategory.IN);
-        Expression();
+        Identificamela();
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         Expect(TokenCategory.CURLY_OPEN);
         while (firstOfStatement.Contains(CurrentToken)) {
