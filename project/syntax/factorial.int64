@@ -18,7 +18,7 @@ iterative_factorial(n) {
 range(start, end) {
     var result;
     result = new(0);
-    while (start < end) {
+    while () {
         add(result, start);
         start = start + 1;
     }

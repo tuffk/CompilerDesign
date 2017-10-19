@@ -98,7 +98,7 @@ public Token CurrentToken2 {
 }
 
 public Token Expect(TokenCategory category) {
-        Console.WriteLine(CurrentToken2);
+
         if (CurrentToken == category) {
                 Token current = tokenStream.Current;
                 tokenStream.MoveNext();
@@ -124,7 +124,7 @@ public void Program() {
 }
 public void Comentamela()
 {
-        Console.WriteLine("Comentamela");
+
         if (CurrentToken == TokenCategory.COMMENT) {
                 Expect(TokenCategory.COMMENT);
         }
@@ -138,7 +138,7 @@ public void Finisher(){
 }
 
 public void Declaration() {
-        Console.WriteLine("Declaration");
+
         Comentamela();
         switch (CurrentToken) {
         case TokenCategory.VAR:
@@ -174,7 +174,7 @@ public void ArreglamelaContinuer()
 }
 
 public void Vareamela(){
-        Console.WriteLine("Vareamela");
+
         Expect(TokenCategory.VAR);
         Expect(TokenCategory.IDENTIFIER);
         if(CurrentToken == TokenCategory.COMMA)
@@ -189,7 +189,7 @@ public void Vareamela(){
 
 public void DeclarationContinuer()
 {
-        Console.WriteLine("DeclarationContinuer");
+
         Comentamela();
         Expect(TokenCategory.IDENTIFIER);
         Comentamela();
@@ -202,7 +202,7 @@ public void DeclarationContinuer()
 
 public void ArgumentContinuer()
 {
-        Console.WriteLine("ArgumentContinuer");
+
         // SimpleExpression();
         Expression();
         if(CurrentToken == TokenCategory.PARENTHESIS_OPEN){
@@ -217,7 +217,7 @@ public void ArgumentContinuer()
 
 public void Identificamela()
 {
-        Console.WriteLine("Identificamela");
+
         Expect(TokenCategory.IDENTIFIER);
         switch(CurrentToken)
         {
@@ -285,7 +285,7 @@ public void Returneamela(){
 
 public void Funcionamela()
 {
-        Console.WriteLine("Funcionamela");
+
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Comentamela();
         if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
@@ -318,7 +318,7 @@ public void Funcionamela()
 }
 
 public void Statement() {
-        Console.WriteLine("Statement");
+
         Comentamela();
         switch (CurrentToken) {
         case TokenCategory.IDENTIFIER:
@@ -398,7 +398,7 @@ public void Type() {
 }
 
 public void Assignment() {
-        Console.WriteLine("Assignment");
+
         Expect(TokenCategory.ASSIGN);
         if(CurrentToken == TokenCategory.IDENTIFIER){
           Identificamela();
@@ -420,7 +420,7 @@ public void Print() {
 }
 
 public void If() {
-        Console.WriteLine("IF Function");
+
         Expect(TokenCategory.IF);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expression();
@@ -465,7 +465,7 @@ public void If() {
 
 public void RecursiveameEnElIf()
 {
-        Console.WriteLine("RecursiveameEnElIf");
+
         Expect(TokenCategory.ELSEIF);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         DeclarationContinuer();
@@ -495,7 +495,7 @@ public void Inlinemeamela()
 }
 
 public void Switcheamela() {
-        Console.WriteLine("Switcheamela");
+
         Expect(TokenCategory.SWITCH);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expect(TokenCategory.IDENTIFIER);
@@ -542,7 +542,7 @@ public void Switcheamela() {
 }
 
 public void Whileamela() {
-        Console.WriteLine("Whileamela");
+
         Expect(TokenCategory.WHILE);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expression();
@@ -562,7 +562,7 @@ public void Whileamela() {
 
 
 public void DoWhileamela() {
-        Console.WriteLine("DoWhileamela");
+
         Expect(TokenCategory.DO);
         Expect(TokenCategory.CURLY_OPEN);
         while (firstOfStatement.Contains(CurrentToken)) {
@@ -581,7 +581,7 @@ public void DoWhileamela() {
 
 
 public void Foreamesto() {
-        Console.WriteLine("Foreamesto");
+
         Expect(TokenCategory.FOR);
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expect(TokenCategory.IDENTIFIER);
@@ -602,7 +602,7 @@ public void Foreamesto() {
 
 
 public void Expression() {
-        Console.WriteLine("Expression");
+
         Comentamela();
         SimpleExpression();
 
@@ -639,7 +639,7 @@ public void switchExpresion() {
 }
 
 public void SimpleExpression() {
-        Console.WriteLine("SimpleExpression");
+
         switch (CurrentToken) {
 
         case TokenCategory.IDENTIFIER:
@@ -744,11 +744,11 @@ public void SimpleExpression() {
                 //                       tokenStream.Current);
                 break;
         }
-        Console.WriteLine("la naca -------------------------------------------------");
+
 }
 
 public void Operator() {
-        Console.WriteLine("Operator");
+
         switch (CurrentToken) {
 
         case TokenCategory.AND:
