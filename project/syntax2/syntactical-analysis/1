@@ -1,0 +1,10 @@
+Syntax Error: Expecting PARENTHESIS_LEFT 
+but found SWITCH ("switch") at row 46, column 9.
+Syntax Error: Expecting one of {IDENTIFIER, VAR, EOF}
+but found SEMICOLON (";") at row 1, column 1.
+Syntax Error: Expecting PARENTHESIS_RIGHT 
+but found BASE_10 ("1") at row 9, column 13.
+Syntax Error: Expecting PARENTHESIS_LEFT 
+but found SWITCH ("switch") at row 26, column 5.
+Syntax Error: Expecting PARENTHESIS_RIGHT 
+but found BASE_10 ("1") at row 10, column 13.
