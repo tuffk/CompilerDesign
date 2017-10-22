@@ -98,7 +98,7 @@ public Token CurrentToken2 {
 }
 
 public Token Expect(TokenCategory category) {
-
+        Console.WriteLine(CurrentToken2);
         if (CurrentToken == category) {
                 Token current = tokenStream.Current;
                 tokenStream.MoveNext();
@@ -202,9 +202,10 @@ public void DeclarationContinuer()
 
 public void ArgumentContinuer()
 {
-
+        Console.WriteLine("ArgumentContinuer");
         // SimpleExpression();
         Expression();
+        Console.WriteLine($"--------------------{CurrentToken2}-------------------");
         if(CurrentToken == TokenCategory.PARENTHESIS_OPEN){
           Funcionamela();
         }
@@ -285,12 +286,13 @@ public void Returneamela(){
 
 public void Funcionamela()
 {
-
+        Console.WriteLine("++++++++++entre a funcionaemla");
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Comentamela();
         if (CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
         {
                 ArgumentContinuer();
+                Console.WriteLine("sali de continuer");
         }
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         if (CurrentToken == TokenCategory.SEMICOLON)
@@ -312,8 +314,6 @@ public void Funcionamela()
           Breakeamela();
           Continuamela();
           Expect(TokenCategory.CURLY_CLOSE);
-        }else{
-          Expression();
         }
 }
 
@@ -433,6 +433,10 @@ public void If() {
         {
           Comentamela();
           goto KUZ;
+        }
+        while(CurrentToken != TokenCategory.PARENTHESIS_CLOSE)
+        {
+          Expression();
         }
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         Expect(TokenCategory.CURLY_OPEN);
@@ -586,7 +590,9 @@ public void Foreamesto() {
         Expect(TokenCategory.PARENTHESIS_OPEN);
         Expect(TokenCategory.IDENTIFIER);
         Expect(TokenCategory.IN);
+        Console.WriteLine("me fui a identificamela");
         Identificamela();
+        Console.WriteLine("sali de identificamela");
         Expect(TokenCategory.PARENTHESIS_CLOSE);
         Expect(TokenCategory.CURLY_OPEN);
         while (firstOfStatement.Contains(CurrentToken)) {
@@ -605,7 +611,6 @@ public void Expression() {
 
         Comentamela();
         SimpleExpression();
-
         while (firstOfOperator.Contains(CurrentToken)) {
                 Operator();
                 SimpleExpression();
@@ -740,8 +745,12 @@ public void SimpleExpression() {
             break;
 
         default:
-                // throw new SyntaxError(firstOfSimpleExpression,
-                //                       tokenStream.Current);
+            if (firstOfOperator.Contains(CurrentToken)) {
+              Operator();
+            }else{
+                throw new SyntaxError(firstOfSimpleExpression,
+                                      tokenStream.Current);
+                }
                 break;
         }
 
