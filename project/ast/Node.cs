@@ -1,8 +1,7 @@
 /*
-Authors:
- - Gad Levy A01017986
- - Jonathan Ginsburg A01021617
- - Pablo de la Mora A01020365
+  Jaime Margolin A01019332
+  Juan carlos Leon A01020200
+  Rodrigo Solana A01129839
 */
 
 using System;
@@ -42,7 +41,7 @@ namespace Int64 {
 
         public string ToStringTree() {
             var sb = new StringBuilder();
-            TreeTraversal(this, "", sb);
+            TreeTraversal(this, "|", sb);
             return sb.ToString();
         }
 
@@ -51,7 +50,7 @@ namespace Int64 {
             sb.Append(node);
             sb.Append('\n');
             foreach (var child in node.children) {
-                TreeTraversal(child, indent + "  ", sb);
+                TreeTraversal(child, indent + "--", sb);
             }
         }
     }

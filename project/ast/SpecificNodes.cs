@@ -1,88 +1,85 @@
 /*
-Authors:
- - Gad Levy A01017986
- - Jonathan Ginsburg A01021617
- - Pablo de la Mora A01020365
+  Jaime Margolin A01019332
+  Juan carlos Leon A01020200
+  Rodrigo Solana A01129839
 */
 
 namespace Int64 {
-    class NProgram: Node {}
+    class Program: Node {}
 
-    class NVarDef: Node {}
+    class VariableDeclaration: Node {}
 
-    class NFunDef: Node {}
+    class FunctionDefinition: Node {}
 
-    class NVarDefList: Node {}
+    class VarList: Node {}
 
-	class NFunDefList: Node {} //Added for semantics
+	class FunList: Node {} //xq papi gins dice
 
-	class NParameterList: Node {} //Added for semantics
+	class ParamList: Node {} //xq papi gins dice
 
-	class NParameter: Node {} //Added for semantics
+	class Param: Node {} //xq papi gins dice
 
-	class NBreak: Node {} //Added for semantics
+	class BreakNode: Node {} //xq papi gins dice
 
-	class NContinue: Node {} //Added for semantics
+	class ContinueNode: Node {} //xq papi gins dice
 
-	class NReturn: Node {} //Added for semantics
+	class ReturnNode: Node {} //xq papi gins dice
 
-    class NStmtList: Node {}
+    class StatementList: Node {}
 
-    class NAssign: Node {}
+    class Assign: Node {}
 
-    class NFunCall: Node {}
+    class FCall: Node {}
 
-    class NIfStmt: Node {}
+    class IfNode: Node {}
 
-    class NSwitchStmt: Node {}
+    class SwitchNode: Node {}
 
-	class NCaseList: Node {} //Added for semantics
+	class CaseList: Node {} //xq papi gins dice
 
-    class NCase: Node {}
+    class Case: Node {}
 
-    //class NDefault: Node {} Removed for semantics equivalence to NStmtList
+    class BoolNode: Node {}
 
-    class NLitBool: Node {}
+    class IntNode: Node {}
 
-    class NLitInt: Node {}
+    class CharNode: Node {}
 
-    class NLitChar: Node {}
+    class WhileNode: Node {}
 
-    class NWhileStmt: Node {}
+    class DoWhileNode: Node {}
 
-    class NDoWhileStmt: Node {}
+    class ForNode: Node {}
 
-    class NForStmt: Node {}
+	class ExprList: Node {} //xq papi gins dice
 
-	class NExprList: Node {} //Added for semantics
+	class ExprNode: Node {} //xq papi gins dice
 
-	class NExpr: Node {} //Added for semantics
+    class OrNode: Node {}
 
-    class NExprOr: Node {}
+    class AndNode: Node {}
 
-    class NExprAnd: Node {}
+    class CompNode: Node {}
 
-    class NExprComp: Node {}
+    class RelNode: Node {}
 
-    class NExprRel: Node {}
+    class BinOrNode: Node {}
 
-    class NExprBitOr: Node {}
+    class BinAndNode: Node {}
 
-    class NExprBitAnd: Node {}
+    class BinShiftNode: Node {}
 
-    class NExprBitShift: Node {}
+    class PlusNode: Node {}
 
-    class NExprAdd: Node {}
+    class MulNode: Node {}
 
-    class NExprMul: Node {}
+    class PowerNode: Node {}
 
-    class NExprPow: Node {}
+    class UnaryNode: Node {}
 
-    class NExprUnary: Node {}
+    class PrimaryExpNode: Node {}
 
-    class NExprPrimary: Node {}
+    class StringNode: Node {}
 
-    class NLitString: Node {}
-
-    class NArrayList: Node {}
+    class ArrayList: Node {}
 }

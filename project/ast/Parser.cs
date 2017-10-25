@@ -1,8 +1,7 @@
 /*
-Authors:
-- Gad Levy A01017986
-- Jonathan Ginsburg A01021617
-- Pablo de la Mora A01020365
+  Jaime Margolin A01019332
+  Juan carlos Leon A01020200
+  Rodrigo Solana A01129839
 */
 
 using System;
@@ -91,11 +90,12 @@ namespace Int64 {
 			get { return tokenStream.Current.Category; }
 		}
 
-		public Token Expect(TokenCategory category) {
-			//Console.WriteLine("Expecting: " + tokenStream.Current.Lexeme);
-			//Console.WriteLine(System.Environment.StackTrace);
+		public Token CurrentToken2 {
+		        get { return tokenStream.Current; }
+		}
+
+		public Token Expect(TokenCategory category) {;
 			if (CurrentToken == category) {
-				//Console.WriteLine("Consuming: " + tokenStream.Current.Lexeme);
 				Token current = tokenStream.Current;
 				tokenStream.MoveNext();
 				return current;
@@ -104,25 +104,24 @@ namespace Int64 {
 			}
 		}
 
-		// Grammar entry point
-		// Returns NProgram
+		// new start point
 		public Node CProgram() {
-			NProgram nProgram = (NProgram)Program();
+			Program nProgram = (Program)ProgramRecursive();
 			Expect(TokenCategory.EOF);
 			return nProgram;
 		}
 
-		// Returns NProgram
-		public Node Program() {
-			NProgram nProgram = new NProgram();
-			NVarDefList nVarDefList = new NVarDefList();
-			NFunDefList nFunDefList = new NFunDefList();
+		// old start point (return "root" node for tree building)
+		public Node ProgramRecursive() {
+			Program nProgram = new Program();
+			VarList nVarDefList = new VarList();
+			FunList nFunDefList = new FunList();
 			while (firstOfProgram.Contains(CurrentToken)) {
 				if (CurrentToken == TokenCategory.VAR) {
-					VarDef(nVarDefList);
+					Vareamela(nVarDefList);
 				}
 				else if (CurrentToken == TokenCategory.IDENTIFIER) {
-					FunDef(nFunDefList);
+					Funcionamela(nFunDefList);
 				}
 				else if (CurrentToken == TokenCategory.EOF) {
 					break;
@@ -144,43 +143,41 @@ namespace Int64 {
 			return nProgram;
 		}
 
-		// Appends NVarDef to nVarDefList
-		public void VarDef(NVarDefList nVarDefList) {
-			NVarDef nVarDef = new NVarDef();
+		public void Vareamela(VarList nVarDefList) {
+			VariableDeclaration nVarDef = new VariableDeclaration();
 			Expect(TokenCategory.VAR);
 			nVarDef.AnchorToken = Expect(TokenCategory.IDENTIFIER);
 			nVarDefList.Add(nVarDef);
 			while (CurrentToken==TokenCategory.COMMA) {
 				Expect(TokenCategory.COMMA);
-				NVarDef otherNVarDef = new NVarDef();
+				VariableDeclaration otherNVarDef = new VariableDeclaration();
 				otherNVarDef.AnchorToken = Expect(TokenCategory.IDENTIFIER);
 				nVarDefList.Add(otherNVarDef);
 			}
 			Expect(TokenCategory.SEMICOLON);
 		}
 
-		// Appends NFunDef to nFunDefList
-		public void FunDef(NFunDefList nFunDefList) {
-			NFunDef nFunDef = new NFunDef(){
+		public void Funcionamela(FunList nFunDefList) {
+			FunctionDefinition nFunDef = new FunctionDefinition(){
 				AnchorToken = Expect(TokenCategory.IDENTIFIER)
 			};
-			NParameterList nParameterList = new NParameterList();
+			ParamList nParameterList = new ParamList();
 			Expect(TokenCategory.PARENTHESIS_LEFT);
 			if (CurrentToken==TokenCategory.IDENTIFIER) {
-				nParameterList.Add(new NParameter(){
+				nParameterList.Add(new Param(){
 					AnchorToken = Expect(TokenCategory.IDENTIFIER)
 				});
 				while (CurrentToken==TokenCategory.COMMA) {
 					Expect(TokenCategory.COMMA);
-					nParameterList.Add(new NParameter(){
+					nParameterList.Add(new Param(){
 						AnchorToken = Expect(TokenCategory.IDENTIFIER)
 					});
 				}
 			}
 			Expect(TokenCategory.PARENTHESIS_RIGHT);
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
-			NVarDefList nVarDefList = (NVarDefList)VarDefList();
-			NStmtList nStmtList = (NStmtList)StmtList();
+			VarList nVarDefList = (VarList)DefinitionContinuer();
+			StatementList nStmtList = (StatementList)StatmentList();
 			Expect(TokenCategory.CURLY_BRACE_RIGHT);
 			nFunDef.Add(nParameterList);
 			nFunDef.Add(nVarDefList);
@@ -188,38 +185,35 @@ namespace Int64 {
 			nFunDefList.Add(nFunDef);
 		}
 
-		// Returns NVarDefList
-		public Node VarDefList() {
-			NVarDefList nVarDefList = new NVarDefList();
+		public Node DefinitionContinuer() {
+			VarList nVarDefList = new VarList();
 			while (CurrentToken == TokenCategory.VAR) {
-				VarDef(nVarDefList);
+				Vareamela(nVarDefList);
 			}
 			return nVarDefList;
 		}
 
-		// Returns NStmtList
-		public Node StmtList() {
-			NStmtList nStmtList = new NStmtList();
+		public Node StatmentList() {
+			StatementList nStmtList = new StatementList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			return nStmtList;
 		}
 
-		// Appends NStmt to nStmtList
-		public void Stmt(NStmtList nStmtList) {
+		public void Statment(StatementList nStmtList) {
 			switch(CurrentToken) {
 				case TokenCategory.IDENTIFIER: {
 					Token tokenForAnchor = Expect(TokenCategory.IDENTIFIER);
 					if (CurrentToken==TokenCategory.ASSIGN) {
-						NAssign nAssign = new NAssign(){
+						Assign nAssign = new Assign(){
 							AnchorToken = tokenForAnchor
 						};
 						nAssign.Add(Assign());
 						nStmtList.Add(nAssign);
 					}
 					else if (CurrentToken==TokenCategory.PARENTHESIS_LEFT) {
-						NFunCall nFunCall = new NFunCall(){
+						FCall nFunCall = new FCall(){
 							AnchorToken = tokenForAnchor
 						};
 						nFunCall.Add(FunCall());
@@ -256,14 +250,14 @@ namespace Int64 {
 					break;
 				}
 				case TokenCategory.BREAK: {
-					nStmtList.Add(new NBreak() {
+					nStmtList.Add(new BreakNode() {
 						AnchorToken = Expect(TokenCategory.BREAK)
 					});
 					Expect(TokenCategory.SEMICOLON);
 					break;
 				}
 				case TokenCategory.CONTINUE: {
-					nStmtList.Add(new NContinue() {
+					nStmtList.Add(new ContinueNode() {
 						AnchorToken = Expect(TokenCategory.CONTINUE)
 					});
 					Expect(TokenCategory.SEMICOLON);
@@ -271,7 +265,7 @@ namespace Int64 {
 				}
 				case TokenCategory.RETURN: {
 					Expect(TokenCategory.RETURN);
-					nStmtList.Add(new NReturn(){
+					nStmtList.Add(new ReturnNode(){
 						Expr()
 					});
 					Expect(TokenCategory.SEMICOLON);
@@ -287,17 +281,15 @@ namespace Int64 {
 			}
 		}
 
-		// Returns NAssign
 		public Node Assign() {
 			Expect(TokenCategory.ASSIGN);
-			NExpr nExpr = (NExpr)Expr();
+			ExprNode nExpr = (ExprNode)Expr();
 			Expect(TokenCategory.SEMICOLON);
 			return nExpr;
 		}
 
-		// Returns NExprList
 		public Node FunCall() {
-			NExprList nExprList = new NExprList();
+			ExprList nExprList = new ExprList();
 			Expect(TokenCategory.PARENTHESIS_LEFT);
 			if (firstOfExprPrimary.Contains(CurrentToken)) {
 				nExprList.Add(Expr());
@@ -310,16 +302,15 @@ namespace Int64 {
 			return nExprList;
 		}
 
-		// Returns NIfStmt
 		public Node IfStmt() {
-			NIfStmt nIfStmt = new NIfStmt();
+			IfNode nIfStmt = new IfNode();
 			Expect(TokenCategory.PARENTHESIS_LEFT);
 			nIfStmt.Add(Expr());
 			Expect(TokenCategory.PARENTHESIS_RIGHT);
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
-			NStmtList nStmtList = new NStmtList();
+			StatementList nStmtList = new StatementList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			nIfStmt.Add(nStmtList);
 			Expect(TokenCategory.CURLY_BRACE_RIGHT);
@@ -331,18 +322,18 @@ namespace Int64 {
 					nIfStmt.Add(Expr());
 					Expect(TokenCategory.PARENTHESIS_RIGHT);
 					Expect(TokenCategory.CURLY_BRACE_LEFT);
-					NStmtList otherNStmtList = new NStmtList();
+					StatementList otherNStmtList = new StatementList();
 					while (firstOfStatement.Contains(CurrentToken)) {
-						Stmt(otherNStmtList);
+						Statment(otherNStmtList);
 					}
 					nIfStmt.Add(otherNStmtList);
 					Expect(TokenCategory.CURLY_BRACE_RIGHT);
 				}
 				else if (CurrentToken==TokenCategory.CURLY_BRACE_LEFT) {
 					Expect(TokenCategory.CURLY_BRACE_LEFT);
-					NStmtList otherNStmtList = new NStmtList();
+					StatementList otherNStmtList = new StatementList();
 					while (firstOfStatement.Contains(CurrentToken)) {
-						Stmt(otherNStmtList);
+						Statment(otherNStmtList);
 					}
 					nIfStmt.Add(otherNStmtList);
 					Expect(TokenCategory.CURLY_BRACE_RIGHT);
@@ -352,15 +343,14 @@ namespace Int64 {
 			return nIfStmt;
 		}
 
-		// Return NSwitchStmt
 		public Node SwitchStmt() {
-			NSwitchStmt nSwitchStmt = new NSwitchStmt();
+			SwitchNode nSwitchStmt = new SwitchNode();
 			Expect(TokenCategory.SWITCH);
 			Expect(TokenCategory.PARENTHESIS_LEFT);
 			nSwitchStmt.Add(Expr());
 			Expect(TokenCategory.PARENTHESIS_RIGHT);
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
-			NCaseList nCaseList = new NCaseList();
+			CaseList nCaseList = new CaseList();
 			while (CurrentToken==TokenCategory.CASE) {
 				nCaseList.Add(Case());
 			}
@@ -372,9 +362,8 @@ namespace Int64 {
 			return nSwitchStmt;
 		}
 
-		//Returns NCase
 		public Node Case() {
-			NCase nCase = new NCase();
+			Case nCase = new Case();
 			Expect(TokenCategory.CASE);
 			nCase.Add(Lit());
 			while (CurrentToken==TokenCategory.COMMA) {
@@ -382,49 +371,48 @@ namespace Int64 {
 				nCase.Add(Lit());
 			}
 			Expect(TokenCategory.COLON);
-			NStmtList nStmtList = new NStmtList();
+			StatementList nStmtList = new StatementList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			nCase.Add(nStmtList);
 			return nCase;
 		}
 
-		// Returns NLitInt, NLitBool or NLitChar
 		public Node Lit() {
 			switch(CurrentToken) {
 				case TokenCategory.TRUE: {
-					return new NLitBool(){
+					return new BoolNode(){
 						AnchorToken = Expect(TokenCategory.TRUE)
 					};
 				}
 				case TokenCategory.FALSE: {
-					return new NLitBool(){
+					return new BoolNode(){
 						AnchorToken = Expect(TokenCategory.FALSE)
 					};
 				}
 				case TokenCategory.BASE_2: {
-					return new NLitInt(){
+					return new IntNode(){
 						AnchorToken = Expect(TokenCategory.BASE_2)
 					};
 				}
 				case TokenCategory.BASE_8: {
-					return new NLitInt(){
+					return new IntNode(){
 						AnchorToken = Expect(TokenCategory.BASE_8)
 					};
 				}
 				case TokenCategory.BASE_10: {
-					return new NLitInt(){
+					return new IntNode(){
 						AnchorToken = Expect(TokenCategory.BASE_10)
 					};
 				}
 				case TokenCategory.BASE_16: {
-					return new NLitInt(){
+					return new IntNode(){
 						AnchorToken = Expect(TokenCategory.BASE_16)
 					};
 				}
 				case TokenCategory.CHARACTER: {
-					return new NLitChar(){
+					return new CharNode(){
 						AnchorToken = Expect(TokenCategory.CHARACTER)
 					};
 				}
@@ -443,42 +431,39 @@ namespace Int64 {
 			}
 		}
 
-		// Returns NStmtList
 		public Node Default() {
-			NStmtList nStmtList = new NStmtList();
+			StatementList nStmtList = new StatementList();
 			Expect(TokenCategory.DEFAULT);
 			Expect(TokenCategory.COLON);
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			return nStmtList;
 		}
 
-		// Returns NWhileStmt
 		public Node WhileStmt() {
-			NWhileStmt nWhileStmt = new NWhileStmt();
+			WhileNode nWhileStmt = new WhileNode();
 			Expect(TokenCategory.WHILE);
 			Expect(TokenCategory.PARENTHESIS_LEFT);
 			nWhileStmt.Add(Expr());
 			Expect(TokenCategory.PARENTHESIS_RIGHT);
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
-			NStmtList nStmtList = new NStmtList();
+			StatementList nStmtList = new StatementList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			nWhileStmt.Add(nStmtList);
 			Expect(TokenCategory.CURLY_BRACE_RIGHT);
 			return nWhileStmt;
 		}
 
-		// Returns NDoWhileStmt
 		public Node DoWhileStmt() {
-			NDoWhileStmt nDoWhileStmt = new NDoWhileStmt();
+			DoWhileNode nDoWhileStmt = new DoWhileNode();
 			Expect(TokenCategory.DO);
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
-			NStmtList nStmtList = new NStmtList();
+			StatementList nStmtList = new StatementList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			nDoWhileStmt.Add(nStmtList);
 			Expect(TokenCategory.CURLY_BRACE_RIGHT);
@@ -490,29 +475,27 @@ namespace Int64 {
 			return nDoWhileStmt;
 		}
 
-		// Returns NForStmt
 		public Node ForStmt() {
 			Expect(TokenCategory.FOR);
 			Expect(TokenCategory.PARENTHESIS_LEFT);
-			NForStmt nForStmt = new NForStmt() {
+			ForNode nForStmt = new ForNode() {
 				AnchorToken = Expect(TokenCategory.IDENTIFIER)
 			};
 			Expect(TokenCategory.IN);
 			nForStmt.Add(Expr());
 			Expect(TokenCategory.PARENTHESIS_RIGHT);
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
-			NStmtList nStmtList = new NStmtList();
+			StatementList nStmtList = new StatementList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			nForStmt.Add(nStmtList);
 			Expect(TokenCategory.CURLY_BRACE_RIGHT);
 			return nForStmt;
 		}
 
-		// Returns NExpr
 		public Node Expr() {
-			NExpr nExpr = new NExpr();
+			ExprNode nExpr = new ExprNode();
 			nExpr.Add(ExprOr());
 			if (CurrentToken==TokenCategory.QUESTION_MARK) {
 				Expect(TokenCategory.QUESTION_MARK);
@@ -523,9 +506,8 @@ namespace Int64 {
 			return nExpr;
 		}
 
-		// Returns NExprOr
 		public Node ExprOr() {
-			NExprOr nExprOr = new NExprOr();
+			OrNode nExprOr = new OrNode();
 			nExprOr.Add(ExprAnd());
 			while (CurrentToken==TokenCategory.OR) {
 				Expect(TokenCategory.OR);
@@ -534,9 +516,8 @@ namespace Int64 {
 			return nExprOr;
 		}
 
-		// Returns NExprAnd
 		public Node ExprAnd() {
-			NExprAnd nExprAnd = new NExprAnd();
+			AndNode nExprAnd = new AndNode();
 			nExprAnd.Add(ExprComp());
 			while (CurrentToken==TokenCategory.AND) {
 				Expect(TokenCategory.AND);
@@ -545,9 +526,8 @@ namespace Int64 {
 			return nExprAnd;
 		}
 
-		// Returns NExprComp
 		public Node ExprComp() {
-			NExprComp nExprComp = new NExprComp();
+			CompNode nExprComp = new CompNode();
 			nExprComp.Add(ExprRel());
 			if (CurrentToken == TokenCategory.NOT_EQUAL || CurrentToken == TokenCategory.EQUAL) {
 				switch(CurrentToken) {
@@ -561,15 +541,13 @@ namespace Int64 {
 						nExprComp.Add(ExprComp());
 						break;
 					}
-					// There is no default as it would not be reachable
 				}
 			}
 			return nExprComp;
 		}
 
-		// Returns NExprRel
 		public Node ExprRel() {
-			NExprRel nExprRel = new NExprRel();
+			RelNode nExprRel = new RelNode();
 			nExprRel.Add(ExprBitOr());
 			if (CurrentToken == TokenCategory.LESS_THAN || CurrentToken == TokenCategory.LESS_OR_EQUAL_THAN || CurrentToken == TokenCategory.GREATER_THAN || CurrentToken == TokenCategory.GREATER_OR_EQUAL_THAN) {
 				switch(CurrentToken) {
@@ -593,15 +571,13 @@ namespace Int64 {
 						nExprRel.Add(ExprRel());
 						break;
 					}
-					// Default case would be unreachable
 				}
 			}
 			return nExprRel;
 		}
 
-		// Returns NExprBitOr
 		public Node ExprBitOr() {
-			NExprBitOr nExprBitOr = new NExprBitOr();
+			BinOrNode nExprBitOr = new BinOrNode();
 			nExprBitOr.Add(ExprBitAnd());
 			if (CurrentToken == TokenCategory.BIT_OR || CurrentToken == TokenCategory.XOR) {
 				switch(CurrentToken) {
@@ -615,15 +591,13 @@ namespace Int64 {
 						nExprBitOr.Add(ExprBitOr());
 						break;
 					}
-					// Default case would be unreachable
 				}
 			}
 			return nExprBitOr;
 		}
 
-		// Returns NExprBitAnd
 		public Node ExprBitAnd() {
-			NExprBitAnd nExprBitAnd = new NExprBitAnd();
+			BinAndNode nExprBitAnd = new BinAndNode();
 			nExprBitAnd.Add(ExprBitShift());
 			while (CurrentToken==TokenCategory.BIT_AND) {
 				switch(CurrentToken) {
@@ -632,15 +606,13 @@ namespace Int64 {
 						nExprBitAnd.Add(ExprBitAnd());
 						break;
 					}
-					// Default case would be unreachable
 				}
 			}
 			return nExprBitAnd;
 		}
 
-		// Returns NExprBitShift
 		public Node ExprBitShift() {
-			NExprBitShift nExprBitShift = new NExprBitShift();
+			BinShiftNode nExprBitShift = new BinShiftNode();
 			nExprBitShift.Add(ExprAdd());
 			if (CurrentToken == TokenCategory.SHIFT_LEFT || CurrentToken == TokenCategory.SHIFT_RIGHT || CurrentToken == TokenCategory.SHIFT_RIGHT_ALT) {
 				switch(CurrentToken) {
@@ -659,15 +631,13 @@ namespace Int64 {
 						nExprBitShift.Add(ExprBitShift());
 						break;
 					}
-					// Default case would be unreachable
 				}
 			}
 			return nExprBitShift;
 		}
 
-		// Returns NExprAdd
 		public Node ExprAdd() {
-			NExprAdd nExprAdd = new NExprAdd();
+			PlusNode nExprAdd = new PlusNode();
 			nExprAdd.Add(ExprMul());
 			while (CurrentToken==TokenCategory.SUBTRACTION||CurrentToken==TokenCategory.ADDITION) {
 				switch(CurrentToken) {
@@ -681,15 +651,13 @@ namespace Int64 {
 						nExprAdd.Add(ExprAdd());
 						break;
 					}
-					// Default case would be unreachable
 				}
 			}
 			return nExprAdd;
 		}
 
-		// Returns NExprMul
 		public Node ExprMul() {
-			NExprMul nExprMul = new NExprMul();
+			MulNode nExprMul = new MulNode();
 			nExprMul.Add(ExprPow());
 			if (CurrentToken == TokenCategory.MULTIPLICATION || CurrentToken == TokenCategory.DIVISION || CurrentToken == TokenCategory.MODULUS) {
 				switch(CurrentToken) {
@@ -708,15 +676,13 @@ namespace Int64 {
 						nExprMul.Add(ExprMul());
 						break;
 					}
-					// Default case would be unreachable
 				}
 			}
 			return nExprMul;
 		}
 
-		// Returns NExprPow
 		public Node ExprPow() {
-			NExprPow nExprPow = new NExprPow();
+			PowerNode nExprPow = new PowerNode();
 			nExprPow.Add(ExprUnary());
 			if (CurrentToken == TokenCategory.POWER) {
 				Expect(TokenCategory.POWER);
@@ -725,9 +691,8 @@ namespace Int64 {
 			return nExprPow;
 		}
 
-		// Returns NExprUnary
 		public Node ExprUnary() {
-			NExprUnary nExprUnary = new NExprUnary();
+			UnaryNode nExprUnary = new UnaryNode();
 			if (firstOfUnary.Contains(CurrentToken)) {
 				switch(CurrentToken) {
 					case TokenCategory.ADDITION: {
@@ -750,7 +715,6 @@ namespace Int64 {
 						nExprUnary.Add(ExprUnary());
 						break;
 					}
-					// Default case would be unreachable
 				}
 			}
 			else if (firstOfExprPrimary.Contains(CurrentToken)) {
@@ -759,13 +723,12 @@ namespace Int64 {
 			return nExprUnary;
 		}
 
-		// Returns NExprPrimary
 		public Node ExprPrimary() {
-			NExprPrimary nExprPrimary = new NExprPrimary();
+			PrimaryExpNode nExprPrimary = new PrimaryExpNode();
 			if (CurrentToken == TokenCategory.IDENTIFIER) {
 				Token identifier = Expect(TokenCategory.IDENTIFIER);
 				if (CurrentToken==TokenCategory.PARENTHESIS_LEFT) {
-					NFunCall nFunCall = new NFunCall(){
+					FCall nFunCall = new FCall(){
 						AnchorToken = identifier
 					};
 					nFunCall.Add(FunCall());
@@ -786,13 +749,12 @@ namespace Int64 {
 			return nExprPrimary;
 		}
 
-		// Returns NLitInt, NLitBool, NLitChar, NLitString or NArrayList
 		public Node LitAlt() {
 			if (firstOfLit.Contains(CurrentToken)) {
 				return Lit();
 			}
 			else if (CurrentToken==TokenCategory.STRING) {
-				NLitString nLitString = new NLitString(){
+				StringNode nLitString = new StringNode(){
 					AnchorToken = Expect(TokenCategory.STRING)
 				};
 				return nLitString;
@@ -816,9 +778,8 @@ namespace Int64 {
 			}
 		}
 
-		// Returns NArrayList
 		public Node ArrayList() {
-			NArrayList nArrayList = new NArrayList();
+			ArrayList nArrayList = new ArrayList();
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
 			if (firstOfLit.Contains(CurrentToken)) {
 				nArrayList.Add(Lit());
