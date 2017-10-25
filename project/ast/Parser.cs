@@ -106,13 +106,13 @@ namespace Int64 {
 		// Grammar entry point
 		// Returns NProgram
 		public Node CProgram() {
-			NProgram nProgram = (NProgram)Program();
+			NProgram nProgram = (NProgram)ProgramRecursive();
 			Expect(TokenCategory.EOF);
 			return nProgram;
 		}
 
 		// Returns NProgram
-		public Node Program() {
+		public Node ProgramRecursive() {
 			NProgram nProgram = new NProgram();
 			NVarDefList nVarDefList = new NVarDefList();
 			NFunDefList nFunDefList = new NFunDefList();
