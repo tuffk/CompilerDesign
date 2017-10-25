@@ -1,8 +1,7 @@
 /*
-Authors:
- - Gad Levy A01017986
- - Jonathan Ginsburg A01021617
- - Pablo de la Mora A01020365
+  Jaime Margolin A01019332
+  Juan carlos Leon A01020200
+  Rodrigo Solana A01129839
 */
 
 using System;

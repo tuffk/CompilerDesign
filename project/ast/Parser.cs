@@ -1,8 +1,7 @@
 /*
-Authors:
-- Gad Levy A01017986
-- Jonathan Ginsburg A01021617
-- Pablo de la Mora A01020365
+  Jaime Margolin A01019332
+  Juan carlos Leon A01020200
+  Rodrigo Solana A01129839
 */
 
 using System;
@@ -119,10 +118,10 @@ namespace Int64 {
 			NFunDefList nFunDefList = new NFunDefList();
 			while (firstOfProgram.Contains(CurrentToken)) {
 				if (CurrentToken == TokenCategory.VAR) {
-					VarDef(nVarDefList);
+					Vareamela(nVarDefList);
 				}
 				else if (CurrentToken == TokenCategory.IDENTIFIER) {
-					FunDef(nFunDefList);
+					Funcionamela(nFunDefList);
 				}
 				else if (CurrentToken == TokenCategory.EOF) {
 					break;
@@ -145,7 +144,7 @@ namespace Int64 {
 		}
 
 		// Appends NVarDef to nVarDefList
-		public void VarDef(NVarDefList nVarDefList) {
+		public void Vareamela(NVarDefList nVarDefList) {
 			NVarDef nVarDef = new NVarDef();
 			Expect(TokenCategory.VAR);
 			nVarDef.AnchorToken = Expect(TokenCategory.IDENTIFIER);
@@ -160,7 +159,7 @@ namespace Int64 {
 		}
 
 		// Appends NFunDef to nFunDefList
-		public void FunDef(NFunDefList nFunDefList) {
+		public void Funcionamela(NFunDefList nFunDefList) {
 			NFunDef nFunDef = new NFunDef(){
 				AnchorToken = Expect(TokenCategory.IDENTIFIER)
 			};
@@ -179,8 +178,8 @@ namespace Int64 {
 			}
 			Expect(TokenCategory.PARENTHESIS_RIGHT);
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
-			NVarDefList nVarDefList = (NVarDefList)VarDefList();
-			NStmtList nStmtList = (NStmtList)StmtList();
+			NVarDefList nVarDefList = (NVarDefList)DefinitionContinuer();
+			NStmtList nStmtList = (NStmtList)StatmentList();
 			Expect(TokenCategory.CURLY_BRACE_RIGHT);
 			nFunDef.Add(nParameterList);
 			nFunDef.Add(nVarDefList);
@@ -189,25 +188,25 @@ namespace Int64 {
 		}
 
 		// Returns NVarDefList
-		public Node VarDefList() {
+		public Node DefinitionContinuer() {
 			NVarDefList nVarDefList = new NVarDefList();
 			while (CurrentToken == TokenCategory.VAR) {
-				VarDef(nVarDefList);
+				Vareamela(nVarDefList);
 			}
 			return nVarDefList;
 		}
 
 		// Returns NStmtList
-		public Node StmtList() {
+		public Node StatmentList() {
 			NStmtList nStmtList = new NStmtList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			return nStmtList;
 		}
 
 		// Appends NStmt to nStmtList
-		public void Stmt(NStmtList nStmtList) {
+		public void Statment(NStmtList nStmtList) {
 			switch(CurrentToken) {
 				case TokenCategory.IDENTIFIER: {
 					Token tokenForAnchor = Expect(TokenCategory.IDENTIFIER);
@@ -319,7 +318,7 @@ namespace Int64 {
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
 			NStmtList nStmtList = new NStmtList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			nIfStmt.Add(nStmtList);
 			Expect(TokenCategory.CURLY_BRACE_RIGHT);
@@ -333,7 +332,7 @@ namespace Int64 {
 					Expect(TokenCategory.CURLY_BRACE_LEFT);
 					NStmtList otherNStmtList = new NStmtList();
 					while (firstOfStatement.Contains(CurrentToken)) {
-						Stmt(otherNStmtList);
+						Statment(otherNStmtList);
 					}
 					nIfStmt.Add(otherNStmtList);
 					Expect(TokenCategory.CURLY_BRACE_RIGHT);
@@ -342,7 +341,7 @@ namespace Int64 {
 					Expect(TokenCategory.CURLY_BRACE_LEFT);
 					NStmtList otherNStmtList = new NStmtList();
 					while (firstOfStatement.Contains(CurrentToken)) {
-						Stmt(otherNStmtList);
+						Statment(otherNStmtList);
 					}
 					nIfStmt.Add(otherNStmtList);
 					Expect(TokenCategory.CURLY_BRACE_RIGHT);
@@ -384,7 +383,7 @@ namespace Int64 {
 			Expect(TokenCategory.COLON);
 			NStmtList nStmtList = new NStmtList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			nCase.Add(nStmtList);
 			return nCase;
@@ -449,7 +448,7 @@ namespace Int64 {
 			Expect(TokenCategory.DEFAULT);
 			Expect(TokenCategory.COLON);
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			return nStmtList;
 		}
@@ -464,7 +463,7 @@ namespace Int64 {
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
 			NStmtList nStmtList = new NStmtList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			nWhileStmt.Add(nStmtList);
 			Expect(TokenCategory.CURLY_BRACE_RIGHT);
@@ -478,7 +477,7 @@ namespace Int64 {
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
 			NStmtList nStmtList = new NStmtList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			nDoWhileStmt.Add(nStmtList);
 			Expect(TokenCategory.CURLY_BRACE_RIGHT);
@@ -503,7 +502,7 @@ namespace Int64 {
 			Expect(TokenCategory.CURLY_BRACE_LEFT);
 			NStmtList nStmtList = new NStmtList();
 			while (firstOfStatement.Contains(CurrentToken)) {
-				Stmt(nStmtList);
+				Statment(nStmtList);
 			}
 			nForStmt.Add(nStmtList);
 			Expect(TokenCategory.CURLY_BRACE_RIGHT);
