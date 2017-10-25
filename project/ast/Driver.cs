@@ -13,18 +13,25 @@ namespace Int64 {
 
     public class Driver {
 
-        const string VERSION = "0.2";
+        const string VERSION = "0.3";
 
         //-----------------------------------------------------------
         static readonly string[] ReleaseIncludes = {
             "Lexical analysis",
-            "Syntactic analysis"
+            "Syntactic analysis",
+            "AST construction"
         };
 
         //-----------------------------------------------------------
         void PrintAppHeader() {
-			Console.WriteLine("Int64 lexical analyzer " + VERSION);
-            Console.WriteLine("GJP.");
+            Console.WriteLine("Buttercup compiler, version " + VERSION);
+            Console.WriteLine("Copyright \u00A9 2013 by A. Ortiz, ITESM CEM."
+            );
+            Console.WriteLine("This program is free software; you may "
+                + "redistribute it under the terms of");
+            Console.WriteLine("the GNU General Public License version 3 or "
+                + "later.");
+            Console.WriteLine("This program has absolutely no warranty.");
         }
 
         //-----------------------------------------------------------
@@ -53,8 +60,8 @@ namespace Int64 {
                 var inputPath = args[0];
                 var input = File.ReadAllText(inputPath);
                 var parser = new Parser(new Scanner(input).Start().GetEnumerator());
-                parser.Program();
-                Console.WriteLine("Syntax OK.");
+                var program = parser.CProgram();
+                Console.Write(program.ToStringTree());
 
             } catch (Exception e) {
 

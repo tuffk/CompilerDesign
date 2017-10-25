@@ -1,6 +1,6 @@
-mcs -out:a.exe Driver.cs Scanner.cs Token.cs TokenCategory.cs Parser.cs SyntaxError.cs
+mcs -out:a.exe *.cs
 shopt -s nullglob
-for i in ../sample-inputs/*.int64; do
+for i in *.int64; do
     echo -e "\033[1;32m corriendo para"
     echo $i
     echo -e "\033[93m"
