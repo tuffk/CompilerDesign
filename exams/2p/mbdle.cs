@@ -14,7 +14,8 @@ public enum TokenCategory {
     PAR_OPEN, PAR_CLOSE,
     SQUARE_OPEN, SQUARE_CLOSE,
     ANGLE_OPEN, ANGLE_CLOSE,
-    CURLY_OPEN, CURLY_CLOSE
+    CURLY_OPEN, CURLY_CLOSE,
+    COMMA
 }
 
 public class Token {
@@ -41,6 +42,7 @@ public class Scanner {
             |(\[) | (\])
             |(\<) | (\>)
             |(\{) | (\})
+            |(,)
             |(.)",
             RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace
         );
@@ -72,6 +74,8 @@ public class Scanner {
             } else if(m.Groups[10].Success) {
                 yield return new Token(TokenCategory.CURLY_CLOSE);
             } else if (m.Groups[11].Success) {
+                yield return new Token(TokenCategory.COMMA);
+            } else if (m.Groups[12].Success) {
                 yield return new Token(TokenCategory.ILLEGAL);
             }
         }
@@ -80,6 +84,21 @@ public class Scanner {
 }
 
 class SyntaxError: Exception {
+  public SyntaxError(TokenCategory expectedCategory,
+                     Token token):
+      base(String.Format(
+          "Syntax Error: Expecting {0} but found {1}",
+          expectedCategory,
+          token.Category)) {
+  }
+
+  public SyntaxError(string tokens,
+                     Token token):
+      base(String.Format(
+          "Syntax Error: Expecting {0} but found {1}",
+          tokens,
+          token.Category)) {
+  }
 }
 
 public class Parser {
@@ -94,6 +113,9 @@ public class Parser {
     public TokenCategory Current {
         get { return tokenStream.Current.Category; }
     }
+    public Token CurrentToken {
+        get { return tokenStream.Current; }
+    }
 
     public Token Expect(TokenCategory category) {
         if (Current == category) {
@@ -101,24 +123,137 @@ public class Parser {
             tokenStream.MoveNext();
             return current;
         } else {
-            throw new SyntaxError();
+            throw new SyntaxError(category, CurrentToken);
         }
     }
 
-    public void Mbdle() {
-        switch (Current) {
-          case TokenCategory.ATOM:
-                Expect(TokenCategory.ATOM);
-                break;
-          case TokenCategory.PAR_OPEN:
-            Expect(TokenCategory.PAR_OPEN);
-            break;
-          case TokenCategory.PAR_CLOSE:
-            Expect(TokenCategory.PAR_CLOSE);
-            break;
-          default:
-          Console.WriteLine($"pito: {Current}");
+    public void DetectorOpen()
+    {
+      Console.WriteLine("--- entre a normal ---");
+      switch (Current) {
+        case TokenCategory.PAR_OPEN:
+          Expect(TokenCategory.PAR_OPEN);
+            SharmutaRecursiva();
+          Expect(TokenCategory.PAR_CLOSE);
           break;
+        case TokenCategory.SQUARE_OPEN:
+          Expect(TokenCategory.SQUARE_OPEN);
+            SharmutaRecursiva();
+          Expect(TokenCategory.SQUARE_CLOSE);
+          break;
+        case TokenCategory.ANGLE_OPEN:
+          Expect(TokenCategory.ANGLE_OPEN);
+            SharmutaRecursiva();
+          Expect(TokenCategory.ANGLE_CLOSE);
+          break;
+        case TokenCategory.CURLY_OPEN:
+          Expect(TokenCategory.CURLY_OPEN);
+            SharmutaRecursiva();
+          Expect(TokenCategory.CURLY_CLOSE);
+          break;
+          default:
+          throw new SyntaxError("(,[,<,{", CurrentToken);
+    }
+    Console.WriteLine("programa termina");
+  }
+
+  public void DetectorOpenComma()
+  {
+    // Console.WriteLine("+++ entre a detector coma +++");
+    // Console.WriteLine($"-----------------{Current}------------------");
+    switch (Current) {
+      case TokenCategory.PAR_OPEN:
+        Expect(TokenCategory.PAR_OPEN);
+          SharmutaRecursiva();
+        Expect(TokenCategory.PAR_CLOSE);
+        while(Current == TokenCategory.COMMA)
+        {
+          ListContinuer();
+        }
+        break;
+      case TokenCategory.SQUARE_OPEN:
+        Expect(TokenCategory.SQUARE_OPEN);
+          SharmutaRecursiva();
+        Expect(TokenCategory.SQUARE_CLOSE);
+        while(Current == TokenCategory.COMMA)
+        {
+          ListContinuer();
+        }
+        break;
+      case TokenCategory.ANGLE_OPEN:
+        Expect(TokenCategory.ANGLE_OPEN);
+          SharmutaRecursiva();
+        Expect(TokenCategory.ANGLE_CLOSE);
+        while(Current == TokenCategory.COMMA)
+        {
+          ListContinuer();
+        }
+        break;
+      case TokenCategory.CURLY_OPEN:
+        Expect(TokenCategory.CURLY_OPEN);
+          SharmutaRecursiva();
+        Expect(TokenCategory.CURLY_CLOSE);
+        while(Current == TokenCategory.COMMA)
+        {
+          ListContinuer();
+        }
+        break;
+        default:
+          throw new SyntaxError("(,[,<,{", CurrentToken);
+  }
+  // Console.WriteLine("sali de detector de coma");
+}
+
+  public void SharmutaRecursiva()
+  {
+    // Console.WriteLine("++++entre a sahrmuta ++++");
+    if(Current == TokenCategory.ATOM)
+    {
+      AtomContinuer();
+    }else if(
+      Current == TokenCategory.PAR_OPEN ||
+      Current == TokenCategory.SQUARE_OPEN ||
+      Current == TokenCategory.ANGLE_OPEN ||
+      Current == TokenCategory.CURLY_OPEN
+    )
+    {
+      DetectorOpenComma();
+    }
+    // Console.WriteLine("sali de sharmuta");
+  }
+
+  public void ListContinuer()
+  {
+    // Console.WriteLine("entre a ListContinuercontinuer");
+    Expect(TokenCategory.COMMA);
+    DetectorOpenComma();
+    // Console.WriteLine("sali de ListContinuercontinuer");
+  }
+
+  public void AtomContinuer()
+  {
+    // Console.WriteLine("entre a AtomContinuer");
+    Expect(TokenCategory.ATOM);
+    if (Current == TokenCategory.COMMA ) {
+      Expect(TokenCategory.COMMA);
+      AtomContinuer();
+    }
+    // Console.WriteLine("sali de continuer");
+  }
+
+    public void Mbdle() {
+
+        if(Current == TokenCategory.ATOM)
+        {
+          Expect(TokenCategory.ATOM);
+        }else if(
+          Current == TokenCategory.PAR_OPEN ||
+          Current == TokenCategory.SQUARE_OPEN ||
+          Current == TokenCategory.ANGLE_OPEN ||
+          Current == TokenCategory.CURLY_OPEN
+        )
+        {
+          DetectorOpen();
         }
         Expect(TokenCategory.EOL);
     }
@@ -127,6 +262,8 @@ public class Parser {
 public class MBDLE {
 
     public static void Main(String[] args) {
+      int[] pito = new int[3] {1,4,7};
+      Console.WriteLine($"{pito}");
         try {
             while (true) {
                 Console.Write("> ");
@@ -139,6 +276,7 @@ public class MBDLE {
                 Console.WriteLine("syntax ok");
             }
         } catch (SyntaxError) {
+            // Console.WriteLine(e);
             Console.WriteLine("syntax error");
         }
     }
