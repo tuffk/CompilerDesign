@@ -129,7 +129,7 @@ public class Parser {
 
     public void DetectorOpen()
     {
-      Console.WriteLine("--- entre a normal ---");
+      // Console.WriteLine("--- entre a normal ---");
       switch (Current) {
         case TokenCategory.PAR_OPEN:
           Expect(TokenCategory.PAR_OPEN);
@@ -154,7 +154,7 @@ public class Parser {
           default:
           throw new SyntaxError("(,[,<,{", CurrentToken);
     }
-    Console.WriteLine("programa termina");
+    // Console.WriteLine("programa termina");
   }
 
   public void DetectorOpenComma()

@@ -15,6 +15,7 @@
 [a-zA-Z0-9_]+  { return ATOM; }
 [ \t]          { /* ignore whitespace */ }
 \n             { return EOL; }
+[(]            {return PAR_OPEN; }
 .              { return ILLEGAL; }
 
 %%
