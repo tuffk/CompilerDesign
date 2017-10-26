@@ -10,7 +10,11 @@ using System.IO;
 using System.Text.RegularExpressions;
 
 public enum TokenCategory {
-    ATOM, EOL, ILLEGAL
+    ATOM, EOL, ILLEGAL,
+    PAR_OPEN, PAR_CLOSE,
+    SQUARE_OPEN, SQUARE_CLOSE,
+    ANGLE_OPEN, ANGLE_CLOSE,
+    CURLY_OPEN, CURLY_CLOSE
 }
 
 public class Token {
@@ -32,8 +36,13 @@ public class Scanner {
 
     static readonly Regex regex =
         new Regex(
-            @"(\w+)|(\s)|(.)",
-            RegexOptions.Compiled | RegexOptions.Multiline
+            @"(\w+)|(\s)
+            |(\() | (\))
+            |(\[) | (\])
+            |(\<) | (\>)
+            |(\{) | (\})
+            |(.)",
+            RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace
         );
 
     public Scanner(String input) {
@@ -46,7 +55,23 @@ public class Scanner {
                 yield return new Token(TokenCategory.ATOM);
             } else if (m.Groups[2].Success) {
                 continue;
-            } else if (m.Groups[3].Success) {
+            } else if(m.Groups[3].Success) {
+                yield return new Token(TokenCategory.PAR_OPEN);
+            } else if(m.Groups[4].Success) {
+                yield return new Token(TokenCategory.PAR_CLOSE);
+            } else if(m.Groups[5].Success) {
+                yield return new Token(TokenCategory.SQUARE_OPEN);
+            } else if(m.Groups[6].Success) {
+                yield return new Token(TokenCategory.SQUARE_CLOSE);
+            } else if(m.Groups[7].Success) {
+                yield return new Token(TokenCategory.ANGLE_OPEN);
+            } else if(m.Groups[8].Success) {
+                yield return new Token(TokenCategory.ANGLE_CLOSE);
+            } else if(m.Groups[9].Success) {
+                yield return new Token(TokenCategory.CURLY_OPEN);
+            } else if(m.Groups[10].Success) {
+                yield return new Token(TokenCategory.CURLY_CLOSE);
+            } else if (m.Groups[11].Success) {
                 yield return new Token(TokenCategory.ILLEGAL);
             }
         }
@@ -81,7 +106,20 @@ public class Parser {
     }
 
     public void Mbdle() {
-        Expect(TokenCategory.ATOM);
+        switch (Current) {
+          case TokenCategory.ATOM:
+                Expect(TokenCategory.ATOM);
+                break;
+          case TokenCategory.PAR_OPEN:
+            Expect(TokenCategory.PAR_OPEN);
+            break;
+          case TokenCategory.PAR_CLOSE:
+            Expect(TokenCategory.PAR_CLOSE);
+            break;
+          default:
+          Console.WriteLine($"pito: {Current}");
+          break;
+        }
         Expect(TokenCategory.EOL);
     }
 }
