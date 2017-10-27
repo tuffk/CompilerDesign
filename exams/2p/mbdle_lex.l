@@ -1,7 +1,7 @@
 /*---------------------------------------------------------
   jaime margolin a01019332
-  juan carlos leon
-  rodrigo solana
+  juan carlos leon a01020200
+  rodrigo solana a01129839
 -----------------------------------------------------------*/
 
 %{
@@ -23,7 +23,7 @@
 [>]            { return ANGLE_CLOSE; }
 [{]            { return CURLY_OPEN; }
 [}]            { return CURLY_CLOSE; }
-[,]            { return COMMA; } 
+[,]            { return COMMA; }
 .              { return ILLEGAL; }
 
 %%
