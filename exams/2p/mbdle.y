@@ -25,7 +25,20 @@ void yyerror(char *s, ...);
 
 mbdle:
     /* nothing */ { }                              /* Matches at beginning of input */
-    | mbdle ATOM  PAR_OPEN PAR_CLOSE SQUARE_OPEN SQUARE_CLOSE ANGLE_OPEN ANGLE_CLOSE CURLY_OPEN CURLY_CLOSE EOL { printf("syntax ok\n> "); }  /* EOL is end of an expression */
+    | mbdle prog  EOL { printf("syntax ok\n> "); }
+    | atini   EOL { printf("syntax ok\n> "); } /* EOL is end of an expression */
+;
+
+prog:
+PAR_OPEN prog2 PAR_CLOSE
+;
+
+prog2:
+atini
+;
+
+atini:
+ ATOM
 ;
 
 %%

@@ -387,18 +387,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  2
+#define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   13
+#define YYLAST   7
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  14
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  2
+#define YYNNTS  5
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  3
+#define YYNRULES  7
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  13
+#define YYNSTATES  12
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -445,7 +445,7 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    27,    27,    28
+       0,    27,    27,    28,    29,    33,    37,    41
 };
 #endif
 
@@ -456,7 +456,8 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "ATOM", "ILLEGAL", "EOL", "PAR_OPEN",
   "PAR_CLOSE", "SQUARE_OPEN", "SQUARE_CLOSE", "ANGLE_OPEN", "ANGLE_CLOSE",
-  "CURLY_OPEN", "CURLY_CLOSE", "$accept", "mbdle", YY_NULLPTR
+  "CURLY_OPEN", "CURLY_CLOSE", "$accept", "mbdle", "prog", "prog2",
+  "atini", YY_NULLPTR
 };
 #endif
 
@@ -470,10 +471,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -8
+#define YYPACT_NINF -5
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-8)))
+  (!!((Yystate) == (-5)))
 
 #define YYTABLE_NINF -1
 
@@ -484,8 +485,8 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -8,     0,    -8,    -5,    -3,    -6,    -4,    -2,    -1,     1,
-      -7,     2,    -8
+      -2,    -5,     0,    -3,    -5,    -2,    -1,    -5,    -4,    -5,
+      -5,    -5
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -493,20 +494,20 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       2,     0,     1,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     3
+       2,     7,     0,     0,     1,     0,     0,     4,     0,     6,
+       3,     5
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -8,    -8
+      -5,    -5,    -5,    -5,     2
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1
+      -1,     2,     6,     8,     3
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -514,34 +515,32 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       2,     4,     6,     3,     5,     7,    11,    12,     8,     0,
-       9,     0,     0,    10
+       4,     1,     7,    11,    10,     0,     5,     9
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     6,     8,     3,     7,     9,    13,     5,    10,    -1,
-      11,    -1,    -1,    12
+       0,     3,     5,     7,     5,    -1,     6,     5
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    15,     0,     3,     6,     7,     8,     9,    10,    11,
-      12,    13,     5
+       0,     3,    15,    18,     0,     6,    16,     5,    17,    18,
+       5,     7
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    14,    15,    15
+       0,    14,    15,    15,    15,    16,    17,    18
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     0,    11
+       0,     2,     0,     3,     2,     3,     1,     1
 };
 
 
@@ -1220,17 +1219,23 @@ yyreduce:
         case 2:
 #line 27 "mbdle.y" /* yacc.c:1646  */
     { }
-#line 1224 "mbdle.c" /* yacc.c:1646  */
+#line 1223 "mbdle.c" /* yacc.c:1646  */
     break;
 
   case 3:
 #line 28 "mbdle.y" /* yacc.c:1646  */
     { printf("syntax ok\n> "); }
-#line 1230 "mbdle.c" /* yacc.c:1646  */
+#line 1229 "mbdle.c" /* yacc.c:1646  */
+    break;
+
+  case 4:
+#line 29 "mbdle.y" /* yacc.c:1646  */
+    { printf("syntax ok\n> "); }
+#line 1235 "mbdle.c" /* yacc.c:1646  */
     break;
 
 
-#line 1234 "mbdle.c" /* yacc.c:1646  */
+#line 1239 "mbdle.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1458,7 +1463,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 31 "mbdle.y" /* yacc.c:1906  */
+#line 44 "mbdle.y" /* yacc.c:1906  */
 
 
 int main(int argc, char **argv) {
