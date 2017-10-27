@@ -1,15 +1,3 @@
-para correr el segundo ejecutable y revisar la syntaxis el programa
-solo evalua adecuadamente el primer input. sin importar cual sea el segundo
-siempre da un syntax error y sale del programa
-para probar todos los ejemplso hay que correr el programa una vez para cada uno
-
-
-EJ del problema
-> ([aaasd],{asd,asd})
-syntax ok
->
-syntax error
-
 
 se probo contra los siguientes ejemplos y dieron el siguiente output
 an_atom	syntax ok
