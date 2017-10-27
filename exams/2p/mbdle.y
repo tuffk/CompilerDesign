@@ -25,8 +25,8 @@ void yyerror(char *s, ...);
 
 mbdle:
     /* nothing */ { }                              /* Matches at beginning of input */
-    | atini   EOL { printf("syntax ok\n> "); } /* EOL is end of an expression */
-    | prog  EOL { printf("syntax ok\n> "); }
+    | mbdle atini   EOL { printf("syntax ok\n> "); } /* EOL is end of an expression */
+    | mbdle prog  EOL { printf("syntax ok\n> "); }
 ;
 
 prog:
