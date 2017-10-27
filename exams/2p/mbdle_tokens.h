@@ -55,7 +55,8 @@ extern int yydebug;
     ANGLE_OPEN = 265,
     ANGLE_CLOSE = 266,
     CURLY_OPEN = 267,
-    CURLY_CLOSE = 268
+    CURLY_CLOSE = 268,
+    COMMA = 269
   };
 #endif
 
@@ -68,7 +69,7 @@ union YYSTYPE
 
     int ival;
 
-#line 72 "mbdle_tokens.h" /* yacc.c:1909  */
+#line 73 "mbdle_tokens.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

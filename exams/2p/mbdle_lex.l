@@ -23,6 +23,7 @@
 [>]            { return ANGLE_CLOSE; }
 [{]            { return CURLY_OPEN; }
 [}]            { return CURLY_CLOSE; }
+[,]            { return COMMA; } 
 .              { return ILLEGAL; }
 
 %%

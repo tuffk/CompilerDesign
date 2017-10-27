@@ -19,26 +19,49 @@ void yyerror(char *s, ...);
 }
 
 /* declare tokens */
-%token ATOM ILLEGAL EOL PAR_OPEN PAR_CLOSE SQUARE_OPEN SQUARE_CLOSE ANGLE_OPEN ANGLE_CLOSE CURLY_OPEN CURLY_CLOSE
+%token ATOM ILLEGAL EOL PAR_OPEN PAR_CLOSE SQUARE_OPEN SQUARE_CLOSE ANGLE_OPEN ANGLE_CLOSE CURLY_OPEN CURLY_CLOSE COMMA
 
 %%
 
 mbdle:
     /* nothing */ { }                              /* Matches at beginning of input */
-    | mbdle prog  EOL { printf("syntax ok\n> "); }
     | atini   EOL { printf("syntax ok\n> "); } /* EOL is end of an expression */
+    | prog  EOL { printf("syntax ok\n> "); }
 ;
 
 prog:
 PAR_OPEN prog2 PAR_CLOSE
+| SQUARE_OPEN prog2 SQUARE_CLOSE
+| ANGLE_OPEN prog2 ANGLE_CLOSE
+| CURLY_OPEN prog2 CURLY_CLOSE
 ;
 
 prog2:
-atini
+at
+| {}
+| PAR_OPEN prog2 PAR_CLOSE com2
+| SQUARE_OPEN prog2 SQUARE_CLOSE com2
+| ANGLE_OPEN prog2 ANGLE_CLOSE com2
+| CURLY_OPEN prog2 CURLY_CLOSE com2
 ;
 
 atini:
  ATOM
+;
+
+at:
+ATOM
+| ATOM atcom
+;
+
+atcom:
+COMMA at
+;
+
+
+com2:
+{}
+| COMMA prog2
 ;
 
 %%
