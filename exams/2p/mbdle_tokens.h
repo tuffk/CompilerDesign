@@ -47,7 +47,15 @@ extern int yydebug;
   {
     ATOM = 258,
     ILLEGAL = 259,
-    EOL = 260
+    EOL = 260,
+    PAR_OPEN = 261,
+    PAR_CLOSE = 262,
+    SQUARE_OPEN = 263,
+    SQUARE_CLOSE = 264,
+    ANGLE_OPEN = 265,
+    ANGLE_CLOSE = 266,
+    CURLY_OPEN = 267,
+    CURLY_CLOSE = 268
   };
 #endif
 
@@ -60,7 +68,7 @@ union YYSTYPE
 
     int ival;
 
-#line 64 "mbdle_tokens.h" /* yacc.c:1909  */
+#line 72 "mbdle_tokens.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

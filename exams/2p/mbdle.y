@@ -19,13 +19,13 @@ void yyerror(char *s, ...);
 }
 
 /* declare tokens */
-%token ATOM ILLEGAL EOL
+%token ATOM ILLEGAL EOL PAR_OPEN PAR_CLOSE SQUARE_OPEN SQUARE_CLOSE ANGLE_OPEN ANGLE_CLOSE CURLY_OPEN CURLY_CLOSE
 
 %%
 
 mbdle:
     /* nothing */ { }                              /* Matches at beginning of input */
-    | mbdle ATOM EOL { printf("syntax ok\n> "); }  /* EOL is end of an expression */
+    | mbdle ATOM  PAR_OPEN PAR_CLOSE SQUARE_OPEN SQUARE_CLOSE ANGLE_OPEN ANGLE_CLOSE CURLY_OPEN CURLY_CLOSE EOL { printf("syntax ok\n> "); }  /* EOL is end of an expression */
 ;
 
 %%
