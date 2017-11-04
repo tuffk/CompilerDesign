@@ -5,81 +5,83 @@
 */
 
 namespace Int64 {
-    class Program: Node {}
+    class NProgram: Node {}
 
-    class VariableDeclaration: Node {}
+    class NVarDef: Node {}
 
-    class FunctionDefinition: Node {}
+    class NFunDef: Node {}
 
-    class VarList: Node {}
+    class NVarDefList: Node {}
 
-	class FunList: Node {} //xq papi gins dice
+	class NFunDefList: Node {} //Added for semantics
 
-	class ParamList: Node {} //xq papi gins dice
+	class NParameterList: Node {} //Added for semantics
 
-	class Param: Node {} //xq papi gins dice
+	class NParameter: Node {} //Added for semantics
 
-	class BreakNode: Node {} //xq papi gins dice
+	class NBreak: Node {} //Added for semantics
 
-	class ContinueNode: Node {} //xq papi gins dice
+	class NContinue: Node {} //Added for semantics
 
-	class ReturnNode: Node {} //xq papi gins dice
+	class NReturn: Node {} //Added for semantics
 
-    class StatementList: Node {}
+    class NStmtList: Node {}
 
-    class Assign: Node {}
+    class NAssign: Node {}
 
-    class FCall: Node {}
+    class NFunCall: Node {}
 
-    class IfNode: Node {}
+    class NIfStmt: Node {}
 
-    class SwitchNode: Node {}
+    class NSwitchStmt: Node {}
 
-	class CaseList: Node {} //xq papi gins dice
+	class NCaseList: Node {} //Added for semantics
 
-    class Case: Node {}
+    class NCase: Node {}
 
-    class BoolNode: Node {}
+    //class NDefault: Node {} Removed for semantics equivalence to NStmtList
 
-    class IntNode: Node {}
+    class NLitBool: Node {}
 
-    class CharNode: Node {}
+    class NLitInt: Node {}
 
-    class WhileNode: Node {}
+    class NLitChar: Node {}
 
-    class DoWhileNode: Node {}
+    class NWhileStmt: Node {}
 
-    class ForNode: Node {}
+    class NDoWhileStmt: Node {}
 
-	class ExprList: Node {} //xq papi gins dice
+    class NForStmt: Node {}
 
-	class ExprNode: Node {} //xq papi gins dice
+	class NExprList: Node {} //Added for semantics
 
-    class OrNode: Node {}
+	class NExpr: Node {} //Added for semantics
 
-    class AndNode: Node {}
+    class NExprOr: Node {}
 
-    class CompNode: Node {}
+    class NExprAnd: Node {}
 
-    class RelNode: Node {}
+    class NExprComp: Node {}
 
-    class BinOrNode: Node {}
+    class NExprRel: Node {}
 
-    class BinAndNode: Node {}
+    class NExprBitOr: Node {}
 
-    class BinShiftNode: Node {}
+    class NExprBitAnd: Node {}
 
-    class PlusNode: Node {}
+    class NExprBitShift: Node {}
 
-    class MulNode: Node {}
+    class NExprAdd: Node {}
 
-    class PowerNode: Node {}
+    class NExprMul: Node {}
 
-    class UnaryNode: Node {}
+    class NExprPow: Node {}
 
-    class PrimaryExpNode: Node {}
+    class NExprUnary: Node {}
 
-    class StringNode: Node {}
+    class NExprPrimary: Node {}
 
-    class ArrayList: Node {}
+    class NLitString: Node {}
+
+    class NArrayList: Node {}
 }
