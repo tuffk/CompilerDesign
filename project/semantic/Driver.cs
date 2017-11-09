@@ -56,20 +56,33 @@ namespace Int64 {
             }
 
             try {
-                var inputPath = args[0];
-                var input = File.ReadAllText(inputPath);
-                var parser = new Parser(new Scanner(input).Start().GetEnumerator());
-                var program = parser.CProgram();
-                Console.Write(program.ToStringTree());
+              var inputPath = args[0];
+              var input = File.ReadAllText(inputPath);
+              var parser = new Parser(new Scanner(input).Start().GetEnumerator());
+              var program = parser.Program();
+              Console.WriteLine("Syntax OK.");
+
+              var semantic = new SemanticAnalyzer();
+              semantic.Visit((dynamic) program);
+
+              Console.WriteLine("Semantics OK.");
+              Console.WriteLine();
+              Console.WriteLine("Symbol Table");
+              Console.WriteLine("============");
+              foreach (var entry in semantic.Table) {
+                  Console.WriteLine(entry);
+              }
 
             } catch (Exception e) {
 
-                if (e is FileNotFoundException || e is SyntaxError) {
-                    Console.Error.WriteLine(e.Message);
-                    Environment.Exit(1);
-                }
+              if (e is FileNotFoundException
+                  || e is SyntaxError
+                  || e is SemanticError) {
+                  Console.Error.WriteLine(e.Message);
+                  Environment.Exit(1);
+              }
 
-                throw;
+              throw;
             }
         }
 

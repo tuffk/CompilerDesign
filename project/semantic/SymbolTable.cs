@@ -10,9 +10,24 @@ using System.Collections.Generic;
 
 namespace Int64 {
 
-    public class SymbolTable: IEnumerable<KeyValuePair<string, Type>> {
+  public class Modishness {
+    string scope;
+    int? args = null;
+    string name;
+    Modishness(string sc, int? ar, string na)
+    {
+      scope = sc;
+      if (ar != null)
+      {
+        args = ar;
+      }
+      name = na
+    }
+  }
 
-        IDictionary<string, Type> data = new SortedDictionary<string, Type>();
+    public class SymbolTable: IEnumerable<KeyValuePair<string, Modishness>> {
+
+        IDictionary<string, Modishness> data = new SortedDictionary<string, Modishness>();
 
         //-----------------------------------------------------------
         public override string ToString() {
@@ -22,7 +37,7 @@ namespace Int64 {
             foreach (var entry in data) {
                 sb.Append(String.Format("{0}: {1}\n",
                                         entry.Key,
-                                        entry.Value));
+                                        entry.Value.name));
             }
             sb.Append("====================\n");
             return sb.ToString();
