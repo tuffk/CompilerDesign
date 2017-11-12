@@ -79,10 +79,12 @@ public SymbolTable Table {
         private set;
 }
 
-public List<string> globVars;
+public List<string> globVars; // Global variabe "table"
+public static int pasones;
 
 //-----------------------------------------------------------
 public SemanticAnalyzer() {
+        pasones = 0;
         Table = new SymbolTable();
         Modishness mo = new Modishness("printi", 1, true);
         Table["printi"] = mo;
@@ -111,76 +113,76 @@ public SemanticAnalyzer() {
 
 //-----------------------------------------------------------
 public void Visit(NProgram node) {
-  Console.WriteLine($"+++++++++++++++ NPROGRAM ++++++++++++++++");
-  Console.WriteLine($"n0: ${node[0].GetType()}\t n1: ${node[1].GetType()}");
+        Console.WriteLine($"+++++++++++++++ NPROGRAM ++++++++++++++++");
+        Console.WriteLine($"n0: ${node[0].GetType()}\t n1: ${node[1].GetType()}");
         Visit((dynamic) node[0]);
         Visit((dynamic) node[1]);
 }
 
 //-----------------------------------------------------------
 public void Visit(NVarDefList node) {
-  Console.WriteLine($"+++++++++++++++ NVARDEFLSIT ++++++++++++++++");
-  Console.WriteLine($"n0: ${node.GetType()}");
-  foreach(Node i in node)
-  {
-    Console.WriteLine($"Global Variable: {i.AnchorToken.Lexeme }");
-  }
+        Console.WriteLine($"+++++++++++++++ NVARDEFLSIT ++++++++++++++++");
+        Console.WriteLine($"n0: ${node.GetType()}");
+        foreach(Node i in node)
+        {
+                Console.WriteLine($"Global Variable: {i.AnchorToken.Lexeme }");
+        }
         VisitChildren(node);
 }
 
 public void Visit(NFunDefList node) {
-  Console.WriteLine($"+++++++++++++++ NFUNDEFLIST ++++++++++++++++");
+        Console.WriteLine($"+++++++++++++++ NFUNDEFLIST ++++++++++++++++");
 
         VisitChildren(node);
 }
 
 //-----------------------------------------------------------
 public void Visit(NVarDef node) {
-  Console.WriteLine($"+++++++++++++++ NVARDEF ++++++++++++++++");
+        Console.WriteLine($"+++++++++++++++ NVARDEF ++++++++++++++++");
 //  Console.WriteLine(node);
         var variableName = node.AnchorToken.Lexeme;
         Console.WriteLine($"variable: {variableName}");
         if (globVars.Contains(variableName)) {
-          Console.WriteLine("Estoy en el IF duplicated variable");
+                Console.WriteLine("Estoy en el IF duplicated variable");
                 throw new SemanticError(
                               "Duplicated variable: " + variableName,
                               node[0].AnchorToken);
-                              //throw new System.ArgumentException("Duplicated variable", "ERROR");
+                //throw new System.ArgumentException("Duplicated variable", "ERROR");
 
 
 
         } else {
-            Console.WriteLine($"Agregando Variable: {variableName} ");
+                Console.WriteLine($"Agregando Variable: {variableName} ");
                 globVars.Add(variableName);
                 //Table[variableName] =
-                        // typeMapper[node.AnchorToken.Category];
+                // typeMapper[node.AnchorToken.Category];
         }
 }
 
 //-----------------------------------------------------------
 public void Visit(NFunDef node) {
-  var cont = 0;
-  Console.WriteLine($"+++++++++++++++ NFUNDEF ++++++++++++++++");
-  Console.WriteLine(node);
+        var cont = 0;
+        Console.WriteLine($"+++++++++++++++ NFUNDEF ++++++++++++++++");
+        Console.WriteLine(node);
         var funName = node.AnchorToken.Lexeme;
         Console.WriteLine($"Funcion: {funName}");
 
         foreach(Node i in node.children)
-         {
-           Console.WriteLine($"Funcion: {i}");
+        {
+                Console.WriteLine($"Funcion: {i}");
 
-             if(i.GetType().ToString() == "Int64.NParameterList")
-               foreach(Node j in i.children)
-                 cont++;
+                if(i.GetType().ToString() == "Int64.NParameterList")
+                        foreach(Node j in i.children)
+                                cont++;
 
-         }
+        }
         Console.WriteLine($"Cont =  {cont}");
 
         Modishness mo = new Modishness(funName, cont);
-Console.WriteLine($"modishnes: {mo.name}, {mo.args}, {mo.predef}");
-  Table[funName] = mo;
+        Console.WriteLine($"modishnes: {mo.name}, {mo.args}, {mo.predef}");
+        Table[funName] = mo;
 
-         //VisitChildren(node);
+        //VisitChildren(node);
 
 
 
@@ -316,8 +318,8 @@ void VisitBinaryOperator(char op, Node node /*, Type type*/) {
         //                       node.AnchorToken);
         // }
 
-        Visit((dynamic) node[0]) ;
-            Visit((dynamic) node[1]);
+        Visit((dynamic) node[0]);
+        Visit((dynamic) node[1]);
 }
 }
 }

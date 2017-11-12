@@ -13,7 +13,7 @@ namespace Int64 {
 
     public class Driver {
 
-        const string VERSION = "0.3";
+        const string VERSION = "0.4";
 
         //-----------------------------------------------------------
         static readonly string[] ReleaseIncludes = {
@@ -68,6 +68,7 @@ namespace Int64 {
 
               var semantic = new SemanticAnalyzer();
               semantic.Visit((dynamic) program);
+              SemanticAnalyzer.pasones++;
 
               Console.WriteLine("Semantics OK.");
               Console.WriteLine();
