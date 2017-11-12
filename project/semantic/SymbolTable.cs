@@ -47,8 +47,10 @@ namespace Int64 {
             var sb = new StringBuilder();
             sb.Append("\n\nSymbol Table\n");
             sb.Append("====================\n");
+            sb.Append("|name\t\t|arity\t\t|predefined\t\t\n");
+
             foreach (var entry in data) {
-                sb.Append(String.Format("{0}: {1} {2} {3} \n",
+                sb.Append(String.Format("{0} \t\t|{2} \t\t|{3} ]\n",
                                         entry.Key,
                                         entry.Value.name,
                                         entry.Value.args,
