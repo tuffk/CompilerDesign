@@ -101,7 +101,7 @@ public void Visit(NVarDefList node) {
   Console.WriteLine($"n0: ${node.GetType()}");
   foreach(Node i in node)
   {
-    Console.WriteLine($"var: {i.AnchorToken.Lexeme }");
+    Console.WriteLine($"Global Variable: {i.AnchorToken.Lexeme }");
   }
         VisitChildren(node);
 }
@@ -110,7 +110,7 @@ public void Visit(NFunDefList node) {
   Console.WriteLine($"+++++++++++++++ NFUNDEFLIST ++++++++++++++++");
   foreach(Node i in node)
   {
-    Console.WriteLine($"func: {i.AnchorToken.Lexeme }");
+    Console.WriteLine($"Func: {i.AnchorToken.Lexeme }");
   }
         VisitChildren(node);
 }
@@ -123,10 +123,11 @@ public void Visit(NVarDef node) {
         Console.WriteLine($"variable: {variableName}");
         if (globVars.Contains(variableName)) {
           Console.WriteLine("Estoy en el IF duplicated variable");
-              /*  throw new SemanticError(
+                throw new SemanticError(
                               "Duplicated variable: " + variableName,
-                              node[0].AnchorToken);*/
-                              throw new System.ArgumentException("Duplicated variable", "ERROR");
+                              node[0].AnchorToken);
+                              //throw new System.ArgumentException("Duplicated variable", "ERROR");
+
 
 
         } else {
@@ -139,8 +140,11 @@ public void Visit(NVarDef node) {
 
 //-----------------------------------------------------------
 public void Visit(NFunDef node) {
+  Console.WriteLine($"+++++++++++++++ NFUNDEF ++++++++++++++++");
+        var funName = node.AnchorToken.Lexeme;
 
-        var funName = node[0].AnchorToken.Lexeme;
+        Console.WriteLine($"def: {funName}");
+
 
 
 }

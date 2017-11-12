@@ -77,6 +77,13 @@ namespace Int64 {
                   Console.WriteLine(entry);
               }
 
+
+              Console.WriteLine("Global Variable Table");
+              Console.WriteLine("============");
+              foreach (var entry in semantic.globVars) {
+                  Console.WriteLine(entry);
+              }
+
             } catch (Exception e) {
 
               if (e is FileNotFoundException

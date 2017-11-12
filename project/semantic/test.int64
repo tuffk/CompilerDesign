@@ -1,7 +1,6 @@
 var punietas;
 var piruja;
 var mamada;
-var mamada;
 
 main() {
     var x, y;
