@@ -11,10 +11,10 @@ using System.Collections.Generic;
 namespace Int64 {
 
   public class Sharmuta {
-    public
-    string name;
-    bool param;
-    int? pos;
+
+    public string name;
+    public bool param;
+    public int? pos;
 
     Sharmuta(string na, bool par, int? po){
       name = na;
@@ -24,10 +24,9 @@ namespace Int64 {
   }
 
   public class Modishness {
-    public
-    string name;
-    int args = 0;
-    bool predef = false;
+    public string name;
+    public int args = 0;
+    public bool predef = false;
     Sharmuta locTable = null;
 
     Modishness(string na, int ar=0, bool pr=false, Sharmuta lt = null)

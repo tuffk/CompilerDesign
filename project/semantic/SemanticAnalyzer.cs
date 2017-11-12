@@ -117,9 +117,10 @@ public void Visit(NFunDefList node) {
 
 //-----------------------------------------------------------
 public void Visit(NVarDef node) {
-
-        var variableName = node[0].AnchorToken.Lexeme;
-
+  Console.WriteLine($"+++++++++++++++ NVARDEF ++++++++++++++++");
+//  Console.WriteLine(node);
+        var variableName = node.AnchorToken.Lexeme;
+Console.WriteLine(variableName);
         if (globVars.Contains(variableName)) {
                 throw new SemanticError(
                               "Duplicated variable: " + variableName,
@@ -251,10 +252,9 @@ public void Visit(NExprMul node) {
 }
 
 //-----------------------------------------------------------
-void VisitChildren(Node node) {
-  IList<Node> tizdaien;
-  tizdaien = node.GetChildren();
-        foreach (var n in tizdaien) {
+public void VisitChildren(Node node) {
+        foreach (var n in node.children) {
+
                 Visit((dynamic) n);
         }
 }
