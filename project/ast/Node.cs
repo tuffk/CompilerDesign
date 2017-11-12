@@ -10,9 +10,14 @@ using System.Text;
 
 namespace Int64 {
 
-    class Node: IEnumerable<Node> {
+  public class Node: IEnumerable<Node> {
 
-        IList<Node> children = new List<Node>();
+    public IList<Node> GetChildren()
+    {
+      return children;
+    }
+      public IList<Node> children = new List<Node>();
+
 
         public Node this[int index] {
             get {

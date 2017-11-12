@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Diagnostics;
 
 namespace Int64 {
 
@@ -61,6 +62,9 @@ namespace Int64 {
               var parser = new Parser(new Scanner(input).Start().GetEnumerator());
               var program = parser.Program();
               Console.WriteLine("Syntax OK.");
+              Console.Write(program.ToStringTree());
+
+              Console.WriteLine($"-------------{program.GetType()}------------------");
 
               var semantic = new SemanticAnalyzer();
               semantic.Visit((dynamic) program);

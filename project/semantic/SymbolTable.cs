@@ -10,18 +10,32 @@ using System.Collections.Generic;
 
 namespace Int64 {
 
-  public class Modishness {
-    string scope;
-    int? args = null;
+  public class Sharmuta {
+    public
     string name;
-    Modishness(string sc, int? ar, string na)
+    bool param;
+    int? pos;
+
+    Sharmuta(string na, bool par, int? po){
+      name = na;
+      param = par;
+      pos = po;
+    }
+  }
+
+  public class Modishness {
+    public
+    string name;
+    int args = 0;
+    bool predef = false;
+    Sharmuta locTable = null;
+
+    Modishness(string na, int ar=0, bool pr=false, Sharmuta lt = null)
     {
-      scope = sc;
-      if (ar != null)
-      {
-        args = ar;
-      }
-      name = na
+      args = ar;
+      name = na;
+      predef = pr;
+      locTable = lt;
     }
   }
 
@@ -44,7 +58,7 @@ namespace Int64 {
         }
 
         //-----------------------------------------------------------
-        public Type this[string key] {
+        public Modishness this[string key] {
             get {
                 return data[key];
             }
@@ -59,7 +73,7 @@ namespace Int64 {
         }
 
         //-----------------------------------------------------------
-        public IEnumerator<KeyValuePair<string, Type>> GetEnumerator() {
+        public IEnumerator<KeyValuePair<string, Modishness>> GetEnumerator() {
             return data.GetEnumerator();
         }
 

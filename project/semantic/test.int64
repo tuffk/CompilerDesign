@@ -1,4 +1,14 @@
-var x;
-x = 16;
-var y;
-y = x + 8;
+var punietas;
+var piruja;
+
+main() {
+    var x, y;
+    print(x);
+    x = 16;
+    y = x +5;
+}
+
+
+algo(a){
+
+}

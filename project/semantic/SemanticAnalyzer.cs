@@ -79,19 +79,39 @@ public SymbolTable Table {
         private set;
 }
 
+public List<string> globVars;
+
 //-----------------------------------------------------------
 public SemanticAnalyzer() {
         Table = new SymbolTable();
+        globVars = new List<string>();
 }
 
 //-----------------------------------------------------------
 public void Visit(NProgram node) {
+  Console.WriteLine($"+++++++++++++++ NPROGRAM ++++++++++++++++");
+  Console.WriteLine($"n0: ${node[0].GetType()}\t n1: ${node[1].GetType()}");
         Visit((dynamic) node[0]);
         Visit((dynamic) node[1]);
 }
 
 //-----------------------------------------------------------
 public void Visit(NVarDefList node) {
+  Console.WriteLine($"+++++++++++++++ NVARDEFLSIT ++++++++++++++++");
+  Console.WriteLine($"n0: ${node.GetType()}");
+  foreach(Node i in node)
+  {
+    Console.WriteLine($"var: {i.AnchorToken.Lexeme }");
+  }
+        VisitChildren(node);
+}
+
+public void Visit(NFunDefList node) {
+  Console.WriteLine($"+++++++++++++++ NFUNDEFLIST ++++++++++++++++");
+  foreach(Node i in node)
+  {
+    Console.WriteLine($"func: {i.AnchorToken.Lexeme }");
+  }
         VisitChildren(node);
 }
 
@@ -100,15 +120,24 @@ public void Visit(NVarDef node) {
 
         var variableName = node[0].AnchorToken.Lexeme;
 
-        if (Table.Contains(variableName)) {
+        if (globVars.Contains(variableName)) {
                 throw new SemanticError(
                               "Duplicated variable: " + variableName,
                               node[0].AnchorToken);
 
         } else {
-                Table[variableName] =
-                        typeMapper[node.AnchorToken.Category];
+                globVars.Add(variableName);
+                //Table[variableName] =
+                        // typeMapper[node.AnchorToken.Category];
         }
+}
+
+//-----------------------------------------------------------
+public void Visit(NFunDef node) {
+
+        var funName = node[0].AnchorToken.Lexeme;
+
+
 }
 
 //-----------------------------------------------------------
@@ -223,7 +252,9 @@ public void Visit(NExprMul node) {
 
 //-----------------------------------------------------------
 void VisitChildren(Node node) {
-        foreach (var n in node) {
+  IList<Node> tizdaien;
+  tizdaien = node.GetChildren();
+        foreach (var n in tizdaien) {
                 Visit((dynamic) n);
         }
 }
