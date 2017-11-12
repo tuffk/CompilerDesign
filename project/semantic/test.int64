@@ -1,4 +1,4 @@
-/*var punietas;
+var punietas;
 var piruja;
 var mamada;
 
@@ -10,7 +10,7 @@ main() {
     Chingatela(x, y);
 
 }
-*/
+
 
 Chingatela(a, b){
 
