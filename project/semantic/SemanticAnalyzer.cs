@@ -84,6 +84,28 @@ public List<string> globVars;
 //-----------------------------------------------------------
 public SemanticAnalyzer() {
         Table = new SymbolTable();
+        Modishness mo = new Modishness("printi", 1, true);
+        Table["printi"] = mo;
+        mo = new Modishness("printc", 1, true);
+        Table["printc"] = mo;
+        mo = new Modishness("prints", 1, true);
+        Table["prints"] = mo;
+        mo = new Modishness("println", 0, true);
+        Table["println"] = mo;
+        mo = new Modishness("readi", 0, true);
+        Table["readi"] = mo;
+        mo = new Modishness("reads", 0, true);
+        Table["reads"] = mo;
+        mo = new Modishness("new", 1, true);
+        Table["new"] = mo;
+        mo = new Modishness("size", 1, true);
+        Table["size"] = mo;
+        mo = new Modishness("add", 2, true);
+        Table["add"] = mo;
+        mo = new Modishness("get", 2, true);
+        Table["get"] = mo;
+        mo = new Modishness("set", 3, true);
+        Table["set"] = mo;
         globVars = new List<string>();
 }
 
