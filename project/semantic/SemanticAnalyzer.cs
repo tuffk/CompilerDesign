@@ -108,10 +108,7 @@ public void Visit(NVarDefList node) {
 
 public void Visit(NFunDefList node) {
   Console.WriteLine($"+++++++++++++++ NFUNDEFLIST ++++++++++++++++");
-  foreach(Node i in node)
-  {
-    Console.WriteLine($"Func: {i.AnchorToken.Lexeme }");
-  }
+
         VisitChildren(node);
 }
 
@@ -140,10 +137,28 @@ public void Visit(NVarDef node) {
 
 //-----------------------------------------------------------
 public void Visit(NFunDef node) {
+  var cont = 0;
   Console.WriteLine($"+++++++++++++++ NFUNDEF ++++++++++++++++");
+  Console.WriteLine(node);
         var funName = node.AnchorToken.Lexeme;
+        Console.WriteLine($"Funcion: {funName}");
 
-        Console.WriteLine($"def: {funName}");
+        foreach(Node i in node.children)
+         {
+           Console.WriteLine($"Funcion: {i}");
+
+             if(i.GetType().ToString() == "Int64.NParameterList")
+               foreach(Node j in i.children)
+                 cont++;
+
+         }
+        Console.WriteLine($"Cont =  {cont}");
+
+        Modishness mo = new Modishness(funName, cont);
+Console.WriteLine($"modishnes: {mo.name}, {mo.args}, {mo.predef}");
+  Table[funName] = mo;
+
+         //VisitChildren(node);
 
 
 

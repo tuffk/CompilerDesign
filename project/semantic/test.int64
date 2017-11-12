@@ -1,4 +1,4 @@
-var punietas;
+/*var punietas;
 var piruja;
 var mamada;
 
@@ -7,9 +7,11 @@ main() {
     print(x);
     x = 16;
     y = x +5;
+    Chingatela(x, y);
+
 }
+*/
 
-
-algo(a){
+Chingatela(a, b){
 
 }

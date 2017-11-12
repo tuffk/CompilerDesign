@@ -71,18 +71,19 @@ namespace Int64 {
 
               Console.WriteLine("Semantics OK.");
               Console.WriteLine();
-              Console.WriteLine("Symbol Table");
-              Console.WriteLine("============");
-              foreach (var entry in semantic.Table) {
-                  Console.WriteLine(entry);
-              }
-
 
               Console.WriteLine("Global Variable Table");
               Console.WriteLine("============");
               foreach (var entry in semantic.globVars) {
                   Console.WriteLine(entry);
               }
+
+              // Console.WriteLine("\n\nSymbol Table");
+              // Console.WriteLine("============");
+              // foreach (var entry in semantic.Table) {
+              //     Console.WriteLine(entry);
+              // }
+              Console.WriteLine(semantic.Table.ToString());
 
             } catch (Exception e) {
 

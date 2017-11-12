@@ -16,7 +16,7 @@ namespace Int64 {
     public bool param;
     public int? pos;
 
-    Sharmuta(string na, bool par, int? po){
+    public Sharmuta(string na, bool par, int? po){
       name = na;
       param = par;
       pos = po;
@@ -29,7 +29,7 @@ namespace Int64 {
     public bool predef = false;
     Sharmuta locTable = null;
 
-    Modishness(string na, int ar=0, bool pr=false, Sharmuta lt = null)
+    public Modishness(string na, int ar=0, bool pr=false, Sharmuta lt = null)
     {
       args = ar;
       name = na;
@@ -45,12 +45,14 @@ namespace Int64 {
         //-----------------------------------------------------------
         public override string ToString() {
             var sb = new StringBuilder();
-            sb.Append("Symbol Table\n");
+            sb.Append("\n\nSymbol Table\n");
             sb.Append("====================\n");
             foreach (var entry in data) {
-                sb.Append(String.Format("{0}: {1}\n",
+                sb.Append(String.Format("{0}: {1} {2} {3} \n",
                                         entry.Key,
-                                        entry.Value.name));
+                                        entry.Value.name,
+                                        entry.Value.args,
+                                        entry.Value.predef));
             }
             sb.Append("====================\n");
             return sb.ToString();
