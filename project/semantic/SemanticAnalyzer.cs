@@ -120,13 +120,17 @@ public void Visit(NVarDef node) {
   Console.WriteLine($"+++++++++++++++ NVARDEF ++++++++++++++++");
 //  Console.WriteLine(node);
         var variableName = node.AnchorToken.Lexeme;
-Console.WriteLine(variableName);
+        Console.WriteLine($"variable: {variableName}");
         if (globVars.Contains(variableName)) {
-                throw new SemanticError(
+          Console.WriteLine("Estoy en el IF duplicated variable");
+              /*  throw new SemanticError(
                               "Duplicated variable: " + variableName,
-                              node[0].AnchorToken);
+                              node[0].AnchorToken);*/
+                              throw new System.ArgumentException("Duplicated variable", "ERROR");
+
 
         } else {
+            Console.WriteLine($"Agregando Variable: {variableName} ");
                 globVars.Add(variableName);
                 //Table[variableName] =
                         // typeMapper[node.AnchorToken.Category];
