@@ -69,6 +69,9 @@ namespace Int64 {
               var semantic = new SemanticAnalyzer();
               semantic.Visit((dynamic) program);
               SemanticAnalyzer.pasones++;
+              
+              Console.WriteLine("\n\n**************SEGUNDA VUELTA**************\n\n");
+              semantic.Visit((dynamic) program);
 
               Console.WriteLine("Semantics OK.");
               Console.WriteLine();

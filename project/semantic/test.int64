@@ -2,16 +2,20 @@ var punietas;
 var piruja;
 var mamada;
 
+
 main() {
     var x, y;
-    print(x);
     x = 16;
-    y = x +5;
+    y = x + 5;
     Chingatela(x, y);
 
 }
 
 
 Chingatela(a, b){
-
+var kuz, zain;
+zain = 6;
+kuz = 7;
+zain = zain + kuz;
+// printi(zain);
 }

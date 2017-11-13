@@ -113,10 +113,56 @@ public SemanticAnalyzer() {
 
 //-----------------------------------------------------------
 public void Visit(NProgram node) {
+        var cuentame = 0;
         Console.WriteLine($"+++++++++++++++ NPROGRAM ++++++++++++++++");
         Console.WriteLine($"n0: ${node[0].GetType()}\t n1: ${node[1].GetType()}");
+        if(pasones == 0)
+        {
         Visit((dynamic) node[0]);
         Visit((dynamic) node[1]);
+        }
+        else if(pasones == 1){
+          Console.WriteLine("---------FOREACH BITCH!---------");
+          foreach(Node j in node[1].children){
+            Table[j.AnchorToken.Lexeme].locTable = new SortedDictionary<string , Sharmuta>();
+                  Console.WriteLine($"\n\nfunc NAME: {j.AnchorToken.Lexeme}");
+
+                    Console.WriteLine($"TABLA \t{Table[j.AnchorToken.Lexeme]}");
+                  foreach(Node i in j.children)
+                  {
+                //  Console.WriteLine($"FOR {cuentame}\t nodo: {i}");
+
+                  if(i.GetType().ToString() == "Int64.NParameterList"){
+                  Console.WriteLine("------------ ENTRE AL IF ------------");
+                  Console.WriteLine($"Estoy en parameterList: {i.children}\n");
+                    foreach(Node k in i.children){
+                        Sharmuta sha = new Sharmuta(k.AnchorToken.Lexeme, true ,cuentame);
+                        //Table[j.AnchorToken.Lexeme].locTable=sha;
+                        Table[j.AnchorToken.Lexeme].locTable[k.AnchorToken.Lexeme] = sha;
+                        Console.WriteLine($"\t\tk: {k.AnchorToken.Lexeme}");
+                        cuentame++;
+
+                      }
+                    }
+
+                  if(i.GetType().ToString() == "Int64.NVarDefList"){
+                  Console.WriteLine("------------ ENTRE AL IF NVAR DEFLIST------------");
+                  Console.WriteLine($"Estoy en parameterList: {i.children}\n");
+                    foreach(Node k in i.children){
+                      Sharmuta sha = new Sharmuta(k.AnchorToken.Lexeme, false , null);
+                      Table[j.AnchorToken.Lexeme].locTable[k.AnchorToken.Lexeme] = sha;
+                        Console.WriteLine($"\t\tk: {k.AnchorToken.Lexeme}");
+
+                      }
+                    }
+
+                  }
+
+                  cuentame=0;
+
+          }
+          //Console.WriteLine($"nodo: ${node[1].chilren}");
+      }
 }
 
 //-----------------------------------------------------------
@@ -142,6 +188,7 @@ public void Visit(NVarDef node) {
 //  Console.WriteLine(node);
         var variableName = node.AnchorToken.Lexeme;
         Console.WriteLine($"variable: {variableName}");
+
         if (globVars.Contains(variableName)) {
                 Console.WriteLine("Estoy en el IF duplicated variable");
                 throw new SemanticError(
