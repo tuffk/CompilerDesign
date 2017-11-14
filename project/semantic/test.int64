@@ -2,7 +2,6 @@ var punietas;
 var piruja;
 var mamada;
 
-
 main() {
     var x, y;
     x = 16;
@@ -11,6 +10,7 @@ main() {
 
 }
 
+var HUEVOS;
 
 Chingatela(a, b){
 var kuz, zain;

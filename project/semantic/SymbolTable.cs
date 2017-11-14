@@ -21,6 +21,7 @@ namespace Int64 {
       param = par;
       pos = po;
     }
+
   }
 
   public class Modishness {

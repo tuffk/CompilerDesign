@@ -18,5 +18,13 @@ namespace Int64 {
                 token.Row,
                 token.Column)) {
         }
+
+        public SemanticError(string message):
+    base(String.Format(
+        "Semantic Error: {0} \n",
+        message)) {
+}
+
+
     }
 }
