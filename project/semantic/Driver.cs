@@ -74,10 +74,10 @@ namespace Int64 {
               semantic.Visit((dynamic) program);
 
 
-              Console.WriteLine("\n\n**************TERCERA VUELTA**************\n\n");
+          /*    Console.WriteLine("\n\n**************TERCERA VUELTA**************\n\n");
               SemanticAnalyzer.pasones++;
               semantic.Visit((dynamic) program);
-
+*/
               Console.WriteLine("Semantics OK.");
               Console.WriteLine();
 

@@ -81,6 +81,9 @@ public SymbolTable Table {
 
 public List<string> globVars; // Global variabe "table"
 public static int pasones;
+public static string nombreFuncion;
+public static bool tipoVariable;
+public static int variablePosition;
 
 //-----------------------------------------------------------
 public SemanticAnalyzer() {
@@ -129,37 +132,8 @@ public void Visit(NProgram node) {
             throw new SemanticError("No main function was found ");
           else if(Table["main"].args > 0)
             throw new SemanticError("main function should hace 0 parameters");
+            Visit((dynamic) node[1]);
 
-          foreach(Node j in node[1].children){
-            Table[j.AnchorToken.Lexeme].locTable = new SortedDictionary<string , Sharmuta>();
-
-                  foreach(Node i in j.children)
-                  {
-
-                  if(i.GetType().ToString() == "Int64.NParameterList"){
-                    foreach(Node k in i.children){
-                        Sharmuta sha = new Sharmuta(k.AnchorToken.Lexeme, true ,cuentame);
-                        Table[j.AnchorToken.Lexeme].locTable[k.AnchorToken.Lexeme] = sha;
-                        cuentame++;
-                      }
-
-                    }
-
-
-                  if(i.GetType().ToString() == "Int64.NVarDefList")
-                    foreach(Node k in i.children){
-                      if(Table[j.AnchorToken.Lexeme].locTable.ContainsKey(k.AnchorToken.Lexeme))
-                      throw new SemanticError($"parameter and local variable names have to be unique on function declaration: [{j.AnchorToken.Lexeme}]");
-                      Sharmuta sha = new Sharmuta(k.AnchorToken.Lexeme, false , null);
-                      Table[j.AnchorToken.Lexeme].locTable[k.AnchorToken.Lexeme] = sha;
-                      }
-
-                  }
-
-                  cuentame=0;
-
-          }
-          //Console.WriteLine($"nodo: ${node[1].chilren}");
       }
         else if(pasones == 2){
               Visit((dynamic) node[1]);
@@ -174,6 +148,9 @@ public void Visit(NVarDefList node) {
         {
                 Console.WriteLine($"Global Variable: {i.AnchorToken.Lexeme }");
         }
+
+      variablePosition=0;
+
         VisitChildren(node);
 }
 
@@ -186,12 +163,24 @@ public void Visit(NFunDefList node) {
 public void Visit(NParameterList node) {
         Console.WriteLine($"+++++++++++++++ NPARAMETERLIST ++++++++++++++++");
 
+        if(pasones == 1)
+        {
+          tipoVariable = true;
+          Console.WriteLine("\n\n\n\n\n\n\nEstoy en 2do pason de NPARAMETERLIST");
+
+        }
+
         VisitChildren(node);
 }
 
 public void Visit(NParameter node) {
         Console.WriteLine($"+++++++++++++++ NParameter ++++++++++++++++");
-
+        if(pasones == 1)
+        {
+                  Sharmuta sha = new Sharmuta(node.AnchorToken.Lexeme, true ,variablePosition);
+                  Table[nombreFuncion].locTable[node.AnchorToken.Lexeme] = sha;
+                  variablePosition++;
+        }
         VisitChildren(node);
 }
 
@@ -209,8 +198,15 @@ public void Visit(NVarDef node) {
         else {
                 Console.WriteLine($"Agregando Variable: {variableName} ");
                 globVars.Add(variableName);
-                //Table[variableName] =
-                // typeMapper[node.AnchorToken.Category];
+        }
+        else if(pasones == 1)
+        {
+          if(Table[nombreFuncion].locTable.ContainsKey(node.AnchorToken.Lexeme))
+          throw new SemanticError("parameter and local variable names have to be unique on function: " + nombreFuncion,
+          node.AnchorToken);
+
+          Sharmuta sha = new Sharmuta(node.AnchorToken.Lexeme, false , null);
+          Table[nombreFuncion].locTable[node.AnchorToken.Lexeme] = sha;
         }
 }
 
@@ -244,11 +240,20 @@ public void Visit(NFunDef node) {
         Table[funName] = mo;
       }
 
+      else if(pasones ==1 )
+      {
+        nombreFuncion = funName;
+        Table[nombreFuncion].locTable = new SortedDictionary<string , Sharmuta>();
+        Console.WriteLine("\n\n\n\n\n\t\t\t\tVoy en el segundo pason de NFUNDEF");
+
+        VisitChildren(node);
+
+      }
+
       else if (pasones == 2)
       {
       Console.WriteLine("\n\n\n\n\n\t\t\t\tVoy en el tercer pason");
       Console.WriteLine($"\n\n\n\n\n\t\t\t\tnode: {node}");
-
 
        VisitChildren(node);
       }

@@ -6,13 +6,13 @@ main() {
     var x, y;
     x = 16;
     y = x + 5;
-    Chingatela(x, y);
+    Chinga(x, y);
 
 }
 
 var HUEVOS;
 
-Chingatela(a, b){
+Chinga(a, b){
 var kuz, zain;
 zain = 6;
 kuz = 7;
