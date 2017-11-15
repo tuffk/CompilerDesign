@@ -245,7 +245,6 @@ public void Visit(NFunDef node) {
         nombreFuncion = funName;
         Table[nombreFuncion].locTable = new SortedDictionary<string , Sharmuta>();
         Console.WriteLine("\n\n\n\n\n\t\t\t\tVoy en el segundo pason de NFUNDEF");
-
         VisitChildren(node);
 
       }
@@ -265,6 +264,30 @@ public void Visit(NFunDef node) {
 public void Visit(NStmtList node) {
 
   Console.WriteLine($"+++++++++++++++ NStmtList ++++++++++++++++");
+        VisitChildren(node);
+}
+
+//-----------------------------------------------------------
+public void Visit(NBreak node) {
+
+  Console.WriteLine($"+++++++++++++++ NBreak ++++++++++++++++");
+        VisitChildren(node);
+}
+
+
+//-----------------------------------------------------------
+public void Visit(NContinue node) {
+
+  Console.WriteLine($"+++++++++++++++ NContinue ++++++++++++++++");
+        VisitChildren(node);
+}
+
+
+
+//-----------------------------------------------------------
+public void Visit(NReturn node) {
+
+  Console.WriteLine($"+++++++++++++++ NReturn ++++++++++++++++");
         VisitChildren(node);
 }
 
@@ -307,10 +330,12 @@ public void Visit(NAssign node) {
         }
 }
 
-//-----------------------------------------------------------
-// public void Visit(Print node) {
-//         node.ExpressionType = Visit((dynamic) node[0]);
-// }
+// -----------------------------------------------------------
+public void Visit(Print node) {
+    Console.WriteLine($"+++++++++++++++ Print ++++++++++++++++");
+      VisitChildren(node);
+      //  node.ExpressionType = Visit((dynamic) node[0]);
+}
 
 //-----------------------------------------------------------
 public void Visit(NIfStmt node) {
@@ -320,7 +345,97 @@ public void Visit(NIfStmt node) {
         //                       + " in conditional statement",
         //                       node.AnchorToken);
         // }
-        VisitChildren(node[1]);
+        VisitChildren(node);
+}
+
+//------------------------------------------------------------
+public void Visit(NSwitchStmt node) {
+  Console.WriteLine($"+++++++++++++++ NSwitchStmt ++++++++++++++++");
+
+        VisitChildren(node);
+}
+
+//------------------------------------------------------------
+public void Visit(NCaseList node) {
+  Console.WriteLine($"+++++++++++++++ NCaseList ++++++++++++++++");
+
+        VisitChildren(node);
+}
+
+//------------------------------------------------------------
+public void Visit(NCase node) {
+  Console.WriteLine($"+++++++++++++++ NCase ++++++++++++++++");
+
+        VisitChildren(node);
+}
+
+//------------------------------------------------------------
+public void Visit(NLitBool node) {
+  Console.WriteLine($"+++++++++++++++ NLitBool ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+
+//------------------------------------------------------------
+public void Visit(NWhileStmt node) {
+  Console.WriteLine($"+++++++++++++++ NWhileStmt ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+
+//------------------------------------------------------------
+public void Visit(NLitChar node) {
+  Console.WriteLine($"+++++++++++++++ NLitChar ++++++++++++++++");
+        Console.WriteLine($"\n\n\n\n\n\t\t\tnode:    {node.GetType()}");
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NDoWhileStmt node) {
+  Console.WriteLine($"+++++++++++++++ NDoWhileStmt ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NForStmt node) {
+  Console.WriteLine($"+++++++++++++++ NForStmt ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NExpr node) {
+  Console.WriteLine($"+++++++++++++++ NExpr ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NExprOr node) {
+  Console.WriteLine($"+++++++++++++++ NExprOr ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NExprRel node) {
+  Console.WriteLine($"+++++++++++++++ NExprRel ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NExprBitOr node) {
+  Console.WriteLine($"+++++++++++++++ NExprBitOr ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NExprBitAnd node) {
+  Console.WriteLine($"+++++++++++++++ NExprBitAnd ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NExprBitShift node) {
+  Console.WriteLine($"+++++++++++++++ NExprBitShift ++++++++++++++++");
+
+        //VisitChildren(node);
 }
 
 //-----------------------------------------------------------
@@ -351,6 +466,22 @@ public void Visit(NLitInt node) {
                               "Integer literal too large: " + intStr,
                               node.AnchorToken);
         }
+}
+
+//-----------------------------------------------------------
+public void Visit(NLitString node) {
+  Console.WriteLine($"+++++++++++++++ NLitString ++++++++++++++++");
+
+        /*var intStr = node.AnchorToken.Lexeme;
+
+        try {
+                Convert.ToInt32(intStr);
+
+        } catch (OverflowException) {
+                throw new SemanticError(
+                              "Integer literal too large: " + intStr,
+                              node.AnchorToken);
+        }*/
 }
 
 //-----------------------------------------------------------
@@ -392,11 +523,29 @@ public void Visit(NExprAdd node) {
 public void Visit(NExprMul node) {
         VisitBinaryOperator('*', node /*, Type.INT*/);
 }
+//-----------------------------------------------------------
+public void Visit(NExprPow node) {
+        VisitBinaryOperator('^', node /*, Type.INT*/);
+}
 
 //-----------------------------------------------------------
 public void Visit(NExprPrimary node) {
 
       Console.WriteLine($"+++++++++++++++ NExprPrimary ++++++++++++++++");
+        //VisitBinaryOperator('*', node /*, Type.INT*/);
+        VisitChildren(node);
+}
+//-----------------------------------------------------------
+public void Visit(NExprUnary node) {
+
+      Console.WriteLine($"+++++++++++++++ NExprUnary ++++++++++++++++");
+        //VisitBinaryOperator('*', node /*, Type.INT*/);
+        VisitChildren(node);
+}
+//-----------------------------------------------------------
+public void Visit(NArrayList node) {
+
+      Console.WriteLine($"+++++++++++++++ NArrayList ++++++++++++++++");
         //VisitBinaryOperator('*', node /*, Type.INT*/);
         VisitChildren(node);
 }
