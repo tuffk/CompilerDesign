@@ -288,7 +288,7 @@ public void Visit(NContinue node) {
                         VisitChildren(node);
                         inloop--;
                 }else{
-                  throw new SemanticError("unexpected 'break'", node.AnchorToken);
+                  throw new SemanticError("unexpected 'continue'", node.AnchorToken);
                 }
         }else {
                 VisitChildren(node);
@@ -424,7 +424,10 @@ public void Visit(NWhileStmt node) {
         if (pasones == 2) {
           inloop++;
         }
-        //VisitChildren(node);
+        VisitChildren(node);
+        if (pasones == 2) {
+          inloop--;
+        }
 }
 
 //------------------------------------------------------------
@@ -439,7 +442,10 @@ public void Visit(NDoWhileStmt node) {
         if (pasones == 2) {
           inloop++;
         }
-        //VisitChildren(node);
+        VisitChildren(node);
+        if (pasones == 2) {
+          inloop--;
+        }
 }
 //------------------------------------------------------------
 public void Visit(NForStmt node) {
@@ -447,7 +453,10 @@ public void Visit(NForStmt node) {
         if (pasones == 2) {
           inloop++;
         }
-        //VisitChildren(node);
+        VisitChildren(node);
+        if (pasones == 2) {
+          inloop--;
+        }
 }
 //------------------------------------------------------------
 public void Visit(NExpr node) {

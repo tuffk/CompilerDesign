@@ -18,7 +18,7 @@ main() {
 
     HUEVOS = 7;
 }
-break;
+
 var HUEVOS;
 
 Chinga(a, b){
@@ -29,4 +29,6 @@ zain = zain + b;
 
 Chinga(7, 9);
 // printi(zain);
+
+
 }
