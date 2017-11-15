@@ -4,10 +4,15 @@ var mamada;
 
 main() {
     var x, y;
-    x = 16;
-    y = x + 5;
-    Chinga(x, y);
+  /*  x = 16;
+    y = punietas + 5;
+    */
+    Chinga(7, x);
 
+    printc(8);
+    set(x,y, 8)
+
+    HUEVOS = 7;
 }
 
 var HUEVOS;
@@ -16,6 +21,8 @@ Chinga(a, b){
 var kuz, zain;
 zain = 6;
 kuz = 7;
-zain = zain + kuz;
+zain = zain + b;
+
+Chinga(7, 9);
 // printi(zain);
 }
