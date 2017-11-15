@@ -131,7 +131,7 @@ public void Visit(NProgram node) {
           if (Table.Contains("main") == false)
             throw new SemanticError("No main function was found ");
           else if(Table["main"].args > 0)
-            throw new SemanticError("main function should hace 0 parameters");
+            throw new SemanticError("main function must have 0 parameters");
             Visit((dynamic) node[1]);
 
       }
