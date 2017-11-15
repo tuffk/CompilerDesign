@@ -21,6 +21,7 @@ main() {
 
 var HUEVOS;
 
+
 Chinga(a, b){
 var kuz, zain;
 zain = 6;

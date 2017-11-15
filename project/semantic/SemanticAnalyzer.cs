@@ -268,7 +268,6 @@ public void Visit(NBreak node) {
         {
                 if (inloop > 0) {
                         VisitChildren(node);
-                        inloop--;
                 }else{
                   throw new SemanticError("unexpected 'break'", node.AnchorToken);
                 }
@@ -286,7 +285,6 @@ public void Visit(NContinue node) {
         {
                 if (inloop > 0) {
                         VisitChildren(node);
-                        inloop--;
                 }else{
                   throw new SemanticError("unexpected 'continue'", node.AnchorToken);
                 }
