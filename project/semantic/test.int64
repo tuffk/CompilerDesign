@@ -8,13 +8,17 @@ main() {
     y = punietas + 5;
     */
     Chinga(7, x);
-
+    while(x > 0)
+    {
+      x = x + 1;
+      break;
+    }
     printc(8);
     set(x,y, 8)
 
     HUEVOS = 7;
 }
-
+break;
 var HUEVOS;
 
 Chinga(a, b){

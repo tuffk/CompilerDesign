@@ -86,6 +86,7 @@ public static string llamadaFuncion; //variable para guardar el nombre a una lla
 public static Token errorFunctionCall; //auxiliar para marcar row y column en NExprList
 public static int variablePosition; //contador para segundo recorrido poner en que posición está tal argumento
 public static int contadorArgumento; //contador de argumentos en una llamada de funcion
+public static int inloop;
 
 //-----------------------------------------------------------
 public SemanticAnalyzer() {
@@ -114,6 +115,7 @@ public SemanticAnalyzer() {
         mo = new Modishness("set", 3, true);
         Table["set"] = mo;
         globVars = new List<string>();
+        inloop = 0;
 }
 
 //-----------------------------------------------------------
@@ -262,7 +264,17 @@ public void Visit(NStmtList node) {
 public void Visit(NBreak node) {
 
         Console.WriteLine($"+++++++++++++++ NBreak ++++++++++++++++");
-        VisitChildren(node);
+        if (pasones == 2)
+        {
+                if (inloop > 0) {
+                        VisitChildren(node);
+                        inloop--;
+                }else{
+                  throw new SemanticError("unexpected 'break'", node.AnchorToken);
+                }
+        }else {
+                VisitChildren(node);
+        }
 }
 
 
@@ -270,7 +282,17 @@ public void Visit(NBreak node) {
 public void Visit(NContinue node) {
 
         Console.WriteLine($"+++++++++++++++ NContinue ++++++++++++++++");
-        VisitChildren(node);
+        if (pasones == 2)
+        {
+                if (inloop > 0) {
+                        VisitChildren(node);
+                        inloop--;
+                }else{
+                  throw new SemanticError("unexpected 'break'", node.AnchorToken);
+                }
+        }else {
+                VisitChildren(node);
+        }
 }
 
 
@@ -399,7 +421,9 @@ public void Visit(NLitBool node) {
 //------------------------------------------------------------
 public void Visit(NWhileStmt node) {
         Console.WriteLine($"+++++++++++++++ NWhileStmt ++++++++++++++++");
-
+        if (pasones == 2) {
+          inloop++;
+        }
         //VisitChildren(node);
 }
 
@@ -412,13 +436,17 @@ public void Visit(NLitChar node) {
 //------------------------------------------------------------
 public void Visit(NDoWhileStmt node) {
         Console.WriteLine($"+++++++++++++++ NDoWhileStmt ++++++++++++++++");
-
+        if (pasones == 2) {
+          inloop++;
+        }
         //VisitChildren(node);
 }
 //------------------------------------------------------------
 public void Visit(NForStmt node) {
         Console.WriteLine($"+++++++++++++++ NForStmt ++++++++++++++++");
-
+        if (pasones == 2) {
+          inloop++;
+        }
         //VisitChildren(node);
 }
 //------------------------------------------------------------
