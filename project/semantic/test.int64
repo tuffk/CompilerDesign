@@ -1,35 +1,13 @@
-var punietas;
-var piruja;
-var mamada;
 
-main() {
-    var x, y;
-  /*  x = 16;
-    y = punietas + 5;
-    */
-    Chinga(7, x);
-    while(x > 0)
-    {
-      x = x + 1;
-      break;
-    }
-    printc(8);
-    set(x,y, 8)
+// Returns the largest element in the array list referred by handle a.
+max_array(a) {
+    var max, x;
+    max = 0x8000000000000000; // This is the smallest number for a 64-bit int.
 
-    HUEVOS = 7;
+    return max;
 }
 
-var HUEVOS;
-
-
-Chinga(a, b){
-var kuz, zain;
-zain = 6;
-kuz = 7;
-zain = zain + b;
-
-Chinga(7, 9);
-// printi(zain);
-
+main() {
+    var array, sum, max;
 
 }

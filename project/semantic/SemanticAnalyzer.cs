@@ -513,14 +513,16 @@ public void Visit(NLitInt node) {
 
         var intStr = node.AnchorToken.Lexeme;
 
-        try {
-                Convert.ToInt32(intStr);
+      /*  try {
+          Console.WriteLine("Aquí valgo madres");
+                Convert.ToInt64(intStr);
+                Console.WriteLine("EXITO!!");
 
         } catch (OverflowException) {
                 throw new SemanticError(
                               "Integer literal too large: " + intStr,
                               node.AnchorToken);
-        }
+        }*/
 }
 
 //-----------------------------------------------------------
