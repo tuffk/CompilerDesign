@@ -79,10 +79,18 @@ public SymbolTable Table {
         private set;
 }
 
-public List<string> globVars;
+public List<string> globVars; // Global variabe "table"
+public static int pasones;  //variable para contar el número de recorrido del árbol
+public static string nombreFuncion; //variable para guardar el nombre de la funcion que se está recorriendo
+public static string llamadaFuncion; //variable para guardar el nombre a una llamada de función
+public static Token errorFunctionCall; //auxiliar para marcar row y column en NExprList
+public static int variablePosition; //contador para segundo recorrido poner en que posición está tal argumento
+public static int contadorArgumento; //contador de argumentos en una llamada de funcion
+public static int inloop;
 
 //-----------------------------------------------------------
 public SemanticAnalyzer() {
+        pasones = 0;
         Table = new SymbolTable();
         Modishness mo = new Modishness("printi", 1, true);
         Table["printi"] = mo;
@@ -107,116 +115,267 @@ public SemanticAnalyzer() {
         mo = new Modishness("set", 3, true);
         Table["set"] = mo;
         globVars = new List<string>();
+        inloop = 0;
 }
 
 //-----------------------------------------------------------
 public void Visit(NProgram node) {
-  Console.WriteLine($"+++++++++++++++ NPROGRAM ++++++++++++++++");
-  Console.WriteLine($"n0: ${node[0].GetType()}\t n1: ${node[1].GetType()}");
-        Visit((dynamic) node[0]);
-        Visit((dynamic) node[1]);
+        var cuentame = 0; var cuentaParam=0;
+        Console.WriteLine($"+++++++++++++++ NPROGRAM ++++++++++++++++");
+        Console.WriteLine($"n0: ${node[0].GetType()}\t n1: ${node[1].GetType()}");
+        /*Primer Vuelta recursiva del árbol*/
+        if(pasones == 0)
+        {
+                Visit((dynamic) node[0]);
+                Visit((dynamic) node[1]);
+        }
+        /*Segunda Vuelta del árbol generando las tablas del body*/
+        else if(pasones == 1) {
+                /*If SemanticError de main*/
+                if (Table.Contains("main") == false)
+                        throw new SemanticError("No main function was found ");
+                else if(Table["main"].args > 0)
+                        throw new SemanticError("main function must have 0 parameters");
+                Visit((dynamic) node[1]);
+
+        }
+        else if(pasones == 2) {
+                Visit((dynamic) node[1]);
+        }
 }
 
 //-----------------------------------------------------------
 public void Visit(NVarDefList node) {
-  Console.WriteLine($"+++++++++++++++ NVARDEFLSIT ++++++++++++++++");
-  Console.WriteLine($"n0: ${node.GetType()}");
-  foreach(Node i in node)
-  {
-    Console.WriteLine($"Global Variable: {i.AnchorToken.Lexeme }");
-  }
+        Console.WriteLine($"+++++++++++++++ NVARDEFLSIT ++++++++++++++++");
+        //Console.WriteLine($"n0: ${node.GetType()}");
+
+        variablePosition=0;
+
         VisitChildren(node);
 }
 
 public void Visit(NFunDefList node) {
-  Console.WriteLine($"+++++++++++++++ NFUNDEFLIST ++++++++++++++++");
+        Console.WriteLine($"+++++++++++++++ NFUNDEFLIST ++++++++++++++++");
 
+        VisitChildren(node);
+}
+
+public void Visit(NParameterList node) {
+        Console.WriteLine($"+++++++++++++++ NPARAMETERLIST ++++++++++++++++");
+
+        VisitChildren(node);
+}
+
+public void Visit(NParameter node) {
+        Console.WriteLine($"+++++++++++++++ NParameter ++++++++++++++++");
+        if(pasones == 1)
+        {
+                Sharmuta sha = new Sharmuta(node.AnchorToken.Lexeme, true,variablePosition);
+                Table[nombreFuncion].locTable[node.AnchorToken.Lexeme] = sha;
+                variablePosition++;
+        }
         VisitChildren(node);
 }
 
 //-----------------------------------------------------------
 public void Visit(NVarDef node) {
-  Console.WriteLine($"+++++++++++++++ NVARDEF ++++++++++++++++");
-//  Console.WriteLine(node);
+        Console.WriteLine($"+++++++++++++++ NVARDEF ++++++++++++++++");
+
         var variableName = node.AnchorToken.Lexeme;
-        Console.WriteLine($"variable: {variableName}");
-        if (globVars.Contains(variableName)) {
-          Console.WriteLine("Estoy en el IF duplicated variable");
-                throw new SemanticError(
-                              "Duplicated variable: " + variableName,
-                              node[0].AnchorToken);
-                              //throw new System.ArgumentException("Duplicated variable", "ERROR");
+        //Console.WriteLine($"variable: {variableName}");
+        if(pasones == 0)
+                if (globVars.Contains(variableName))
+                        throw new SemanticError(
+                                      "Duplicated variable: " + variableName,
+                                      node.AnchorToken);
+                else {
+                        //Console.WriteLine($"Agregando Variable: {variableName} ");
+                        globVars.Add(variableName);
+                }
+        else if(pasones == 1)
+        {
+                if(Table[nombreFuncion].locTable.ContainsKey(node.AnchorToken.Lexeme))
+                        throw new SemanticError("parameter and local variable names have to be unique on function: " + nombreFuncion,
+                                                node.AnchorToken);
 
-
-
-        } else {
-            Console.WriteLine($"Agregando Variable: {variableName} ");
-                globVars.Add(variableName);
-                //Table[variableName] =
-                        // typeMapper[node.AnchorToken.Category];
+                Sharmuta sha = new Sharmuta(node.AnchorToken.Lexeme, false, null);
+                Table[nombreFuncion].locTable[node.AnchorToken.Lexeme] = sha;
         }
 }
 
 //-----------------------------------------------------------
 public void Visit(NFunDef node) {
-  var cont = 0;
-  Console.WriteLine($"+++++++++++++++ NFUNDEF ++++++++++++++++");
-  Console.WriteLine(node);
+        var cont = 0;
+        Console.WriteLine($"+++++++++++++++ NFUNDEF ++++++++++++++++");
+        //Console.WriteLine(node);
         var funName = node.AnchorToken.Lexeme;
-        Console.WriteLine($"Funcion: {funName}");
+        Console.WriteLine($"\t\t\t\t\t\t\tEvaluando la funcion: {funName}");
+        if(pasones == 0)
+        {
+                if (Table.Contains(funName) && pasones == 0)
+                        throw new SemanticError(
+                                      "Repeated Function Declaration: " + funName,
+                                      node.AnchorToken);
 
-        foreach(Node i in node.children)
-         {
-           Console.WriteLine($"Funcion: {i}");
+                foreach(Node i in node.children)
+                {
+                        Console.WriteLine($"Funcion: {i}");
 
-             if(i.GetType().ToString() == "Int64.NParameterList")
-               foreach(Node j in i.children)
-                 cont++;
+                        if(i.GetType().ToString() == "Int64.NParameterList")
+                                foreach(Node j in i.children)
+                                        cont++;
 
-         }
-        Console.WriteLine($"Cont =  {cont}");
+                }
+                Console.WriteLine($"Cont =  {cont}");
 
-        Modishness mo = new Modishness(funName, cont);
-Console.WriteLine($"modishnes: {mo.name}, {mo.args}, {mo.predef}");
-  Table[funName] = mo;
+                Modishness mo = new Modishness(funName, cont);
+                Console.WriteLine($"modishnes: {mo.name}, {mo.args}, {mo.predef}");
+                Table[funName] = mo;
+        }
 
-         //VisitChildren(node);
+        else if(pasones ==1 )
+        {
+                nombreFuncion = funName;
+                Table[nombreFuncion].locTable = new SortedDictionary<string, Sharmuta>();
+                VisitChildren(node);
 
+        }
+
+        else if (pasones == 2)
+        {
+                nombreFuncion = funName;
+                Console.WriteLine("\n\n\n\n\n\t\t\t\tVoy en el tercer pason");
+                Console.WriteLine($"\t\t\t\tnode: {node}");
+
+                VisitChildren(node);
+        }
 
 
 }
 
 //-----------------------------------------------------------
 public void Visit(NStmtList node) {
+
+        Console.WriteLine($"+++++++++++++++ NStmtList ++++++++++++++++");
+        VisitChildren(node);
+}
+
+//-----------------------------------------------------------
+public void Visit(NBreak node) {
+
+        Console.WriteLine($"+++++++++++++++ NBreak ++++++++++++++++");
+        if (pasones == 2)
+        {
+                if (inloop > 0) {
+                        VisitChildren(node);
+                }else{
+                  throw new SemanticError("unexpected 'break'", node.AnchorToken);
+                }
+        }else {
+                VisitChildren(node);
+        }
+}
+
+
+//-----------------------------------------------------------
+public void Visit(NContinue node) {
+
+        Console.WriteLine($"+++++++++++++++ NContinue ++++++++++++++++");
+        if (pasones == 2)
+        {
+                if (inloop > 0) {
+                        VisitChildren(node);
+                }else{
+                  throw new SemanticError("unexpected 'continue'", node.AnchorToken);
+                }
+        }else {
+                VisitChildren(node);
+        }
+}
+
+
+
+//-----------------------------------------------------------
+public void Visit(NReturn node) {
+
+        Console.WriteLine($"+++++++++++++++ NReturn ++++++++++++++++");
+        VisitChildren(node);
+}
+
+
+//-----------------------------------------------------------
+public void Visit(NFunCall node) {
+
+        Console.WriteLine($"+++++++++++++++ NFunCall ++++++++++++++++");
+        if(pasones == 2)
+        {
+                errorFunctionCall = node.AnchorToken;
+                llamadaFuncion = node.AnchorToken.Lexeme;
+                if(!Table.Contains(node.AnchorToken.Lexeme))
+                        throw new SemanticError("function [" + node.AnchorToken.Lexeme +"] has not been declared",
+                                                node.AnchorToken);
+        }
+
+        VisitChildren(node);
+}
+
+//-----------------------------------------------------------
+public void Visit(NExprList node) {
+
+        Console.WriteLine($"+++++++++++++++ NExprList ++++++++++++++++");
+        if(pasones == 2) {
+                foreach(var i in node) {
+                        contadorArgumento++;
+                }
+                if(Table[llamadaFuncion].args != contadorArgumento)
+                        throw new SemanticError("expected " + Table[llamadaFuncion].args + $" arguments in function call  [{llamadaFuncion}]",
+                                                errorFunctionCall);
+
+
+        }
+        contadorArgumento = 0;
+
+
+
         VisitChildren(node);
 }
 
 //-----------------------------------------------------------
 public void Visit(NAssign node) {
-
+        Console.WriteLine($"+++++++++++++++ NAssign ++++++++++++++++");
         var variableName = node.AnchorToken.Lexeme;
 
-        if (Table.Contains(variableName)) {
+        if(pasones == 0)
+                if (Table.Contains(variableName)) {
 
-                // if (expectedType != Visit((dynamic) node[0])) {
-                //         throw new SemanticError(
-                //                       "Expecting type " + expectedType
-                //                       + " in assignment statement",
-                //                       node.AnchorToken);
-                // }
+                        Visit((dynamic) node[0]);
+
+                } else {
+                        throw new SemanticError(
+                                      "Undeclared variable: " + variableName,
+                                      node.AnchorToken);
+                }
+
+        else if(pasones == 2)
+        {
+                //Console.WriteLine($"\n\n\n\n\t\t\t\t\t\tNAssign 3er pason Funcion  {nombreFuncion}  {node.AnchorToken.Lexeme}");
+                if(!Table[nombreFuncion].locTable.ContainsKey(node.AnchorToken.Lexeme))
+                        if(!globVars.Contains(node.AnchorToken.Lexeme))
+                                throw new SemanticError("variable ["+node.AnchorToken.Lexeme+"] has not been declared ",
+                                                        node.AnchorToken);
+
+
                 Visit((dynamic) node[0]);
 
-        } else {
-                throw new SemanticError(
-                              "Undeclared variable: " + variableName,
-                              node.AnchorToken);
         }
 }
 
-//-----------------------------------------------------------
-// public void Visit(Print node) {
-//         node.ExpressionType = Visit((dynamic) node[0]);
-// }
+// -----------------------------------------------------------
+public void Visit(Print node) {
+        Console.WriteLine($"+++++++++++++++ Print ++++++++++++++++");
+        VisitChildren(node);
+        //  node.ExpressionType = Visit((dynamic) node[0]);
+}
 
 //-----------------------------------------------------------
 public void Visit(NIfStmt node) {
@@ -226,7 +385,112 @@ public void Visit(NIfStmt node) {
         //                       + " in conditional statement",
         //                       node.AnchorToken);
         // }
-        VisitChildren(node[1]);
+        VisitChildren(node);
+}
+
+//------------------------------------------------------------
+public void Visit(NSwitchStmt node) {
+        Console.WriteLine($"+++++++++++++++ NSwitchStmt ++++++++++++++++");
+
+        VisitChildren(node);
+}
+
+//------------------------------------------------------------
+public void Visit(NCaseList node) {
+        Console.WriteLine($"+++++++++++++++ NCaseList ++++++++++++++++");
+
+        VisitChildren(node);
+}
+
+//------------------------------------------------------------
+public void Visit(NCase node) {
+        Console.WriteLine($"+++++++++++++++ NCase ++++++++++++++++");
+
+        VisitChildren(node);
+}
+
+//------------------------------------------------------------
+public void Visit(NLitBool node) {
+        Console.WriteLine($"+++++++++++++++ NLitBool ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+
+//------------------------------------------------------------
+public void Visit(NWhileStmt node) {
+        Console.WriteLine($"+++++++++++++++ NWhileStmt ++++++++++++++++");
+        if (pasones == 2) {
+          inloop++;
+        }
+        VisitChildren(node);
+        if (pasones == 2) {
+          inloop--;
+        }
+}
+
+//------------------------------------------------------------
+public void Visit(NLitChar node) {
+        Console.WriteLine($"+++++++++++++++ NLitChar ++++++++++++++++");
+        Console.WriteLine($"\n\n\n\n\n\t\t\tnode:    {node.GetType()}");
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NDoWhileStmt node) {
+        Console.WriteLine($"+++++++++++++++ NDoWhileStmt ++++++++++++++++");
+        if (pasones == 2) {
+          inloop++;
+        }
+        VisitChildren(node);
+        if (pasones == 2) {
+          inloop--;
+        }
+}
+//------------------------------------------------------------
+public void Visit(NForStmt node) {
+        Console.WriteLine($"+++++++++++++++ NForStmt ++++++++++++++++");
+        if (pasones == 2) {
+          inloop++;
+        }
+        VisitChildren(node);
+        if (pasones == 2) {
+          inloop--;
+        }
+}
+//------------------------------------------------------------
+public void Visit(NExpr node) {
+        Console.WriteLine($"+++++++++++++++ NExpr ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NExprOr node) {
+        Console.WriteLine($"+++++++++++++++ NExprOr ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NExprRel node) {
+        Console.WriteLine($"+++++++++++++++ NExprRel ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NExprBitOr node) {
+        Console.WriteLine($"+++++++++++++++ NExprBitOr ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NExprBitAnd node) {
+        Console.WriteLine($"+++++++++++++++ NExprBitAnd ++++++++++++++++");
+
+        //VisitChildren(node);
+}
+//------------------------------------------------------------
+public void Visit(NExprBitShift node) {
+        Console.WriteLine($"+++++++++++++++ NExprBitShift ++++++++++++++++");
+
+        //VisitChildren(node);
 }
 
 //-----------------------------------------------------------
@@ -245,17 +509,36 @@ public void Visit(NIdentifier node) {
 
 //-----------------------------------------------------------
 public void Visit(NLitInt node) {
+        Console.WriteLine($"+++++++++++++++ NLitInt ++++++++++++++++");
 
         var intStr = node.AnchorToken.Lexeme;
 
-        try {
-                Convert.ToInt32(intStr);
+      /*  try {
+          Console.WriteLine("Aquí valgo madres");
+                Convert.ToInt64(intStr);
+                Console.WriteLine("EXITO!!");
 
         } catch (OverflowException) {
                 throw new SemanticError(
                               "Integer literal too large: " + intStr,
                               node.AnchorToken);
-        }
+        }*/
+}
+
+//-----------------------------------------------------------
+public void Visit(NLitString node) {
+        Console.WriteLine($"+++++++++++++++ NLitString ++++++++++++++++");
+
+        /*var intStr = node.AnchorToken.Lexeme;
+
+           try {
+                Convert.ToInt32(intStr);
+
+           } catch (OverflowException) {
+                throw new SemanticError(
+                              "Integer literal too large: " + intStr,
+                              node.AnchorToken);
+           }*/
 }
 
 //-----------------------------------------------------------
@@ -288,12 +571,49 @@ public void Visit(NExprComp node) {
 
 //-----------------------------------------------------------
 public void Visit(NExprAdd node) {
+
+        Console.WriteLine($"+++++++++++++++ NExprAdd ++++++++++++++++");
         VisitBinaryOperator('+', node /*, Type.INT*/);
 }
 
 //-----------------------------------------------------------
 public void Visit(NExprMul node) {
         VisitBinaryOperator('*', node /*, Type.INT*/);
+}
+//-----------------------------------------------------------
+public void Visit(NExprPow node) {
+        VisitBinaryOperator('^', node /*, Type.INT*/);
+}
+
+//-----------------------------------------------------------
+public void Visit(NExprPrimary node) {
+
+        Console.WriteLine($"+++++++++++++++ NExprPrimary ++++++++++++++++");
+
+        if(pasones == 2)
+                if(!Table[nombreFuncion].locTable.ContainsKey(node.AnchorToken.Lexeme))
+                        if(!globVars.Contains(node.AnchorToken.Lexeme))
+                                throw new SemanticError("variable ["+node.AnchorToken.Lexeme+"] has not been declared ",
+                                                        node.AnchorToken);
+
+        //Console.WriteLine($"\t\t\t\t\t\t\t\t+++++++++++++++ 3er pason  {node.AnchorToken.Lexeme}  ++++++++++++++++");
+
+        //VisitBinaryOperator('*', node /*, Type.INT*/);
+        VisitChildren(node);
+}
+//-----------------------------------------------------------
+public void Visit(NExprUnary node) {
+
+        Console.WriteLine($"+++++++++++++++ NExprUnary ++++++++++++++++");
+        //VisitBinaryOperator('*', node /*, Type.INT*/);
+        VisitChildren(node);
+}
+//-----------------------------------------------------------
+public void Visit(NArrayList node) {
+
+        Console.WriteLine($"+++++++++++++++ NArrayList ++++++++++++++++");
+        //VisitBinaryOperator('*', node /*, Type.INT*/);
+        VisitChildren(node);
 }
 
 //-----------------------------------------------------------
@@ -316,8 +636,8 @@ void VisitBinaryOperator(char op, Node node /*, Type type*/) {
         //                       node.AnchorToken);
         // }
 
-        Visit((dynamic) node[0]) ;
-            Visit((dynamic) node[1]);
+        Visit((dynamic) node[0]);
+        Visit((dynamic) node[1]);
 }
 }
 }

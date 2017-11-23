@@ -21,15 +21,16 @@ namespace Int64 {
       param = par;
       pos = po;
     }
+
   }
 
   public class Modishness {
     public string name;
     public int args = 0;
     public bool predef = false;
-    Sharmuta locTable = null;
+    public SortedDictionary<string,Sharmuta> locTable = null;
 
-    public Modishness(string na, int ar=0, bool pr=false, Sharmuta lt = null)
+    public Modishness(string na, int ar=0, bool pr=false, SortedDictionary<string,Sharmuta> lt = null)
     {
       args = ar;
       name = na;
@@ -55,7 +56,21 @@ namespace Int64 {
                                         entry.Value.name,
                                         entry.Value.args,
                                         entry.Value.predef));
-            }
+
+            if(!entry.Value.predef) {
+                       sb.Append("\t\t\t|LOCALS\n");
+                       sb.Append("\t\t\t|name\t|param?\t|pos\n");
+                       foreach(var zz in (IDictionary<string, Sharmuta>)entry.Value.locTable)
+                       {
+                               sb.Append(String.Format("\t\t\t|{0}\t|{1}\t{2}\n",
+                                                       zz.Key,
+                                                       zz.Value.param,
+                                                       zz.Value.pos
+                                                       ));
+                       }
+                       sb.Append("\t\t\t____________________________________________\n");
+               }
+             }
             sb.Append("====================\n");
             return sb.ToString();
         }

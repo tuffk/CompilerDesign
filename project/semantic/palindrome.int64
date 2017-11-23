@@ -6,11 +6,13 @@
 // Returns true if str is a palindrome, false otherwise.
 is_palindrome(str) {
     var start, finish;
+
     start = 0;
     finish = size(str) - 1;
     while (start < finish) {
         if (get(str, start) != get(str, finish)) {
             return false;
+
         }
         start = start + 1;
         finish = finish - 1;
