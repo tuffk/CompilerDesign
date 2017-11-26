@@ -1,7 +1,7 @@
 var pirujaGay; var mamadas;
 var pene;
 // Returns the largest element in the array list referred by handle a.
-max_array(a) {
+max_array(a, z) {
     var max, x;
     max = 0x8000000000000000; // This is the smallest number for a 64-bit int.
 

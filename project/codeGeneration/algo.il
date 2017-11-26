@@ -7,7 +7,21 @@
            int64 pirujaGay,
            int64 mamadas,
            int64 pene,
-          )call void class ['mscorlib']'System'.'Console'::'WriteLine'(int32)
+          )
+        .method public static
+          default int64 'max_array'(a, z)
+        .locals init (
+           int64 max,
+           int64 x,
+          )
+        .method public static
+          default int64 'main'()
+        .locals init (
+           int64 array,
+           int64 sum,
+           int64 max,
+          )
+        call void class ['mscorlib']'System'.'Console'::'WriteLine'(int32)
     ret
   }
 }

@@ -187,8 +187,8 @@ public void Visit(NVarDefList node) {
 
 public void Visit(NFunDefList node) {
         Console.WriteLine($"+++++++++++++++ NFUNDEFLIST ++++++++++++++++");
-
         VisitChildren(node);
+
 }
 
 public void Visit(NParameterList node) {
@@ -291,6 +291,39 @@ public void Visit(NFunDef node) {
                 VisitChildren(node);
         }
 
+        else if (pasones == 3)
+        {
+        File.AppendAllText(lePatheo,
+        $@".method public static
+          default int64 '{funName}'(") ;
+          //Console.WriteLine("6666666666666666666666666666666666666666666666666666666666666666");
+          //Console.WriteLine($"PITo: {Table[funName].locTable}");
+          var final = Table[funName].args;
+          var contExtra = 1;
+          foreach(var XXX in Table[funName].locTable)
+          {
+            if(XXX.Value.param == true){
+              if(final == contExtra)
+            File.AppendAllText(lePatheo,
+            $@"{XXX.Value.name}") ;
+            else
+            File.AppendAllText(lePatheo,
+            $@"{XXX.Value.name}, ") ;
+
+            contExtra++;
+          }
+
+          }
+
+        File.AppendAllText(lePatheo,
+        $@")
+        ") ;
+
+          VisitChildren(node);
+
+
+
+        }
 
 }
 
