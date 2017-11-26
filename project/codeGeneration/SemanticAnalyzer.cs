@@ -164,7 +164,7 @@ public void Visit(NProgram node) {
   }
 }") ;
 
-Console.WriteLine("Estoy en el pason 4 BITCH");
+Console.WriteLine("Terminé el 4to pasón");
         }
 }
 
@@ -237,7 +237,7 @@ public void Visit(NVarDef node) {
         {
 
           File.AppendAllText(lePatheo,
-          $@" int64 {variableName},
+          $@" int64 '{variableName}',
           " ) ;
         }
 
@@ -316,11 +316,14 @@ public void Visit(NFunDef node) {
           }
 
         File.AppendAllText(lePatheo,
-        $@")
+        @")
+        {
         ") ;
 
           VisitChildren(node);
-
+          File.AppendAllText(lePatheo,
+          @"}
+          ") ;
 
 
         }
@@ -332,6 +335,37 @@ public void Visit(NStmtList node) {
 
         Console.WriteLine($"+++++++++++++++ NStmtList ++++++++++++++++");
         VisitChildren(node);
+}
+
+
+//-----------------------------------------------------------
+public void Visit(NAssign node) {
+        Console.WriteLine($"+++++++++++++++ NAssign ++++++++++++++++");
+        var variableName = node.AnchorToken.Lexeme;
+
+        if(pasones == 0)
+                if (Table.Contains(variableName)) {
+
+                        Visit((dynamic) node[0]);
+
+                } else {
+                        throw new SemanticError(
+                                      "Undeclared variable: " + variableName,
+                                      node.AnchorToken);
+                }
+
+        else if(pasones == 2)
+        {
+                //Console.WriteLine($"\n\n\n\n\t\t\t\t\t\tNAssign 3er pason Funcion  {nombreFuncion}  {node.AnchorToken.Lexeme}");
+                if(!Table[nombreFuncion].locTable.ContainsKey(node.AnchorToken.Lexeme))
+                        if(!globVars.Contains(node.AnchorToken.Lexeme))
+                                throw new SemanticError("variable ["+node.AnchorToken.Lexeme+"] has not been declared ",
+                                                        node.AnchorToken);
+
+
+                Visit((dynamic) node[0]);
+
+        }
 }
 
 //-----------------------------------------------------------
@@ -414,35 +448,6 @@ public void Visit(NExprList node) {
         VisitChildren(node);
 }
 
-//-----------------------------------------------------------
-public void Visit(NAssign node) {
-        Console.WriteLine($"+++++++++++++++ NAssign ++++++++++++++++");
-        var variableName = node.AnchorToken.Lexeme;
-
-        if(pasones == 0)
-                if (Table.Contains(variableName)) {
-
-                        Visit((dynamic) node[0]);
-
-                } else {
-                        throw new SemanticError(
-                                      "Undeclared variable: " + variableName,
-                                      node.AnchorToken);
-                }
-
-        else if(pasones == 2)
-        {
-                //Console.WriteLine($"\n\n\n\n\t\t\t\t\t\tNAssign 3er pason Funcion  {nombreFuncion}  {node.AnchorToken.Lexeme}");
-                if(!Table[nombreFuncion].locTable.ContainsKey(node.AnchorToken.Lexeme))
-                        if(!globVars.Contains(node.AnchorToken.Lexeme))
-                                throw new SemanticError("variable ["+node.AnchorToken.Lexeme+"] has not been declared ",
-                                                        node.AnchorToken);
-
-
-                Visit((dynamic) node[0]);
-
-        }
-}
 
 // -----------------------------------------------------------
 public void Visit(Print node) {
@@ -626,23 +631,6 @@ public void Visit(NLitString node) {
            }*/
 }
 
-//-----------------------------------------------------------
-// public void Visit(True node) {
-// }
-//
-// //-----------------------------------------------------------
-// public void Visit(False node) {
-// }
-//
-// //-----------------------------------------------------------
-// public void Visit(Neg node) {
-//         // if (Visit((dynamic) node[0]) != Type.INT) {
-//         //         throw new SemanticError(
-//         //                       "Operator - requires an operand of type " + Type.INT,
-//         //                       node.AnchorToken);
-//         // }
-//         Visit((dynamic) node[0]);
-// }
 
 //-----------------------------------------------------------
 public void Visit(NExprAnd node) {

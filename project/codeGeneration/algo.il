@@ -4,24 +4,26 @@
   .method public static void 'whatever'() {
   .entrypoint
 .locals init (
-           int64 pirujaGay,
-           int64 mamadas,
-           int64 pene,
+           int64 'testeando',
           )
         .method public static
           default int64 'max_array'(a, z)
+        {
         .locals init (
-           int64 max,
-           int64 x,
+           int64 'max',
+           int64 'x',
           )
-        .method public static
+        }
+          .method public static
           default int64 'main'()
+        {
         .locals init (
-           int64 array,
-           int64 sum,
-           int64 max,
+           int64 'array',
+           int64 'sum',
+           int64 'max',
           )
-        call void class ['mscorlib']'System'.'Console'::'WriteLine'(int32)
+        }
+          call void class ['mscorlib']'System'.'Console'::'WriteLine'(int32)
     ret
   }
 }

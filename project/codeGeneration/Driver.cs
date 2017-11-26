@@ -78,7 +78,11 @@ namespace Int64 {
               SemanticAnalyzer.pasones++;
               semantic.Visit((dynamic) program);
 
-              Console.WriteLine("Semantics OK.");
+              SemanticAnalyzer.pasones++;
+              semantic.Visit((dynamic) program);
+
+
+              Console.WriteLine("\nSemantics OK.");
               Console.WriteLine();
 
               Console.WriteLine("Global Variable Table");
@@ -94,10 +98,6 @@ namespace Int64 {
               // }
               Console.WriteLine(semantic.Table.ToString());
 
-
-
-              SemanticAnalyzer.pasones++;
-              semantic.Visit((dynamic) program);
 
 
 
