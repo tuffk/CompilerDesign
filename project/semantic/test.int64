@@ -10,4 +10,5 @@ max_array(a) {
 main() {
     var array, sum, max;
 
+
 }
