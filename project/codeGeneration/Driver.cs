@@ -97,9 +97,9 @@ namespace Int64 {
 
 
               SemanticAnalyzer.pasones++;
+              semantic.Visit((dynamic) program);
 
 
-              
 
             } catch (Exception e) {
 

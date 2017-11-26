@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace Int64 {
@@ -87,6 +88,7 @@ public static Token errorFunctionCall; //auxiliar para marcar row y column en NE
 public static int variablePosition; //contador para segundo recorrido poner en que posición está tal argumento
 public static int contadorArgumento; //contador de argumentos en una llamada de funcion
 public static int inloop;
+private static string lePatheo; //path al file en el que se va a escribir
 
 //-----------------------------------------------------------
 public SemanticAnalyzer() {
@@ -116,6 +118,7 @@ public SemanticAnalyzer() {
         Table["set"] = mo;
         globVars = new List<string>();
         inloop = 0;
+        lePatheo = "algo.il";
 }
 
 //-----------------------------------------------------------
@@ -141,6 +144,27 @@ public void Visit(NProgram node) {
         }
         else if(pasones == 2) {
                 Visit((dynamic) node[1]);
+        }
+
+        else if(pasones == 3) {
+
+          File.AppendAllText(lePatheo,
+          @".assembly 'output' { }
+.assembly extern 'int64lib' { }
+.class public 'Test' extends ['mscorlib']'System'.'Object' {
+  .method public static void 'whatever'() {
+  .entrypoint
+") ;
+                Visit((dynamic) node[0]);
+
+                Visit((dynamic) node[1]);
+            File.AppendAllText(lePatheo,
+            @"call void class ['mscorlib']'System'.'Console'::'WriteLine'(int32)
+    ret
+  }
+}") ;
+
+Console.WriteLine("Estoy en el pason 4 BITCH");
         }
 }
 
