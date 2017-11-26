@@ -304,11 +304,11 @@ public void Visit(NFunDef node) {
           {
             if(XXX.Value.param == true){
               if(final == contExtra)
-            File.AppendAllText(lePatheo,
-            $@"{XXX.Value.name}") ;
+                File.AppendAllText(lePatheo,
+                $@"{XXX.Value.name}") ;
             else
-            File.AppendAllText(lePatheo,
-            $@"{XXX.Value.name}, ") ;
+                File.AppendAllText(lePatheo,
+                $@"{XXX.Value.name}, ") ;
 
             contExtra++;
           }
