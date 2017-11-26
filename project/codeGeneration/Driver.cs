@@ -94,6 +94,13 @@ namespace Int64 {
               // }
               Console.WriteLine(semantic.Table.ToString());
 
+
+
+              SemanticAnalyzer.pasones++;
+
+
+              
+
             } catch (Exception e) {
 
               if (e is FileNotFoundException
