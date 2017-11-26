@@ -148,7 +148,7 @@ public void Visit(NProgram node) {
 
         else if(pasones == 3) {
 
-          File.AppendAllText(lePatheo,
+          File.WriteAllText(lePatheo,
           @".assembly 'output' { }
 .assembly extern 'int64lib' { }
 .class public 'Test' extends ['mscorlib']'System'.'Object' {
@@ -174,8 +174,15 @@ public void Visit(NVarDefList node) {
         //Console.WriteLine($"n0: ${node.GetType()}");
 
         variablePosition=0;
+        File.AppendAllText(lePatheo,
+        @".locals init (
+          ") ;
 
         VisitChildren(node);
+
+        File.AppendAllText(lePatheo,
+        @")
+        ") ;
 }
 
 public void Visit(NFunDefList node) {
@@ -225,6 +232,16 @@ public void Visit(NVarDef node) {
                 Sharmuta sha = new Sharmuta(node.AnchorToken.Lexeme, false, null);
                 Table[nombreFuncion].locTable[node.AnchorToken.Lexeme] = sha;
         }
+
+        else if(pasones == 3)
+        {
+
+          File.AppendAllText(lePatheo,
+          $@" int64 {variableName},
+          " ) ;
+        }
+
+
 }
 
 //-----------------------------------------------------------

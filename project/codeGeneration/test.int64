@@ -1,4 +1,5 @@
-
+var pirujaGay; var mamadas;
+var pene;
 // Returns the largest element in the array list referred by handle a.
 max_array(a) {
     var max, x;
