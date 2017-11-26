@@ -513,16 +513,27 @@ public void Visit(NLitInt node) {
 
         var intStr = node.AnchorToken.Lexeme;
 
-      /*  try {
-          Console.WriteLine("Aquí valgo madres");
-                Convert.ToInt64(intStr);
+        try {
+          if(intStr.StartsWith("0o") || intStr.StartsWith("0O")){
+            intStr = intStr.Remove(0,2);
+            Convert.ToInt64(intStr,8);
+          }
+          else if(intStr.StartsWith("0b") || intStr.StartsWith("0B")){
+            intStr = intStr.Remove(0,2);
+            Convert.ToInt64(intStr,2);
+          }
+          else if(intStr.StartsWith("0x") || intStr.StartsWith("0X")){
+            intStr = intStr.Remove(0,2);
+            Convert.ToInt64(intStr,16);
+          }
+              //  Convert.ToInt64(intStr);
                 Console.WriteLine("EXITO!!");
 
         } catch (OverflowException) {
                 throw new SemanticError(
                               "Integer literal too large: " + intStr,
                               node.AnchorToken);
-        }*/
+        }
 }
 
 //-----------------------------------------------------------
