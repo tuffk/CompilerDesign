@@ -12,7 +12,7 @@
   .hash algorithm 0x00008004
   .ver  0:0:0:0
 }
-.module funcionamela.exe // GUID = {B895BB3E-8316-40A1-B804-1C9595DBE3B7}
+.module funcionamela.exe // GUID = {F99B044F-0F8A-4680-B664-C1C0E2F7C2F4}
 
 
   .class public auto ansi beforefieldinit Test
@@ -35,10 +35,10 @@
 
     // method line 2
     .method public static hidebysig 
-           default void pito (int32 x)  cil managed 
+           default float64 pito (int32 x)  cil managed 
     {
         // Method begins at RVA 0x2058
-	// Code size 29 (0x1d)
+	// Code size 38 (0x26)
 	.maxstack 2
 	.locals init (
 		int32	V_0)
@@ -53,24 +53,26 @@
 	IL_000d:  box [mscorlib]System.Int32
 	IL_0012:  call string string::Format(string, object)
 	IL_0017:  stsfld string Test::miglob2
-	IL_001c:  ret 
+	IL_001c:  ldc.r8 0.5
+	IL_0025:  ret 
     } // end of method Test::pito
 
     // method line 3
     .method public static hidebysig 
            default void Main ()  cil managed 
     {
-        // Method begins at RVA 0x2084
+        // Method begins at RVA 0x208c
 	.entrypoint
-	// Code size 9 (0x9)
+	// Code size 10 (0xa)
 	.maxstack 1
 	.locals init (
 		int32	V_0)
 	IL_0000:  ldc.i4.0 
 	IL_0001:  stloc.0 
 	IL_0002:  ldc.i4.7 
-	IL_0003:  call void class Test::pito(int32)
-	IL_0008:  ret 
+	IL_0003:  call float64 class Test::pito(int32)
+	IL_0008:  pop 
+	IL_0009:  ret 
     } // end of method Test::Main
 
   } // end of class Test
