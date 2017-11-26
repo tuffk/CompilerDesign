@@ -4,6 +4,6 @@ public class Test
     static public void Main()
     {
         int x;
-        x =18;
+        x =58;
     }
 }
