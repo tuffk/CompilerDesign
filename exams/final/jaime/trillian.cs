@@ -15,6 +15,11 @@ namespace Trillian {
         ILLEGAL_CHAR, EOF
     }
 
+    class Kuz{
+      public Token tok;
+      public string val;
+    }
+
     //---------------------------------------------------------------
     class Scanner {
         readonly string input;
@@ -45,27 +50,34 @@ namespace Trillian {
         public Scanner(string input) {
             this.input = input;
         }
-        public IEnumerable<Token> Start() {
+        public IEnumerable<Kuz> Start() {
             foreach (Match m in regex.Matches(input)) {
                 if (m.Groups["WhiteSpace"].Success) {
                     // Skip spaces.
                 } else if (m.Groups["Other"].Success) {
-                    yield return Token.ILLEGAL_CHAR;
+                    var k =new Kuz();
+                    k.val = "";
+                    k.tok = Token.ILLEGAL_CHAR;
+                    yield return k;
                 }else {
                     foreach (var name in regexLabels.Keys) {
                         if (m.Groups[name].Success) {
-                          //Console.WriteLine($"NAME: {name}, val: {m}");
-                            if(name == "Float")
-                            {
-                              val = $"{m}";
-                            }
-                            yield return regexLabels[name];
+                            Console.WriteLine($"NAME: {name}, val: {m}");
+
+                            var zain = new Kuz();
+                            zain.tok = regexLabels[name];
+                            zain.val = $"{m}";
+                            Console.WriteLine($"khe berghas: {zain.val}");
+                            yield return zain;
                             break;
                         }
                     }
                 }
             }
-            yield return Token.EOF;
+            var k2 =new Kuz();
+            k2.val = "";
+            k2.tok = Token.EOF;
+            yield return k2;
         }
     }
 
@@ -115,26 +127,31 @@ namespace Trillian {
     class Star:        Node {}
     class Sum:       Node {}
     class Float: Node {
+      public Kuz algo;
+      public Float(Kuz x)
+      {
+        this.algo = x;
+      }
 
       public override string ToString() {
-          return "Float";
+          return algo.val;
       }
 
     }
 
     //---------------------------------------------------------------
     class Parser {
-        IEnumerator<Token> tokenStream;
-        public Parser(IEnumerator<Token> tokenStream) {
+        IEnumerator<Kuz> tokenStream;
+        public Parser(IEnumerator<Kuz> tokenStream) {
             this.tokenStream = tokenStream;
             this.tokenStream.MoveNext();
         }
-        public Token CurrentToken {
+        public Kuz CurrentToken {
             get { return tokenStream.Current; }
         }
         public Token Expect(Token category) {
-            if (CurrentToken == category) {
-                Token current = tokenStream.Current;
+            if (CurrentToken.tok == category) {
+                Token current = tokenStream.Current.tok;
                 tokenStream.MoveNext();
                 return current;
             } else {
@@ -150,7 +167,8 @@ namespace Trillian {
         public Node Max() {
           Console.WriteLine($"++ MAX ++");
             var exp1 = SimpleExp();
-            while (CurrentToken == Token.BANG) {
+            Console.WriteLine($"expr1 {exp1}");
+            while (CurrentToken.tok == Token.BANG) {
                 Expect(Token.BANG);
                 var exp2 = new Bang() { exp1, SimpleExp() };
                 exp1 = exp2;
@@ -160,7 +178,7 @@ namespace Trillian {
         public Node MaxList() {
           Console.WriteLine($"++ MaxList ++");
             var exp1 = Max();
-            while (CurrentToken == Token.COMMA) {
+            while (CurrentToken.tok == Token.COMMA) {
                 Expect(Token.COMMA);
                  var exp2 = new Sum() { exp1, Max() };
                  exp1 = exp2;
@@ -168,8 +186,8 @@ namespace Trillian {
             return exp1;
         }
         public Node SimpleExp() {
-          Console.WriteLine($"++ SimpleExp con {CurrentToken} ++");
-            switch (CurrentToken) {
+          Console.WriteLine($"++ SimpleExp con {CurrentToken.tok} ++");
+            switch (CurrentToken.tok) {
             case Token.SQ_OPEN:
                 Console.WriteLine("-- SUM --");
                 Expect(Token.SQ_OPEN);
@@ -177,12 +195,15 @@ namespace Trillian {
                 Expect(Token.SQ_CLOSE);
                 return exp;
             case Token.STAR:
+                Console.WriteLine("-- STAR -- ");
                 Expect(Token.STAR);
                 return new Star() { SimpleExp() };
             case Token.FLOAT:
-                //Console.WriteLine("%%%%%%%%%%%%%%%");
+                Console.WriteLine("-- FLOAT --");
+                var y = CurrentToken;
+                //Console.WriteLine($"********************** {y.tok} *************");
                 Expect(Token.FLOAT);
-                return new Float();
+                return new Float(y);
             default:
                 throw new SyntaxError();
             }
