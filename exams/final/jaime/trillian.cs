@@ -28,7 +28,7 @@ namespace Trillian {
             @"
                 (?<NMax>       [!] )
               | (?<Comma>         [,] )
-              | (?<Star>        [*] )
+              | (?<Dup>        [*] )
               | (?<SqOpen>    \[ )
               | (?<SqClose>   \] )
               | (?<Float>       [-]* \d+ [.]* \d* )
@@ -42,7 +42,7 @@ namespace Trillian {
             new Dictionary<string, Token>() {
                 {"NMax", Token.BANG},
                 {"Comma", Token.COMMA},
-                {"Star", Token.STAR},
+                {"Dup", Token.STAR},
                 {"SqOpen", Token.SQ_OPEN},
                 {"SqClose", Token.SQ_CLOSE},
                 {"Float", Token.FLOAT}
@@ -67,7 +67,6 @@ namespace Trillian {
                             var zain = new Kuz();
                             zain.tok = regexLabels[name];
                             zain.val = $"{m}";
-                            Console.WriteLine($"khe berghas: {zain.val}");
                             yield return zain;
                             break;
                         }
@@ -83,7 +82,7 @@ namespace Trillian {
 
     //---------------------------------------------------------------
     class Node: IEnumerable<Node> {
-        IList<Node> children = new List<Node>();
+        public IList<Node> children = new List<Node>();
         public Node this[int index] {
             get {
                 return children[index];
@@ -124,7 +123,7 @@ namespace Trillian {
     //---------------------------------------------------------------
     class Program:   Node {}
     class NMax:       Node {}
-    class Star:        Node {}
+    class Dup:        Node {}
     class Sum:       Node {}
     class Float: Node {
       public Kuz algo;
@@ -191,13 +190,18 @@ namespace Trillian {
             case Token.SQ_OPEN:
                 Console.WriteLine("-- SUM --");
                 Expect(Token.SQ_OPEN);
-                var exp = new Sum() { MaxList() };
+                var exp = new Sum();
+                exp.Add(Max());
+                while (CurrentToken.tok == Token.COMMA) {
+                    Expect(Token.COMMA);
+                     exp.Add(Max());
+                }
                 Expect(Token.SQ_CLOSE);
                 return exp;
             case Token.STAR:
                 Console.WriteLine("-- STAR -- ");
                 Expect(Token.STAR);
-                return new Star() { SimpleExp() };
+                return new Dup() { SimpleExp() };
             case Token.FLOAT:
                 Console.WriteLine("-- FLOAT --");
                 var y = CurrentToken;
@@ -232,16 +236,31 @@ namespace Trillian {
                 + Visit((dynamic) node[1])
                 + "\t\tcall float64 ['mscorlib']'System'.'Math'::'Max'(float64, float64)\n";
         }
-        public string Visit(Star node) {
+        public string Visit(Dup node) {
           Console.WriteLine($"visit node");
             return Visit((dynamic) node[0])
                 + "\t\tdup\n\t\tadd\n";
         }
         public string Visit(Sum node) {
           Console.WriteLine($"visit sum");
-            return Visit((dynamic) node[0])
-                + Visit((dynamic) node[1])
-                + "\t\tadd\n";
+            // return Visit((dynamic) node[0])
+            //     + Visit((dynamic) node[1])
+            //     + "\t\tadd\n";
+            var cont =0;
+            var sb = new StringBuilder();
+            foreach(var c in node.children)
+            {
+              if (cont == 0) {
+                sb.Append(Visit((dynamic) c));
+                sb.Append("\n");
+                cont++;
+                continue;
+              }
+              sb.Append(Visit((dynamic) c));
+              sb.Append("\n");
+              sb.Append("\t\tadd \n");
+            }
+            return sb.ToString();
         }
         public string Visit(Float node) {
           Console.WriteLine("visit float");
