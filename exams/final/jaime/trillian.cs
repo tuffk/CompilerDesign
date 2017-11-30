@@ -162,9 +162,8 @@ namespace Trillian {
             var exp1 = Max();
             while (CurrentToken == Token.COMMA) {
                 Expect(Token.COMMA);
-                 //var exp2 = new Sum() { exp1, Max() };
-                var exp2 = Max();
-                exp1 = exp2;
+                 var exp2 = new Sum() { exp1, Max() };
+                 exp1 = exp2;
             }
             return exp1;
         }
@@ -191,10 +190,11 @@ namespace Trillian {
 
 
     }
-/*
+
     //---------------------------------------------------------------
     class CILGenerator {
         public string Visit(Program node) {
+          Console.WriteLine($"visitamela {node} con hijos: {node[0]} ");
             return ".assembly 'Trillian' {}\n\n"
                 + ".class public 'FinalExam' extends ['mscorlib']'System'.'Object' {\n"
                 + "\t.method public static void 'start'() {\n"
@@ -205,29 +205,29 @@ namespace Trillian {
                 + "\t}\n"
                 + "}\n";
         }
-        public string Visit(And node) {
+        public string Visit(Bang node) {
+          Console.WriteLine($"visit bang ");
             return Visit((dynamic) node[0])
                 + Visit((dynamic) node[1])
-                + "\t\tand\n";
+                + "\t\tcall float64 ['mscorlib']'System'.'Math'::'Max'(float64, float64)\n";
         }
-        public string Visit(Or node) {
+        public string Visit(Star node) {
+          Console.WriteLine($"visit node");
+            return Visit((dynamic) node[0])
+                + "\t\tdup\n\t\tadd\n";
+        }
+        public string Visit(Sum node) {
+          Console.WriteLine($"visit sum");
             return Visit((dynamic) node[0])
                 + Visit((dynamic) node[1])
-                + "\t\tor\n";
+                + "\t\tadd\n";
         }
-        public string Visit(Not node) {
-            return Visit((dynamic) node[0])
-                + "\t\tldc.i4.1\n"
-                + "\t\txor\n";
-        }
-        public string Visit(Literal_0 node) {
-            return "\t\tldc.i4.0\n";
-        }
-        public string Visit(Literal_1 node) {
-            return "\t\tldc.i4.1\n";
+        public string Visit(Float node) {
+          Console.WriteLine("visit float");
+            return "\t\tldc.r8 4\n";
         }
     }
-*/
+
     //---------------------------------------------------------------
     class Driver {
         public static void Main(string[] args) {
@@ -236,9 +236,9 @@ namespace Trillian {
                     new Scanner(args[0]).Start().GetEnumerator());
                 var ast = p.Start();
                 Console.Write(ast.ToStringTree());
-                // File.WriteAllText(
-                //     "output.il",
-                //     new CILGenerator().Visit((dynamic) ast));
+                File.WriteAllText(
+                    "output.il",
+                    new CILGenerator().Visit((dynamic) ast));
             } catch (SyntaxError) {
                 Console.Error.WriteLine("parse error");
                 Environment.Exit(1);
