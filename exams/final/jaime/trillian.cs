@@ -26,7 +26,7 @@ namespace Trillian {
         public string val;
         static readonly Regex regex = new Regex(
             @"
-                (?<Bang>       [!] )
+                (?<NMax>       [!] )
               | (?<Comma>         [,] )
               | (?<Star>        [*] )
               | (?<SqOpen>    \[ )
@@ -40,7 +40,7 @@ namespace Trillian {
             );
         static readonly IDictionary<string, Token> regexLabels =
             new Dictionary<string, Token>() {
-                {"Bang", Token.BANG},
+                {"NMax", Token.BANG},
                 {"Comma", Token.COMMA},
                 {"Star", Token.STAR},
                 {"SqOpen", Token.SQ_OPEN},
@@ -123,7 +123,7 @@ namespace Trillian {
 
     //---------------------------------------------------------------
     class Program:   Node {}
-    class Bang:       Node {}
+    class NMax:       Node {}
     class Star:        Node {}
     class Sum:       Node {}
     class Float: Node {
@@ -170,7 +170,7 @@ namespace Trillian {
             Console.WriteLine($"expr1 {exp1}");
             while (CurrentToken.tok == Token.BANG) {
                 Expect(Token.BANG);
-                var exp2 = new Bang() { exp1, SimpleExp() };
+                var exp2 = new NMax() { exp1, SimpleExp() };
                 exp1 = exp2;
             }
             return exp1;
@@ -217,16 +217,16 @@ namespace Trillian {
         public string Visit(Program node) {
           Console.WriteLine($"visitamela {node} con hijos: {node[0]} ");
             return ".assembly 'Trillian' {}\n\n"
-                + ".class public 'FinalExam' extends ['mscorlib']'System'.'Object' {\n"
+                + ".class public 'final_exam' extends ['mscorlib']'System'.'Object' {\n"
                 + "\t.method public static void 'start'() {\n"
                 + "\t\t.entrypoint\n"
                 + Visit((dynamic) node[0])
-                + "\t\tcall void ['mscorlib']'System'.'Console'::'WriteLine'(int32)\n"
+                + "\t\tcall void ['mscorlib']'System'.'Console'::'WriteLine'(float64)\n"
                 + "\t\tret\n"
                 + "\t}\n"
                 + "}\n";
         }
-        public string Visit(Bang node) {
+        public string Visit(NMax node) {
           Console.WriteLine($"visit bang ");
             return Visit((dynamic) node[0])
                 + Visit((dynamic) node[1])
@@ -245,7 +245,7 @@ namespace Trillian {
         }
         public string Visit(Float node) {
           Console.WriteLine("visit float");
-            return "\t\tldc.r8 4\n";
+            return $"\t\tldc.r8 {node.algo.val}\n";
         }
     }
 
