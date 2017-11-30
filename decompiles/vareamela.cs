@@ -5,9 +5,10 @@ public class Test
   public static string miglob2;
     static public void Main()
     {
-        var x = true;
-        var y = false;
-        var z = 0;
 
+        var z = 2;
+        var x = 2;
+        int y;
+        y = x+z ;
     }
 }

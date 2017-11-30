@@ -12,7 +12,7 @@
   .hash algorithm 0x00008004
   .ver  0:0:0:0
 }
-.module vareamela.exe // GUID = {53216E07-8B10-45DB-B8CD-38143FC035C6}
+.module vareamela.exe // GUID = {DD8F27A5-EBDB-4238-B163-C4D6CC8A5B40}
 
 
   .class public auto ansi beforefieldinit Test
@@ -39,19 +39,21 @@
     {
         // Method begins at RVA 0x2058
 	.entrypoint
-	// Code size 7 (0x7)
-	.maxstack 1
+	// Code size 9 (0x9)
+	.maxstack 2
 	.locals init (
-		bool	V_0,
-		bool	V_1,
+		int32	V_0,
+		int32	V_1,
 		int32	V_2)
-	IL_0000:  ldc.i4.1 
+	IL_0000:  ldc.i4.2 
 	IL_0001:  stloc.0 
-	IL_0002:  ldc.i4.0 
+	IL_0002:  ldc.i4.2 
 	IL_0003:  stloc.1 
-	IL_0004:  ldc.i4.0 
-	IL_0005:  stloc.2 
-	IL_0006:  ret 
+	IL_0004:  ldloc.1 
+	IL_0005:  ldloc.0 
+	IL_0006:  add 
+	IL_0007:  stloc.2 
+	IL_0008:  ret 
     } // end of method Test::Main
 
   } // end of class Test
