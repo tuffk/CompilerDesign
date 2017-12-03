@@ -1,0 +1,14 @@
+var testeando;
+// Returns the largest element in the array list referred by handle a.
+max_array(a, z) {
+    var max, x;
+    max = 11;
+
+    return max;
+}
+
+main() {
+    var array, sum, max;
+
+
+}
