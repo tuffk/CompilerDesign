@@ -453,6 +453,30 @@ public void imprimemela(string lex, string opt)
           "
       );
       break;
+    case "prints":
+      File.AppendAllText(lePatheo,
+          $@"   ldc.i4 {lex}
+          conv.i8
+          call int64 class ['int64lib']'Utils'.'Runtime'::'printc'(int64)
+          "
+      );
+      break;
+    case "printi":
+      File.AppendAllText(lePatheo,
+          $@"   ldc.i4 {lex}
+          conv.i8
+          call int64 class ['int64lib']'Utils'.'Runtime'::'printi'(int64)
+          "
+      );
+      break;
+    case "printi":
+      File.AppendAllText(lePatheo,
+          $@"   ldc.i4 {lex}
+          conv.i8
+          call int64 class ['int64lib']'Utils'.'Runtime'::'println'(int64)
+          "
+      );
+      break;
     default:
       break;
   }
