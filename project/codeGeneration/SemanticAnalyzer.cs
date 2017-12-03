@@ -453,7 +453,7 @@ public void imprimemela(string lex, string opt)
           "
       );
       break;
-    case "prints":
+    case "printc":
       File.AppendAllText(lePatheo,
           $@"   ldc.i4 {lex}
           conv.i8
@@ -469,7 +469,7 @@ public void imprimemela(string lex, string opt)
           "
       );
       break;
-    case "printi":
+    case "println":
       File.AppendAllText(lePatheo,
           $@"   ldc.i4 {lex}
           conv.i8
