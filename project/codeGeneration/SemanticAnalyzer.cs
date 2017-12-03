@@ -147,24 +147,28 @@ public void Visit(NProgram node) {
         }
 
         else if(pasones == 3) {
+                Console.WriteLine("======================= cuarto pason ======================");
 
-          File.WriteAllText(lePatheo,
-          @".assembly 'output' { }
+                File.WriteAllText(lePatheo,
+                                  @".assembly 'output' { }
+
+.assembly extern 'int64lib' {}
+
 .assembly extern 'int64lib' { }
 .class public 'Test' extends ['mscorlib']'System'.'Object' {
   .method public static void 'whatever'() {
   .entrypoint
-") ;
+");
                 Visit((dynamic) node[0]);
 
                 Visit((dynamic) node[1]);
-            File.AppendAllText(lePatheo,
-            @"call void class ['mscorlib']'System'.'Console'::'WriteLine'(int32)
+                File.AppendAllText(lePatheo,
+                                   @"call void class ['mscorlib']'System'.'Console'::'WriteLine'(int32)
     ret
   }
-}") ;
+}");
 
-Console.WriteLine("Terminé el 4to pasón");
+                Console.WriteLine("Terminé el 4to pasón");
         }
 }
 
@@ -175,14 +179,14 @@ public void Visit(NVarDefList node) {
 
         variablePosition=0;
         File.AppendAllText(lePatheo,
-        @".locals init (
-          ") ;
+                           @".locals init (
+          ");
 
         VisitChildren(node);
 
         File.AppendAllText(lePatheo,
-        @")
-        ") ;
+                           @")
+        ");
 }
 
 public void Visit(NFunDefList node) {
@@ -236,9 +240,9 @@ public void Visit(NVarDef node) {
         else if(pasones == 3)
         {
 
-          File.AppendAllText(lePatheo,
-          $@" int64 '{variableName}',
-          " ) ;
+                File.AppendAllText(lePatheo,
+                                   $@" int64 '{variableName}',
+          " );
         }
 
 
@@ -293,37 +297,37 @@ public void Visit(NFunDef node) {
 
         else if (pasones == 3)
         {
-        File.AppendAllText(lePatheo,
-        $@".method public static
-          default int64 '{funName}'(") ;
-          //Console.WriteLine("6666666666666666666666666666666666666666666666666666666666666666");
-          //Console.WriteLine($"PITo: {Table[funName].locTable}");
-          var final = Table[funName].args;
-          var contExtra = 1;
-          foreach(var XXX in Table[funName].locTable)
-          {
-            if(XXX.Value.param == true){
-              if(final == contExtra)
                 File.AppendAllText(lePatheo,
-                $@"{XXX.Value.name}") ;
-            else
+                                   $@".method public static
+          default int64 '{funName}'(");
+                //Console.WriteLine("6666666666666666666666666666666666666666666666666666666666666666");
+                //Console.WriteLine($"PITo: {Table[funName].locTable}");
+                var final = Table[funName].args;
+                var contExtra = 1;
+                foreach(var XXX in Table[funName].locTable)
+                {
+                        if(XXX.Value.param == true) {
+                                if(final == contExtra)
+                                        File.AppendAllText(lePatheo,
+                                                           $@"{XXX.Value.name}");
+                                else
+                                        File.AppendAllText(lePatheo,
+                                                           $@"{XXX.Value.name}, ");
+
+                                contExtra++;
+                        }
+
+                }
+
                 File.AppendAllText(lePatheo,
-                $@"{XXX.Value.name}, ") ;
-
-            contExtra++;
-          }
-
-          }
-
-        File.AppendAllText(lePatheo,
-        @")
+                                   @")
         {
-        ") ;
+        ");
 
-          VisitChildren(node);
-          File.AppendAllText(lePatheo,
-          @"}
-          ") ;
+                VisitChildren(node);
+                File.AppendAllText(lePatheo,
+                                   @"}
+          ");
 
 
         }
@@ -377,7 +381,7 @@ public void Visit(NBreak node) {
                 if (inloop > 0) {
                         VisitChildren(node);
                 }else{
-                  throw new SemanticError("unexpected 'break'", node.AnchorToken);
+                        throw new SemanticError("unexpected 'break'", node.AnchorToken);
                 }
         }else {
                 VisitChildren(node);
@@ -394,7 +398,7 @@ public void Visit(NContinue node) {
                 if (inloop > 0) {
                         VisitChildren(node);
                 }else{
-                  throw new SemanticError("unexpected 'continue'", node.AnchorToken);
+                        throw new SemanticError("unexpected 'continue'", node.AnchorToken);
                 }
         }else {
                 VisitChildren(node);
@@ -424,7 +428,34 @@ public void Visit(NFunCall node) {
                                                 node.AnchorToken);
         }
 
+        if(pasones == 3) {
+                Console.WriteLine($"aki va l Vagina {node}");
+                if (node.AnchorToken.Lexeme.StartsWith("print")) {
+
+                  Console.WriteLine($"el tatara nieto {node[0][0]}");
+                  imprimemela(node[0][0].AnchorToken.Lexeme, node.AnchorToken.Lexeme);
+                  return;
+                }
+
+        }
         VisitChildren(node);
+}
+
+public void imprimemela(string lex, string opt)
+{
+  switch(opt)
+  {
+    case "prints":
+      File.AppendAllText(lePatheo,
+          $@"   ldc.i4 {lex}
+          conv.i8
+          call int64 class ['int64lib']'Utils'.'Runtime'::'prints'(int64)
+          "
+      );
+      break;
+    default:
+      break;
+  }
 }
 
 //-----------------------------------------------------------
@@ -443,7 +474,7 @@ public void Visit(NExprList node) {
         }
         contadorArgumento = 0;
 
-
+        Console.WriteLine($"aki va el pene {node}");
 
         VisitChildren(node);
 }
@@ -499,11 +530,11 @@ public void Visit(NLitBool node) {
 public void Visit(NWhileStmt node) {
         Console.WriteLine($"+++++++++++++++ NWhileStmt ++++++++++++++++");
         if (pasones == 2) {
-          inloop++;
+                inloop++;
         }
         VisitChildren(node);
         if (pasones == 2) {
-          inloop--;
+                inloop--;
         }
 }
 
@@ -517,22 +548,22 @@ public void Visit(NLitChar node) {
 public void Visit(NDoWhileStmt node) {
         Console.WriteLine($"+++++++++++++++ NDoWhileStmt ++++++++++++++++");
         if (pasones == 2) {
-          inloop++;
+                inloop++;
         }
         VisitChildren(node);
         if (pasones == 2) {
-          inloop--;
+                inloop--;
         }
 }
 //------------------------------------------------------------
 public void Visit(NForStmt node) {
         Console.WriteLine($"+++++++++++++++ NForStmt ++++++++++++++++");
         if (pasones == 2) {
-          inloop++;
+                inloop++;
         }
         VisitChildren(node);
         if (pasones == 2) {
-          inloop--;
+                inloop--;
         }
 }
 //------------------------------------------------------------
@@ -593,19 +624,19 @@ public void Visit(NLitInt node) {
         var intStr = node.AnchorToken.Lexeme;
 
         try {
-          if(intStr.StartsWith("0o") || intStr.StartsWith("0O")){
-            intStr = intStr.Remove(0,2);
-            Convert.ToInt64(intStr,8);
-          }
-          else if(intStr.StartsWith("0b") || intStr.StartsWith("0B")){
-            intStr = intStr.Remove(0,2);
-            Convert.ToInt64(intStr,2);
-          }
-          else if(intStr.StartsWith("0x") || intStr.StartsWith("0X")){
-            intStr = intStr.Remove(0,2);
-            Convert.ToInt64(intStr,16);
-          }
-              //  Convert.ToInt64(intStr);
+                if(intStr.StartsWith("0o") || intStr.StartsWith("0O")) {
+                        intStr = intStr.Remove(0,2);
+                        Convert.ToInt64(intStr,8);
+                }
+                else if(intStr.StartsWith("0b") || intStr.StartsWith("0B")) {
+                        intStr = intStr.Remove(0,2);
+                        Convert.ToInt64(intStr,2);
+                }
+                else if(intStr.StartsWith("0x") || intStr.StartsWith("0X")) {
+                        intStr = intStr.Remove(0,2);
+                        Convert.ToInt64(intStr,16);
+                }
+                //  Convert.ToInt64(intStr);
                 Console.WriteLine("EXITO!!");
 
         } catch (OverflowException) {
@@ -618,7 +649,11 @@ public void Visit(NLitInt node) {
 //-----------------------------------------------------------
 public void Visit(NLitString node) {
         Console.WriteLine($"+++++++++++++++ NLitString ++++++++++++++++");
-
+        //Console.WriteLine($"aki v ala bubi {node.AnchorToken.Lexeme}");
+        if (pasones == 3) {
+                File.AppendAllText(lePatheo,
+                                   $@"ldstr {node.AnchorToken.Lexeme}");
+        }
         /*var intStr = node.AnchorToken.Lexeme;
 
            try {
