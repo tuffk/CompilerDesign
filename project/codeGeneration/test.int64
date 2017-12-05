@@ -1,14 +1,49 @@
-var testeando;
-// Returns the largest element in the array list referred by handle a.
-max_array(a, z) {
-    var max, x;
-    max = 11;
+main() {
 
-    return max;
+var element;
+var algo;
+algo= true;
+
+element = 4;
+
+if (algo)
+{
+  element = 6;
+}
+if (element == 1) {
+element = 6;
+
+}else if(element == 6)
+{
+  element = 8;
+}
+else{
+element = 0;
+}
+      /*
+
+if (element <= 100) {
+
 }
 
-main() {
-    var array, sum, max;
+
+if (element >= 100) {
+
+}
+
+
+if (element != 100) {
+
+}
+
+
+if (element < 100) {
+
+}
+
+if (element > 100) {
+
+}*/
 
 
 }

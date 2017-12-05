@@ -78,6 +78,8 @@ namespace Int64 {
               SemanticAnalyzer.pasones++;
               semantic.Visit((dynamic) program);
 
+
+              Console.WriteLine("\n\n**************CUARTA VUELTA**************\n\n");
               SemanticAnalyzer.pasones++;
               semantic.Visit((dynamic) program);
 

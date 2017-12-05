@@ -89,6 +89,7 @@ public static int variablePosition; //contador para segundo recorrido poner en q
 public static int contadorArgumento; //contador de argumentos en una llamada de funcion
 public static int inloop;
 private static string lePatheo; //path al file en el que se va a escribir
+public static int pila; //contador de variables que estan en la pila
 
 //-----------------------------------------------------------
 public SemanticAnalyzer() {
@@ -152,21 +153,33 @@ public void Visit(NProgram node) {
                 File.WriteAllText(lePatheo,
                                   @".assembly 'output' { }
 
-.assembly extern 'int64lib' {}
-
 .assembly extern 'int64lib' { }
+
 .class public 'Test' extends ['mscorlib']'System'.'Object' {
-  .method public static void 'whatever'() {
-  .entrypoint
-");
-                Visit((dynamic) node[0]);
+
+                ");
+                /*Definicion de variables globales*/
+                var final = globVars.Count;
+                var contExtra = 1;
+                foreach(var XXX in globVars)
+                {
+                  if(final == contExtra)
+                          File.AppendAllText(lePatheo,
+                                             $@".field  public static int64 {XXX}
+                ");
+                  else
+                          File.AppendAllText(lePatheo,
+                                             $@".field  public static int64 {XXX}
+                ");
+
+                  contExtra++;
+
+                }
+
 
                 Visit((dynamic) node[1]);
                 File.AppendAllText(lePatheo,
-                                   @"call void class ['mscorlib']'System'.'Console'::'WriteLine'(int32)
-    ret
-  }
-}");
+                                   @"}");
 
                 Console.WriteLine("Terminé el 4to pasón");
         }
@@ -178,15 +191,43 @@ public void Visit(NVarDefList node) {
         //Console.WriteLine($"n0: ${node.GetType()}");
 
         variablePosition=0;
-        File.AppendAllText(lePatheo,
-                           @".locals init (
-          ");
 
-        VisitChildren(node);
+          if(pasones == 3) {
 
-        File.AppendAllText(lePatheo,
-                           @")
+            var final = (Table[nombreFuncion].locTable).Count;
+            var contExtra = 1;
+            if(nombreFuncion == "main")
+            File.AppendAllText(lePatheo,
+                               @".entrypoint
+              .locals init (
+              ");
+              else
+            File.AppendAllText(lePatheo,
+                               @"
+              .locals init (
+              ");
+
+            foreach(var XXX in Table[nombreFuncion].locTable)
+            {
+                if(final == contExtra)
+                        File.AppendAllText(lePatheo,
+                                           $@"{XXX.Value.name}");
+                else
+                        File.AppendAllText(lePatheo,
+                                           $@"{XXX.Value.name}, ");
+
+                contExtra++;
+
+
+            }
+
+            File.AppendAllText(lePatheo,
+                               @")
         ");
+
+      }
+      else
+      VisitChildren(node);
 }
 
 public void Visit(NFunDefList node) {
@@ -281,7 +322,7 @@ public void Visit(NFunDef node) {
         else if(pasones ==1 )
         {
                 nombreFuncion = funName;
-                Table[nombreFuncion].locTable = new SortedDictionary<string, Sharmuta>();
+                Table[nombreFuncion].locTable = new Dictionary<string, Sharmuta>();
                 VisitChildren(node);
 
         }
@@ -297,6 +338,7 @@ public void Visit(NFunDef node) {
 
         else if (pasones == 3)
         {
+                pila=0; //Se reinicia la pila para la función a evaluar
                 File.AppendAllText(lePatheo,
                                    $@".method public static
           default int64 '{funName}'(");
@@ -324,9 +366,12 @@ public void Visit(NFunDef node) {
         {
         ");
 
+
                 VisitChildren(node);
+
                 File.AppendAllText(lePatheo,
-                                   @"}
+                                   @"  ret
+        }
           ");
 
 
@@ -338,6 +383,7 @@ public void Visit(NFunDef node) {
 public void Visit(NStmtList node) {
 
         Console.WriteLine($"+++++++++++++++ NStmtList ++++++++++++++++");
+
         VisitChildren(node);
 }
 
@@ -368,6 +414,39 @@ public void Visit(NAssign node) {
 
 
                 Visit((dynamic) node[0]);
+
+        }
+        else if (pasones == 3)
+        {
+          Visit((dynamic) node[0]);
+          var cuentaExtraLocal = 0;
+        //  if(Table[nombreFuncion].locTable.ContainsKey(node.AnchorToken.Lexeme))
+        if(globVars.Contains(variableName))
+        File.AppendAllText(lePatheo,
+                           $@"stsfld int32 Test::{variableName}
+");
+
+        else foreach(var XXX in Table[nombreFuncion].locTable)
+        {
+
+          Console.WriteLine($"\n\n\n\n\t\t\t\t%%%%%%%%%%%%%%%%%%Estoy en el foreach con valor {cuentaExtraLocal} buscando {variableName}");
+                if(XXX.Value.name == variableName && XXX.Value.param == false) {
+                  File.AppendAllText(lePatheo,
+                                     $@"stloc.{cuentaExtraLocal}
+        ");
+                  break;
+                }
+                else if(XXX.Value.name == variableName && XXX.Value.param == true) {
+                    File.AppendAllText(lePatheo,
+                                       $@"starg.s {XXX.Value.pos}
+        ");
+                  break;
+
+                  }
+                  if(XXX.Value.param == false)
+                      cuentaExtraLocal++;
+        }
+
 
         }
 }
@@ -429,10 +508,13 @@ public void Visit(NFunCall node) {
         }
 
         if(pasones == 3) {
-                Console.WriteLine($"aki va l Vagina {node}");
-                if (node.AnchorToken.Lexeme.StartsWith("print")) {
+                Console.WriteLine($"aki va l {node}");
+                if (node.AnchorToken.Lexeme.StartsWith("println")) {
 
-                  Console.WriteLine($"el tatara nieto {node[0][0]}");
+                  imprimemela("", node.AnchorToken.Lexeme);
+                  return;
+                }
+                else if (node.AnchorToken.Lexeme.StartsWith("print")) {
                   imprimemela(node[0][0].AnchorToken.Lexeme, node.AnchorToken.Lexeme);
                   return;
                 }
@@ -446,10 +528,20 @@ public void imprimemela(string lex, string opt)
   switch(opt)
   {
     case "prints":
+    var chars = lex.ToCharArray();
+//    long handle = Utils.New(0);
+    File.AppendAllText(lePatheo,
+        $@"ldc.i8 0
+        call int64 class ['int64lib']'Int64'.'Utils'::'New'(int64)
+        ");
+    foreach (long i in Utils.AsCodePoints(lex)) {
       File.AppendAllText(lePatheo,
-          $@"   ldc.i4 {lex}
-          conv.i8
-          call int64 class ['int64lib']'Utils'.'Runtime'::'prints'(int64)
+          $@"ldc.i8 {i}
+          call int64 class ['int64lib']'Int64'.'Utils'::'Add'(int64, int64)
+          ");
+    }
+      File.AppendAllText(lePatheo,
+          @"call int64 class ['int64lib']'Int64'.'Utils'::'Prints'(int64)
           "
       );
       break;
@@ -457,23 +549,51 @@ public void imprimemela(string lex, string opt)
       File.AppendAllText(lePatheo,
           $@"   ldc.i4 {lex}
           conv.i8
-          call int64 class ['int64lib']'Utils'.'Runtime'::'printc'(int64)
+          call int64 class ['int64lib']'Int64'.'Utils'::'Printc'(int64)
           "
       );
       break;
     case "printi":
-      File.AppendAllText(lePatheo,
-          $@"   ldc.i4 {lex}
-          conv.i8
-          call int64 class ['int64lib']'Utils'.'Runtime'::'printi'(int64)
-          "
-      );
+    var cuentaExtraLocal = 0;
+  //  if(Table[nombreFuncion].locTable.ContainsKey(node.AnchorToken.Lexeme))
+  if(globVars.Contains(lex))
+  File.AppendAllText(lePatheo,
+      $@"   ldsfld int32 Test::'{lex}'
+      conv.i8
+      call int64 class ['int64lib']'Int64'.'Utils'::'Printi'(int64)
+      "
+  );
+
+  else foreach(var XXX in Table[nombreFuncion].locTable)
+  {
+    if(XXX.Value.name == lex && XXX.Value.param == false) {
+            File.AppendAllText(lePatheo,
+                $@"   ldloc '{lex}'
+                conv.i8
+                call int64 class ['int64lib']'Int64'.'Utils'::'Printi'(int64)
+                "
+            );
+            break;
+          }
+          else if(XXX.Value.name == lex && XXX.Value.param == true) {
+            File.AppendAllText(lePatheo,
+                $@"   ldloc '{lex}'
+                conv.i8
+                call int64 class ['int64lib']'Int64'.'Utils'::'Printi'(int64)
+                "
+            );
+            break;
+
+            }
+            if(XXX.Value.param == false)
+                cuentaExtraLocal++;
+  }
+
       break;
     case "println":
       File.AppendAllText(lePatheo,
-          $@"   ldc.i4 {lex}
-          conv.i8
-          call int64 class ['int64lib']'Utils'.'Runtime'::'println'(int64)
+          $@"
+          call int64 class ['int64lib']'Int64'.'Utils'::'Println'(int64)
           "
       );
       break;
@@ -546,6 +666,17 @@ public void Visit(NCase node) {
 //------------------------------------------------------------
 public void Visit(NLitBool node) {
         Console.WriteLine($"+++++++++++++++ NLitBool ++++++++++++++++");
+        Console.WriteLine($"RECIBI ESTE PEDO {node.AnchorToken.Lexeme}");
+        if (node.AnchorToken.Lexeme == "true")
+        File.AppendAllText(lePatheo,
+                           @"ldc.i4.1
+        ");
+
+        else
+        File.AppendAllText(lePatheo,
+                           @"ldc.i4.0
+        ");
+
 
         //VisitChildren(node);
 }
@@ -566,6 +697,12 @@ public void Visit(NWhileStmt node) {
 public void Visit(NLitChar node) {
         Console.WriteLine($"+++++++++++++++ NLitChar ++++++++++++++++");
         Console.WriteLine($"\n\n\n\n\n\t\t\tnode:    {node.GetType()}");
+
+        if (pasones == 3) {
+                File.AppendAllText(lePatheo,
+                                   $@"ldc.i4.s {node.AnchorToken.Lexeme}
+        ");
+        }
         //VisitChildren(node);
 }
 //------------------------------------------------------------
@@ -668,6 +805,14 @@ public void Visit(NLitInt node) {
                               "Integer literal too large: " + intStr,
                               node.AnchorToken);
         }
+
+        if (pasones == 3)
+        {
+          File.AppendAllText(lePatheo,
+                             $@"ldc.i4.{intStr}
+        ");
+
+        }
 }
 
 //-----------------------------------------------------------
@@ -676,7 +821,8 @@ public void Visit(NLitString node) {
         //Console.WriteLine($"aki v ala bubi {node.AnchorToken.Lexeme}");
         if (pasones == 3) {
                 File.AppendAllText(lePatheo,
-                                   $@"ldstr {node.AnchorToken.Lexeme}");
+                                   $@"ldstr {node.AnchorToken.Lexeme}
+        ");
         }
         /*var intStr = node.AnchorToken.Lexeme;
 

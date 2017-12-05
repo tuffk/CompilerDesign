@@ -28,9 +28,9 @@ namespace Int64 {
     public string name;
     public int args = 0;
     public bool predef = false;
-    public SortedDictionary<string,Sharmuta> locTable = null;
+    public Dictionary<string,Sharmuta> locTable = null;
 
-    public Modishness(string na, int ar=0, bool pr=false, SortedDictionary<string,Sharmuta> lt = null)
+    public Modishness(string na, int ar=0, bool pr=false, Dictionary<string,Sharmuta> lt = null)
     {
       args = ar;
       name = na;
@@ -41,7 +41,7 @@ namespace Int64 {
 
     public class SymbolTable: IEnumerable<KeyValuePair<string, Modishness>> {
 
-        IDictionary<string, Modishness> data = new SortedDictionary<string, Modishness>();
+        IDictionary<string, Modishness> data = new Dictionary<string, Modishness>();
 
         //-----------------------------------------------------------
         public override string ToString() {
